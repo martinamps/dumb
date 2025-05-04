@@ -15,7 +15,7 @@ This website is designed to be frustrating, absurd, and completely useless - exa
 ### Right Side Panel
 - **Dumb Haiku**: AI-generated haikus about dumb domain names (with a button that does nothing)
 - **Dramatically Overreacted Weather**: Weather forecasts that treat every condition like a catastrophe
-- **Stock Market Emoji Translator**: Incomprehensible financial data visualization
+- **Stock Market Emoji Translator**: Converts real and made-up financial data into completely unhelpful emoji sequences with arbitrary translation rules
 
 ## Product Experience
 
@@ -41,6 +41,7 @@ This website is designed to be frustrating, absurd, and completely useless - exa
 - Built with React Router on Cloudflare Workers
 - Uses Cloudflare AI for generating content
 - Styled with TailwindCSS
+- Modular API architecture with separate route handlers
 
 ## Development
 
