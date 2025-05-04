@@ -1,38 +1,50 @@
-# Welcome to React Router + Cloudflare Workers!
+# World's Dumbest Domain
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/react-router-starter-template)
+Welcome to the repository for [worldsdumbestdomain.com](https://worldsdumbestdomain.com), created for the "World's Dumbest Hackathon" where we build intentionally terrible experiences.
 
-![React Router Starter Template Preview](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/bfdc2f85-e5c9-4c92-128b-3a6711249800/public)
+## Project Overview
 
-<!-- dash-content-start -->
+This website is designed to be frustrating, absurd, and completely useless - exactly as intended! We're building a collection of the worst UX patterns we can imagine, wrapped in a visually appealing but fundamentally broken interface.
 
-A modern, production-ready template for building full-stack React applications using [React Router](https://reactrouter.com/) and the [Cloudflare Vite plugin](https://developers.cloudflare.com/workers/vite-plugin/).
+## Core Features
 
-## Features
+### Main Pane
+- **Horoscope Selector**: Choose your zodiac sign through an intentionally terrible interface
+- **Horoscope-Based CAPTCHA**: Solve absurd verification challenges based on your horoscope
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+### Right Side Panel
+- **Dumb Haiku**: AI-generated haikus about dumb domain names (with a button that does nothing)
+- **Dramatically Overreacted Weather**: Weather forecasts that treat every condition like a catastrophe
+- **Stock Market Emoji Translator**: Incomprehensible financial data visualization
 
-<!-- dash-content-end -->
+## Product Experience
 
-## Getting Started
+### Horoscope Selector Ideas
+- Constellation Connect-the-Dots with a shaky cursor
+- Zodiac Wheel of Misfortune that never quite stops on your sign
+- Astrological Slider with all 12 signs crammed into a tiny arc
+- Star Sign Memory Match with randomly shuffling cards
+- Birth Month Calculator that uses completely wrong calculations
 
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
+### Horoscope-Based CAPTCHA Examples
+- For Aries: "Click on all images that show people taking calculated risks according to actuarial tables"
+- For Taurus: "Slide this bar to exactly represent your financial stability"
+- For Gemini: "Type this sentence backward while answering unrelated math questions"
 
-```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/react-router-starter-template
-```
+### Pessimized Horoscope Delivery
+- Real horoscopes transformed into hilariously pessimistic versions
+- Random "glitches" revealing even worse predictions
+- Oddly specific yet universally applicable details
 
-A live public deployment of this template is available at [https://react-router-starter-template.templates.workers.dev](https://react-router-starter-template.templates.workers.dev)
+## Technical Details
+
+- Built with React Router on Cloudflare Workers
+- Uses Cloudflare AI for generating content
+- Styled with TailwindCSS
+
+## Development
 
 ### Installation
-
-Install the dependencies:
 
 ```bash
 npm install
@@ -40,64 +52,20 @@ npm install
 
 ### Development
 
-Start the development server with HMR:
-
 ```bash
 npm run dev
 ```
 
-Your application will be available at `http://localhost:5173`.
-
-## Typegen
-
-Generate types for your Cloudflare bindings in `wrangler.json`:
-
-```sh
-npm run typegen
-```
-
-## Building for Production
-
-Create a production build:
+### Deployment
 
 ```bash
-npm run build
-```
-
-## Previewing the Production Build
-
-Preview the production build locally:
-
-```bash
-npm run preview
-```
-
-## Deployment
-
-If you don't have a Cloudflare account, [create one here](https://dash.cloudflare.com/sign-up)! Go to your [Workers dashboard](https://dash.cloudflare.com/?to=%2F%3Aaccount%2Fworkers-and-pages) to see your [free custom Cloudflare Workers subdomain](https://developers.cloudflare.com/workers/configuration/routing/workers-dev/) on `*.workers.dev`.
-
-Once that's done, you can deploy your app:
-
-```sh
 npm run deploy
 ```
 
-To deploy a preview URL:
+## Progress Tracking
 
-```sh
-npx wrangler versions upload
-```
-
-You can then promote a version to production after verification or roll it out progressively.
-
-```sh
-npx wrangler versions deploy
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+See [CLAUDE.md](./CLAUDE.md) for current development status and roadmap.
 
 ---
 
-Built with ❤️ using React Router.
+Built with 💩 for the World's Dumbest Hackathon
