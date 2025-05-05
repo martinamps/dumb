@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { Route } from "./+types/home";
+import React from "react";
 
 // Stock Widget Component
 function StockWidget() {
@@ -49,21 +50,59 @@ function StockWidget() {
 
   // Set emoji tooltips (which are just more emojis)
   const emojiTooltips: Record<string, string> = {
+    // Original elemental emojis
     "🔥": "🌋",
     "💧": "🌊",
     "🌪️": "🌀",
     "🪨": "🏔️",
     "⚡": "⛈️",
+    // New elemental emojis
+    "🌱": "🌿",
+    "❄️": "☃️",
+    "☁️": "🌫️",
+    "⭐": "✨",
+    "🌈": "🌟",
+
+    // Original movement emojis
     "🚀": "📈",
     "💀": "📉",
     "🥱": "➖",
+    // New movement emojis
+    "📈": "📊",
+    "📉": "📋",
+    "🌋": "💥",
+    "🕳️": "🧿",
+    "🧨": "💣",
+    "🎢": "🎡",
+    "🏄": "🏊",
+
+    // Original animal emojis
     "🐢": "🐌",
     "🦊": "🦝",
     "🦄": "🐴",
+    // New animal emojis
+    "🦘": "🦒",
+    "🐙": "🦑",
+    "🦜": "🦢",
+    "🦓": "🦛",
+    "🦦": "🦫",
+    "🦝": "🦡",
+    "🦔": "🦙",
+
+    // Original food emojis
     "🍄": "🌑",
     "🍕": "🌓",
     "🍦": "🌕",
     "🥑": "🌗",
+    // New food emojis
+    "🌮": "🌯",
+    "🥐": "🥖",
+    "🍩": "🍪",
+    "🍗": "🍖",
+    "🥝": "🍓",
+    "🍰": "🧁",
+
+    // Original random emojis
     "💰": "💎",
     "🧠": "🤔",
     "🔮": "✨",
@@ -74,6 +113,71 @@ function StockWidget() {
     "📿": "🙏",
     "🧩": "🔍",
     "🪄": "✨",
+    // New random emojis
+    "🎯": "🎮",
+    "🧬": "🔬",
+    "👾": "👹",
+    "💎": "💍",
+    "🛸": "🚀",
+    "👑": "🏆",
+    "🧪": "⚗️",
+    "🔍": "🔎",
+    "💉": "💊",
+    "🧸": "🎁",
+
+    // Costume emojis
+    "🤖": "🦿",
+    "👽": "👾",
+    "👻": "💀",
+    "🧙": "🧙‍♀️",
+    "🧟": "🧟‍♂️",
+    "🦹": "🦹‍♀️",
+    "🧞": "🧞‍♀️",
+    "🦸": "🦸‍♂️",
+    "🧚": "🧚‍♀️",
+    "🧜": "🧜‍♀️",
+
+    // Weather emojis
+    "🌞": "☀️",
+    "🌧️": "☔",
+    "⛈️": "🌩️",
+    "🌨️": "❄️",
+    "🌪️": "🌀",
+    "🌫️": "☁️",
+    "☃️": "⛄",
+    "🌊": "🏄‍♂️",
+
+    // Building emojis
+    "🏠": "🏡",
+    "🏢": "🏬",
+    "🏰": "🏯",
+    "⛩️": "🛕",
+    "🏯": "🏭",
+    "🏛️": "🏗️",
+    "🏗️": "🏙️",
+    "🏭": "🏢",
+    "⛪": "🕌",
+    "🏟️": "🏘️",
+
+    // Vehicle emojis
+    "🚗": "🚙",
+    "🚂": "🚆",
+    "⛵": "🚢",
+    "🚁": "🛩️",
+    "🏎️": "🚓",
+    "🛵": "🏍️",
+    "🚢": "⛴️",
+    "🛩️": "✈️",
+
+    // Plant emojis
+    "🌵": "🌴",
+    "🌴": "🏝️",
+    "🌲": "🌳",
+    "🍀": "☘️",
+    "🌿": "🌱",
+    "🌳": "🌲",
+    "🎋": "🎍",
+    "🌼": "🌺",
   };
 
   // Generate emoji tooltip
@@ -122,6 +226,7 @@ function StockWidget() {
 
     const emojiSequence = stock.emojis;
     const patterns = [
+      // Original patterns
       {
         name: "The Angry Cat",
         emojis: ["🔥", "💀"],
@@ -162,6 +267,97 @@ function StockWidget() {
         emojis: ["🌪️", "🐢"],
         description:
           "Volatility that eventually resolves to slow steady growth",
+      },
+      // New cosmic patterns with expanded emoji sets
+      {
+        name: "The Celestial Convergence",
+        emojis: ["⭐", "🌈", "🚀"],
+        description:
+          "Rare alignment of positive indicators across multiple timeframes",
+      },
+      {
+        name: "The Space Kitten",
+        emojis: ["🛸", "👾", "🌌"],
+        description:
+          "Sudden jumps between price levels with no discernible pattern",
+      },
+      {
+        name: "The Quantum Waffle",
+        emojis: ["🧇", "🧪", "🔬"],
+        description:
+          "Price exists in multiple states simultaneously until observed by analysts",
+      },
+      {
+        name: "The Hypnotic Spiral",
+        emojis: ["🌀", "👁️", "🧿"],
+        description:
+          "Mesmerizing oscillations that trap traders in psychological loops",
+      },
+      {
+        name: "The Ancient Prophecy",
+        emojis: ["🏛️", "📜", "🧙"],
+        description:
+          "Pattern only recognizable to traders with 20+ years of experience",
+      },
+      {
+        name: "The Interdimensional Portal",
+        emojis: ["🕳️", "🌌", "🔮"],
+        description:
+          "Stock price appears to connect to alternate reality markets",
+      },
+      {
+        name: "The Temporal Paradox",
+        emojis: ["⏰", "📊", "🔄"],
+        description:
+          "Future price movement appears to influence past performance",
+      },
+      {
+        name: "The Cosmic Burrito",
+        emojis: ["🌮", "🌯", "🌠"],
+        description:
+          "Everything wrapped up in an unpredictable but satisfying package",
+      },
+      {
+        name: "The Haunted Algorithm",
+        emojis: ["👻", "🤖", "💻"],
+        description:
+          "Trading bots exhibit inexplicable behavior during certain hours",
+      },
+      {
+        name: "The Caffeinated Kangaroo",
+        emojis: ["☕", "🦘", "💥"],
+        description:
+          "Erratic bounces with increasing amplitude until sudden exhaustion",
+      },
+      {
+        name: "The Perpetual Mirage",
+        emojis: ["🌵", "🏜️", "💦"],
+        description:
+          "Chart pattern that suggests profits which never materialize",
+      },
+      {
+        name: "The Weather Wizard",
+        emojis: ["🌞", "🌧️", "🧙‍♂️"],
+        description:
+          "Stock price correlates suspiciously with local weather patterns",
+      },
+      {
+        name: "The Confused Penguin",
+        emojis: ["🐧", "❄️", "🏝️"],
+        description:
+          "Pattern that seems completely out of place in current market conditions",
+      },
+      {
+        name: "The Cosmic Giggle",
+        emojis: ["😂", "🌌", "🎭"],
+        description:
+          "Market movement that can only be explained as a cosmic joke",
+      },
+      {
+        name: "The Schrödinger's Trade",
+        emojis: ["📦", "🐱", "❓"],
+        description:
+          "Position that's simultaneously profitable and unprofitable until closed",
       },
     ];
 
@@ -222,21 +418,39 @@ function StockWidget() {
           <div className="text-[10px] text-center text-gray-500 dark:text-gray-400 mb-2">
             <div className="grid grid-cols-2 gap-1 max-w-xs mx-auto mt-1">
               <div className="flex items-center gap-1">
-                <span className="text-lg inline-block">🔥/💧/🌪️/🪨/⚡</span>
-                <span>Company first letter</span>
+                <span className="text-lg inline-block">
+                  🔥/💧/🌪️/🪨/⚡/🌱/❄️/☁️...
+                </span>
+                <span>Elemental resonance</span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-lg inline-block">🚀/💀/🥱</span>
-                <span>Price movement</span>
+                <span className="text-lg inline-block">
+                  🚀/💀/🥱/📈/📉/🌋/🕳️...
+                </span>
+                <span>Vibrational frequency</span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-lg inline-block">🐢/🦊/🦄</span>
-                <span>Price last digit</span>
+                <span className="text-lg inline-block">
+                  🐢/🦊/🦄/🦘/🐙/🦜/🦓...
+                </span>
+                <span>Temporal signature</span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-lg inline-block">🍄/🍕/🍦/🥑</span>
-                <span>Moon phase</span>
+                <span className="text-lg inline-block">
+                  🍄/🍕/🍦/🥑/🌮/🥐...
+                </span>
+                <span>Cosmic momentum</span>
               </div>
+              <div className="flex items-center gap-1 col-span-2 mt-1 justify-center">
+                <span className="text-lg inline-block">
+                  +🤖/👽/👻/🧙/🧟/🦹/🧞/🏠/🏢/🚗/🚂/🌵/🌴...
+                </span>
+                <span>Quantum fluctuations</span>
+              </div>
+            </div>
+            <div className="text-[8px] italic mt-1">
+              * Symbols periodically redistributed according to celestial
+              mechanics
             </div>
           </div>
 
@@ -380,6 +594,44 @@ function StockWidget() {
                         </span>{" "}
                         pizzas 🍕
                       </p>
+                      {stock.foodEquivalent && (
+                        <p className="text-xs mt-1">
+                          Alternative Value:{" "}
+                          <span className="font-mono">
+                            {stock.foodEquivalent.value}
+                          </span>{" "}
+                          {stock.foodEquivalent.unit}{" "}
+                          {stock.foodEquivalent.unit === "pizzas"
+                            ? "🍕"
+                            : stock.foodEquivalent.unit === "burritos"
+                            ? "🌯"
+                            : stock.foodEquivalent.unit === "coffees"
+                            ? "☕"
+                            : stock.foodEquivalent.unit === "avocado toasts"
+                            ? "🥑"
+                            : stock.foodEquivalent.unit === "ramen bowls"
+                            ? "🍜"
+                            : stock.foodEquivalent.unit === "ice cream cones"
+                            ? "🍦"
+                            : stock.foodEquivalent.unit === "movie tickets"
+                            ? "🎬"
+                            : stock.foodEquivalent.unit === "subway rides"
+                            ? "🚇"
+                            : stock.foodEquivalent.unit === "fancy cupcakes"
+                            ? "🧁"
+                            : "🍽️"}
+                        </p>
+                      )}
+                      {stocks.chaosLevel && (
+                        <p className="text-xs mt-1">
+                          Cosmic Uncertainty Level:{" "}
+                          <span className="font-mono">{stocks.chaosLevel}</span>
+                          /10{" "}
+                          <span className="text-[9px]">
+                            (±{(Math.random() * 3).toFixed(1)})
+                          </span>
+                        </p>
+                      )}
                     </div>
 
                     {/* Chart Pattern Analysis */}
@@ -394,6 +646,72 @@ function StockWidget() {
                         <p className="text-xs mt-1">
                           {getChartPattern()?.description}
                         </p>
+                      </div>
+                    )}
+
+                    {/* Cosmic Market Status */}
+                    {(stocks.marketSentiment ||
+                      stocks.cosmicAlignment ||
+                      stocks.mercuryRetrograde) && (
+                      <div className="bg-indigo-100 dark:bg-indigo-900/30 p-2 rounded-md">
+                        <p className="text-xs font-semibold">
+                          Cosmic Market Status:
+                        </p>
+                        {stocks.marketSentiment && (
+                          <p className="text-xs mt-1">
+                            Market Sentiment:{" "}
+                            <span className="font-medium">
+                              {stocks.marketSentiment.charAt(0).toUpperCase() +
+                                stocks.marketSentiment.slice(1)}
+                            </span>{" "}
+                            {stocks.marketSentiment === "euphoric"
+                              ? "🤩"
+                              : stocks.marketSentiment === "optimistic"
+                              ? "😊"
+                              : stocks.marketSentiment === "cautious"
+                              ? "😐"
+                              : stocks.marketSentiment === "pessimistic"
+                              ? "😟"
+                              : stocks.marketSentiment === "apocalyptic"
+                              ? "😱"
+                              : "🤔"}
+                          </p>
+                        )}
+                        {stocks.cosmicAlignment && (
+                          <p className="text-xs mt-1">
+                            Cosmic Alignment:{" "}
+                            <span
+                              className={
+                                stocks.cosmicAlignment === "favorable"
+                                  ? "text-green-600"
+                                  : "text-red-600"
+                              }
+                            >
+                              {stocks.cosmicAlignment.charAt(0).toUpperCase() +
+                                stocks.cosmicAlignment.slice(1)}
+                            </span>{" "}
+                            {stocks.cosmicAlignment === "favorable"
+                              ? "✨"
+                              : "☄️"}
+                          </p>
+                        )}
+                        {stocks.mercuryRetrograde !== undefined && (
+                          <p className="text-xs mt-1">
+                            Mercury Status:{" "}
+                            <span
+                              className={
+                                stocks.mercuryRetrograde
+                                  ? "text-red-600 font-bold"
+                                  : "text-green-600"
+                              }
+                            >
+                              {stocks.mercuryRetrograde
+                                ? "RETROGRADE"
+                                : "Direct"}
+                            </span>{" "}
+                            {stocks.mercuryRetrograde ? "🔄" : "➡️"}
+                          </p>
+                        )}
                       </div>
                     )}
 
@@ -491,6 +809,32 @@ function StockWidget() {
                                 ).toFixed(2)}
                               </span>
                             </div>
+                            <div className="flex justify-between mt-1">
+                              <span>Cosmic Resonance:</span>
+                              <span
+                                className={
+                                  Math.random() < 0.5
+                                    ? "text-purple-600"
+                                    : "text-orange-600"
+                                }
+                              >
+                                {(Math.random() * 100).toFixed(1)}%
+                              </span>
+                            </div>
+                            <div className="flex justify-between mt-1">
+                              <span>Quantum Entanglement:</span>
+                              <span
+                                className={
+                                  Math.random() < 0.3
+                                    ? "text-red-600 font-bold"
+                                    : ""
+                                }
+                              >
+                                {Math.random() < 0.3
+                                  ? "CRITICAL"
+                                  : (Math.random() * 5 + 1).toFixed(1) + "/10"}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       );
@@ -523,69 +867,72 @@ function StockWidget() {
   );
 }
 
+// Map component defined outside of the WeatherWidget to prevent re-rendering
+const WeatherMap = React.memo(
+  ({
+    lat,
+    lon,
+    pinEmoji,
+    cityName,
+  }: {
+    lat: number;
+    lon: number;
+    pinEmoji: string;
+    cityName: string;
+  }) => {
+    // The iframe URL with closer zoom level to show city names (zoom level 12 is city-level detail)
+    // Using a much tighter bounding box to focus on the location
+    const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${
+      lon - 0.5
+    }%2C${lat - 0.5}%2C${lon + 0.5}%2C${lat + 0.5}&layer=mapnik&zoom=10`;
+
+    return (
+      <div className="mt-2 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700">
+        <div className="relative">
+          {/* Map iframe with CSS to hide controls */}
+          <div className="relative" style={{ height: "200px" }}>
+            <iframe
+              src={mapUrl}
+              width="100%"
+              height="200"
+              frameBorder="0"
+              scrolling="no"
+              title={`Map of ${cityName}`}
+              className="w-full"
+              style={{ zIndex: 1 }}
+            />
+
+            {/* Position emoji pin over map */}
+            <div className="absolute inset-0 flex items-center justify-center text-5xl z-10 pointer-events-none">
+              {pinEmoji}
+            </div>
+
+            {/* Overlay to hide attribution and controls */}
+            <div className="absolute bottom-0 left-0 right-0 h-6 bg-gray-100 dark:bg-gray-800 z-20" />
+            <div className="absolute top-0 left-0 right-0 h-6 bg-gray-100 dark:bg-gray-800 z-20" />
+            <div className="absolute top-6 bottom-6 left-0 w-6 bg-gray-100 dark:bg-gray-800 z-20" />
+            <div className="absolute top-6 bottom-6 right-0 w-6 bg-gray-100 dark:bg-gray-800 z-20" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+);
+
 // Weather Widget Component
 function WeatherWidget() {
   const [weather, setWeather] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [countdown, setCountdown] = useState<number>(30);
+  const [refreshInterval, setRefreshInterval] = useState<number>(30);
+  const [weirdTemp, setWeirdTemp] = useState<any>(null);
+  const [pinEmoji, setPinEmoji] = useState<string>("📍");
 
-  // Weather fetching function
-  const fetchWeather = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch("/api/weather");
-      if (!response.ok) {
-        throw new Error("Failed to fetch weather");
-      }
-      const data = await response.json();
-      setWeather(data);
-      setError(null);
-      setCountdown(Math.floor(Math.random() * 20) + 20); // Random countdown between 20-40 seconds
-    } catch (err) {
-      setError("CATASTROPHIC WEATHER DATA FAILURE!!!");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchWeather();
-
-    // Refresh weather randomly between 20-40 seconds to appear unstable
-    const interval = setInterval(() => {
-      fetchWeather();
-    }, Math.floor(Math.random() * 20000) + 20000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Countdown timer effect
-  useEffect(() => {
-    if (!weather) return;
-
-    const timer = setInterval(() => {
-      setCountdown((prevCount) => {
-        if (prevCount <= 1) {
-          return 0;
-        }
-        return prevCount - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [weather]);
-
-  // Emoji mapping for temperature ranges
-  const getTemperatureEmoji = (temp: number) => {
-    if (temp > 80) return "🔥";
-    if (temp > 70) return "☀️";
-    if (temp > 60) return "😎";
-    if (temp > 50) return "🙂";
-    if (temp > 40) return "🧥";
-    if (temp > 30) return "❄️";
-    return "🥶";
-  };
+  // Random rotating warning icons
+  const warningIcons = ["⚠️", "🚨", "⛔", "🆘", "‼️"];
+  const randomWarning = () =>
+    warningIcons[Math.floor(Math.random() * warningIcons.length)];
 
   // Convert Fahrenheit to random weird units
   const convertToWeirdUnit = (tempF: number) => {
@@ -655,11 +1002,6 @@ function WeatherWidget() {
     };
   };
 
-  // Random rotating warning icons
-  const warningIcons = ["⚠️", "🚨", "⛔", "🆘", "‼️"];
-  const randomWarning = () =>
-    warningIcons[Math.floor(Math.random() * warningIcons.length)];
-
   // Pick a weird emoji for the map pin
   const getRandomWeirdPin = () => {
     const weirdPins = [
@@ -697,43 +1039,93 @@ function WeatherWidget() {
     return weirdPins[Math.floor(Math.random() * weirdPins.length)];
   };
 
-  // Weather map component with OpenStreetMap
-  const WeatherMap = () => {
-    if (!weather?.realWeather?.lat || !weather?.realWeather?.lon) return null;
+  // Weather fetching function
+  const fetchWeather = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/weather");
+      if (!response.ok) {
+        throw new Error("Failed to fetch weather");
+      }
+      const data = await response.json();
+      setWeather(data);
 
-    const lat = weather.realWeather.lat;
-    const lon = weather.realWeather.lon;
-    const pin = getRandomWeirdPin();
+      // Generate new random values only when fetching new weather
+      if (data.temperature) {
+        setWeirdTemp(convertToWeirdUnit(data.temperature));
+      }
+      setPinEmoji(getRandomWeirdPin());
 
-    // Using OpenStreetMap for embedding with a wider view
-    // Use a custom marker with a weird emoji and hide the attribution
-    return (
-      <div className="mt-2 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700">
-        <div className="relative">
-          <iframe
-            width="100%"
-            height="180"
-            frameBorder="0"
-            scrolling="no"
-            title={`Map of ${weather.city}`}
-            src={`https://www.openstreetmap.org/export/embed.html?bbox=${
-              lon - 1
-            }%2C${lat - 1}%2C${lon + 1}%2C${lat + 1}&amp;layer=mapnik`}
-            className="w-full"
-            style={{ zIndex: 1 }}
-          />
-          {/* Position emoji pin over map */}
-          <div className="absolute inset-0 flex items-center justify-center text-4xl z-10 pointer-events-none">
-            {pin}
-          </div>
-          {/* Overlay to hide attribution */}
-          <div className="absolute bottom-0 left-0 right-0 h-5 bg-gray-100 dark:bg-gray-800 z-20"></div>
-        </div>
-      </div>
-    );
+      // Set a new random refresh interval between 20-40 seconds
+      const newInterval = Math.floor(Math.random() * 20) + 20;
+      setRefreshInterval(newInterval);
+      setCountdown(newInterval);
+      setError(null);
+    } catch (err) {
+      setError("CATASTROPHIC WEATHER DATA FAILURE!!!");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (loading) {
+  // Initial fetch on component mount
+  useEffect(() => {
+    fetchWeather();
+  }, []);
+
+  // Countdown timer effect - handles the weather refresh
+  useEffect(() => {
+    if (!weather) return;
+
+    const timer = setInterval(() => {
+      setCountdown((prevCount) => {
+        if (prevCount <= 1) {
+          return 0;
+        }
+        return prevCount - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [weather]);
+
+  // Separate effect to handle refresh when countdown reaches zero
+  useEffect(() => {
+    if (countdown === 0 && weather) {
+      fetchWeather();
+    }
+  }, [countdown, weather]);
+
+  // Emoji mapping for temperature ranges
+  const getTemperatureEmoji = (temp: number) => {
+    if (temp > 80) return "🔥";
+    if (temp > 70) return "☀️";
+    if (temp > 60) return "😎";
+    if (temp > 50) return "🙂";
+    if (temp > 40) return "🧥";
+    if (temp > 30) return "❄️";
+    return "🥶";
+  };
+
+  // Render the countdown timer separately from the weather display
+  const CountdownTimer = () => (
+    <div className="flex justify-center items-center text-[9px] text-gray-500 dark:text-gray-400 mt-2">
+      <span className="flex items-center">
+        <span className="mr-1">Updating in</span>
+        <span className="font-mono font-semibold">{countdown}</span>
+        <span className="animate-pulse ml-1">...</span>
+      </span>
+      <button
+        type="button"
+        onClick={() => fetchWeather()}
+        className="ml-2 text-blue-500 dark:text-blue-400 underline"
+      >
+        Refresh
+      </button>
+    </div>
+  );
+
+  if (loading && !weather) {
     return (
       <div className="min-h-40 flex flex-col items-center justify-center">
         <p className="text-orange-600 dark:text-orange-400 font-bold animate-pulse">
@@ -759,42 +1151,41 @@ function WeatherWidget() {
     );
   }
 
-  // Convert temperature to weird unit
-  const weirdTemp = weather ? convertToWeirdUnit(weather.temperature) : null;
-
   return (
     <div className="min-h-40">
-      {weather && (
+      {weather && weirdTemp && (
         <div className="space-y-2">
           <div className="text-center">
             <span className="text-xl font-bold">{weather.city}</span>
             <div className="flex items-center justify-center gap-2 mt-1">
               <span
                 className="text-lg group relative"
-                title={weirdTemp?.explanation}
+                title={weirdTemp.explanation}
               >
-                {weirdTemp?.temperature}{" "}
+                {weirdTemp.temperature}{" "}
                 <span className="text-sm">
-                  {weirdTemp?.unit} [{weirdTemp?.suffix}]
+                  {weirdTemp.unit} [{weirdTemp.suffix}]
                 </span>
                 {/* Tooltip on hover */}
                 <span className="invisible group-hover:visible absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded whitespace-nowrap">
-                  {weirdTemp?.explanation}
+                  {weirdTemp.explanation}
                 </span>
               </span>
               <span className="text-xl">
                 {getTemperatureEmoji(weather.temperature)}
               </span>
             </div>
-            <div className="text-[10px] text-gray-500 dark:text-gray-400 mt-1 italic">
-              <span className="block mt-1 text-[9px]">
-                ({weather.temperature}°F in normal units)
-              </span>
-            </div>
           </div>
 
-          {/* Add the map component here */}
-          {weather.realWeather && <WeatherMap />}
+          {/* Add the map component with stable props */}
+          {weather.realWeather?.lat && weather.realWeather?.lon && (
+            <WeatherMap
+              lat={weather.realWeather.lat}
+              lon={weather.realWeather.lon}
+              pinEmoji={pinEmoji}
+              cityName={weather.city}
+            />
+          )}
 
           <div className="bg-yellow-100 dark:bg-yellow-900 p-2 rounded-lg border-2 border-yellow-300 dark:border-yellow-700">
             <p className="text-red-600 dark:text-red-400 font-bold text-center text-xs">
@@ -817,24 +1208,12 @@ function WeatherWidget() {
             </p>
           </div>
 
-          <div className="flex justify-center items-center text-[9px] text-gray-500 dark:text-gray-400 mt-2">
-            <span className="flex items-center">
-              <span className="mr-1">Updating in</span>
-              <span className="font-mono font-semibold">{countdown}</span>
-              <span className="animate-pulse ml-1">...</span>
-            </span>
-            <button
-              type="button"
-              onClick={() => fetchWeather()}
-              className="ml-2 text-blue-500 dark:text-blue-400 underline"
-            >
-              Refresh
-            </button>
-          </div>
+          {/* Separate countdown timer component */}
+          <CountdownTimer />
         </div>
       )}
 
-      {loading && (
+      {loading && weather && (
         <div className="min-h-40 flex flex-col items-center justify-center">
           <p className="text-sm text-orange-600 dark:text-orange-400 font-semibold animate-pulse">
             FETCHING CRITICAL WEATHER DATA
