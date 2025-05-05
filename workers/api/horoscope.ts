@@ -142,11 +142,13 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
           const words = rawResponse.split(/\s+/).filter(w => w.length > 3);
           
           if (words.length > 0) {
-            const randomWord = words[Math.floor(Math.random() * words.length)];
+            // Use timestamp to select a word deterministically
+            const wordIndex = Date.now() % words.length;
+            const selectedWord = words[wordIndex];
             captchaData = {
-              instruction: `The AI couldn't format a proper CAPTCHA. As a fallback, please type the word "${randomWord}" from the AI's response.`,
+              instruction: `The AI couldn't format a proper CAPTCHA. As a fallback, please type the word "${selectedWord}" from the AI's response.`,
               type: "text",
-              answer: randomWord
+              answer: selectedWord
             };
             console.log("Created fallback CAPTCHA:", captchaData);
           } else {
@@ -337,7 +339,7 @@ export async function handleValidateCaptchaRequest(request: Request, env: Env): 
   }
 }
 
-// Generate ridiculous success messages
+// Generate success messages based on token and timestamp
 function getRandomSuccessMessage(): string {
   const messages = [
     "Cosmic alignment confirmed! Your astrological CAPTCHA mastery has been recorded in the stars!",
@@ -351,10 +353,12 @@ function getRandomSuccessMessage(): string {
     "DESTINY FULFILLED! You have passed the test that was written in your charts at birth!",
     "ENLIGHTENMENT ACHIEVED! The astrological algorithms bow to your superior insight!"
   ];
-  return messages[Math.floor(Math.random() * messages.length)];
+  // Use current milliseconds as a pseudo-random seed
+  const index = Date.now() % messages.length;
+  return messages[index];
 }
 
-// Generate ridiculous failure messages
+// Generate failure messages based on timestamp
 function getRandomFailureMessage(): string {
   const messages = [
     "ASTROLOGICAL MISMATCH! The stars frown upon your answer with cosmic disappointment!",
@@ -368,7 +372,10 @@ function getRandomFailureMessage(): string {
     "SPIRITUAL REBUFF! The celestial gatekeepers have temporarily blocked your access!",
     "ENLIGHTENMENT DELAYED! Your answer has been banished to the void between dimensions!"
   ];
-  return messages[Math.floor(Math.random() * messages.length)];
+  // Use seconds since the epoch (modulo message count) as our "random" index
+  // This changes every second but is still deterministic for a given second
+  const index = Math.floor(Date.now() / 1000) % messages.length;
+  return messages[index];
 }
 
 // Handle the actual horoscope generation after a successful CAPTCHA
@@ -478,14 +485,16 @@ function getLuckyColor(sign: string): string {
 // Helper function to get a "lucky number" based on sign and day
 function getLuckyNumber(sign: string): string {
   const dayOfMonth = new Date().getDate();
+  const month = new Date().getMonth() + 1;
   const signIndex = validZodiacSigns.indexOf(sign.toLowerCase());
   
-  // 30% chance of getting a normal number
-  if (Math.random() < 0.3) {
+  // Use a deterministic formula instead of Math.random
+  // If the sum of day and month is divisible by 3, return a normal number (similar to 30% chance)
+  if ((dayOfMonth + month) % 3 === 0) {
     return String((dayOfMonth + signIndex) % 100);
   }
   
-  // 70% chance of getting a weird "number"
+  // Otherwise return a weird "number" (similar to 70% chance)
   const weirdNumbers = [
     "π - 0.002", "√-1", "404", "your ex's birthday", 
     "the number of unread emails in your inbox", "∞ - 7", 
@@ -495,7 +504,7 @@ function getLuckyNumber(sign: string): string {
     "the number of times you've walked into a room and forgotten why"
   ];
   
-  const weirdIndex = (dayOfMonth + signIndex) % weirdNumbers.length;
+  const weirdIndex = (dayOfMonth + signIndex + month) % weirdNumbers.length;
   return weirdNumbers[weirdIndex];
 }
 
