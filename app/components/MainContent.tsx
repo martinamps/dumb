@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import DumbIdeaShredder from "./DumbIdeaShredder";
+import { StockWidget } from "./StockWidget";
+import { WeatherWidget } from "./WeatherWidget";
 
 // Define types used within MainContent
 interface ZodiacSign {
@@ -40,6 +42,10 @@ interface HoroscopeData {
   unluckyScenario: string;
   compatibleSigns: string[];
   incompatibleSigns: string[];
+}
+
+interface HaikuData {
+  haiku: string;
 }
 
 // Zodiac sign data (moved here from home.tsx)
@@ -218,6 +224,46 @@ export function MainContent() {
   const [horoscopeLoading, setHoroscopeLoading] = useState<boolean>(false);
   const [horoscopeError, setHoroscopeError] = useState<string | null>(null);
   const [horoscopeVisible, setHoroscopeVisible] = useState<boolean>(false);
+
+  // State for haiku
+  const [haiku, setHaiku] = useState<string>("");
+  const [haikuLoading, setHaikuLoading] = useState<boolean>(true);
+  const [haikuError, setHaikuError] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+
+  // Fetch haiku on component mount
+  useEffect(() => {
+    const fetchHaiku = async () => {
+      try {
+        setHaikuLoading(true);
+        setHaikuError(null);
+        const response = await fetch("/api/haiku");
+        if (!response.ok) {
+          throw new Error("Failed to fetch haiku");
+        }
+        const data: HaikuData = await response.json();
+        setHaiku(data.haiku);
+      } catch (err) {
+        setHaikuError(
+          "Failed to generate a haiku. The AI must be feeling uninspired today."
+        );
+        setHaiku("");
+      } finally {
+        setHaikuLoading(false);
+      }
+    };
+
+    fetchHaiku();
+  }, []);
+
+  const generateNewHaiku = () => {
+    setShowModal(true);
+    // No matter what they choose in the modal, nothing happens with the haiku
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   // Determine zodiac sign based on quiz answers (stable function)
   const determineZodiacSign = useCallback((quizAnswers: number[]): number => {
@@ -914,6 +960,93 @@ export function MainContent() {
     );
   };
 
+  // Custom Modal component for haiku
+  const HaikuModal = () => {
+    if (!showModal) return null;
+    
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="dumb-container dumb-spin p-6 rounded-lg max-w-sm w-full mx-4">
+          <h3 className="text-lg font-bold mb-4 dumb-text" style={{
+            backgroundColor: "rgba(0, 0, 0, 0.2)",
+            padding: "8px",
+            borderRadius: "8px",
+            textShadow: "1px 1px 0 black",
+            fontSize: "clamp(1.1rem, 5vw, 1.4rem)",
+            letterSpacing: "1px"
+          }}>
+            ⁉️⁉️ DO YOU ACTUALLY WANT A NEW HAIKU??? ⁉️⁉️
+          </h3>
+          <div className="flex justify-end space-x-3">
+            <button
+              type="button"
+              onClick={closeModal}
+              className="dumb-button dumb-tilt-left"
+            >
+              NAH!!
+            </button>
+            <button
+              type="button"
+              onClick={closeModal}
+              className="dumb-button dumb-tilt-right"
+            >
+              NVM!!!
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Haiku Widget component
+  const HaikuWidget = () => (
+    <div className="dumb-container dumb-tilt-right mb-6">
+      <h2 className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2" 
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.2)",
+          padding: "5px 8px",
+          borderRadius: "6px 6px 0 0",
+          textShadow: "1px 1px 0 black, -1px -1px 0 black",
+          letterSpacing: "1px",
+          fontSize: "clamp(1.2rem, 5vw, 1.5rem)"
+        }}>
+        🤪 DUMB HAIKU!!! 🤪
+      </h2>
+      <div className="min-h-24">
+        {haikuLoading ? (
+          <p className="italic dumb-text animate-pulse">
+            LOADING DUMB WORDS...
+          </p>
+        ) : haikuError ? (
+          <p className="text-red-500 font-bold">☠️ {haikuError} ☠️</p>
+        ) : (
+          <div 
+            className="font-serif text-xl dumb-text whitespace-pre-line" 
+            style={{
+              fontSize: "clamp(1.3rem, 5vw, 1.8rem)", 
+              fontWeight: "bold",
+              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              padding: "10px",
+              borderRadius: "8px",
+              textShadow: "1px 1px 0 black",
+              letterSpacing: "1px",
+              lineHeight: "1.5"
+            }}
+          >
+            {haiku}
+          </div>
+        )}
+      </div>
+      <button
+        type="button"
+        onClick={generateNewHaiku}
+        className="dumb-button mt-3 w-full dumb-hover"
+      >
+        🔄✨ GENERATE NEW HAIKU!!! ✨🔄
+      </button>
+    </div>
+  );
+
   // Intro banner component
   const WelcomeBanner = () => (
     <div className="dumb-container dumb-tilt-right mb-6 py-3 px-4">
@@ -982,12 +1115,16 @@ export function MainContent() {
   // Main render logic
   return (
     <div className="flex-1 dumb-container dumb-tilt-left">
+      {/* Modal for haiku - Only shows when showModal is true */}
+      <HaikuModal />
+      
       <WelcomeBanner />
 
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center dumb-text mb-3 md:mb-6 dumb-glow">
         World's DUMBEST Horoscopes!!!
       </h1>
 
+      {/* Main horoscope content */}
       {currentQuestion === -1 && !quizComplete && renderStartScreen()}
       {currentQuestion >= 0 && !quizComplete && renderQuizQuestion()}
       {quizComplete && !horoscopeVisible && (
@@ -998,12 +1135,53 @@ export function MainContent() {
       )}
       {horoscopeVisible && renderHoroscope()}
 
-      {/* Ideas shredder always visible */}
+      {/* Widgets from the right panel - now displayed inline */}
+      <div className="mt-12 pt-8 border-t-4 border-dashed border-yellow-400">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="md:col-span-1">
+            <HaikuWidget />
+          </div>
+          <div className="md:col-span-1">
+            <div className="dumb-container dumb-tilt-left">
+              <h2 className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2" 
+                style={{
+                  backgroundColor: "rgba(0, 0, 0, 0.2)",
+                  padding: "5px 8px",
+                  borderRadius: "6px 6px 0 0",
+                  textShadow: "1px 1px 0 black, -1px -1px 0 black",
+                  letterSpacing: "1px",
+                  fontSize: "clamp(1.2rem, 5vw, 1.5rem)"
+                }}>
+                ☔ WORTHLESS WEATHER!!! ☔
+              </h2>
+              <WeatherWidget />
+            </div>
+          </div>
+          <div className="md:col-span-1">
+            <div className="dumb-container dumb-tilt-right">
+              <h2 className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2" 
+                style={{
+                  backgroundColor: "rgba(0, 0, 0, 0.2)",
+                  padding: "5px 8px",
+                  borderRadius: "6px 6px 0 0",
+                  textShadow: "1px 1px 0 black, -1px -1px 0 black",
+                  letterSpacing: "1px",
+                  fontSize: "clamp(1.2rem, 5vw, 1.5rem)"
+                }}>
+                💰 EMOJISTONK!!! 💰
+              </h2>
+              <StockWidget />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Ideas shredder after the widgets */}
       <div className="mt-12 pt-8 border-t-4 border-dashed border-yellow-400">
         <DumbIdeaShredder />
       </div>
 
-      {/* Footer with poop emoji */}
+      {/* Footer with poop emoji - at the very bottom */}
       <div className="mt-12 text-center p-4 border-t-4 border-dashed border-yellow-400">
         <a
           href="https://x.com/martinamps"

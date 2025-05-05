@@ -303,6 +303,12 @@ const htmlContent = `<!DOCTYPE html>
         </div>
     </div>
 
+    <div id="redirect-overlay">
+        <div id="countdown">10</div>
+        <div id="redirect-text">... DOING SOMETHING DUMB !!!</div>
+        <div id="redirect-link">Redirecting to https://www.worldsdumbestapp.com/</div>
+    </div>
+
     <div id="bg-images"></div>
 
     <div class="cursor"></div>
@@ -415,14 +421,14 @@ const htmlContent = `<!DOCTYPE html>
                 button.style.left = \`\${safeX}px\`;
                 button.style.top = \`\${safeY}px\`;
                 
-                // Reset after a short delay
+                // Reset position after a delay to ensure it doesn't get stuck
                 setTimeout(() => {
-                    if (clickCount < 2) {
+                    if (clickCount < 2) { // Only reset if we haven't started redirect countdown
                         button.style.position = 'relative';
                         button.style.left = 'auto';
                         button.style.top = 'auto';
                     }
-                }, 2500);
+                }, 3000);
             }
         });
         
