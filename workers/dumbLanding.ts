@@ -316,9 +316,31 @@ const htmlContent = `<!DOCTYPE html>
     </div>
 
     <div id="redirect-overlay">
-        <div id="countdown">10</div>
+        <div id="countdown">5</div>
         <div id="redirect-text">... DOING SOMETHING DUMB !!!</div>
-        <div id="redirect-link">Redirecting to https://www.worldsdumbestapp.com/</div>
+        <a 
+            id="redirect-link" 
+            href="https://www.worldsdumbestapp.com/" 
+            style="
+                font-size: min(2rem, 8vw);
+                color: #00ff00;
+                text-decoration: underline;
+                margin-bottom: 20px;
+                cursor: pointer;
+                position: relative;
+                z-index: 1000;
+                text-align: center;
+                width: 100%;
+                word-wrap: break-word;
+                background: rgba(0,0,0,0.5);
+                padding: 15px 0;
+                border-radius: 15px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+                display: block;
+            "
+        >
+            Click here to go NOW!
+        </a>
     </div>
 
     <div id="bg-images"></div>
@@ -391,7 +413,7 @@ const htmlContent = `<!DOCTYPE html>
                 button.style.visibility = 'hidden';
                 redirectOverlay.style.display = 'flex';
                 
-                let timeLeft = 10;
+                let timeLeft = 5;
                 countdown.textContent = timeLeft;
 
                 const countdownInterval = setInterval(() => {
