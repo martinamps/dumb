@@ -928,7 +928,7 @@ export function MainContent() {
           fontSize: "clamp(1.2rem, 5vw, 1.6rem)",
         }}
       >
-        🎉 WELCOME TO THE WORLD'S DUMBEST HACKATHON PROJECT!!! 🎉
+        🎉 WELCOME TO THE WORLD'S APP!!! 🎉
       </h2>
       <div className="text-center">
         <p
@@ -942,7 +942,7 @@ export function MainContent() {
           }}
         >
           This RIDICULOUSLY USELESS website was created for the World's Dumbest
-          Hackathon using QUESTIONABLY INTELLIGENT AI models to:
+          Hackathon powered by DUMB <small>(sry meta)</small> AI models to:
         </p>
         <ul
           className="dumb-text space-y-1 mb-4 mx-auto max-w-xl"
@@ -959,8 +959,8 @@ export function MainContent() {
           <li>🤪 Generate DUMB HAIKUS that make NO SENSE</li>
           <li>🔮 Determine your zodiac sign with POINTLESS QUESTIONS</li>
           <li>🧩 Create FRUSTRATING horoscope CAPTCHAs</li>
-          <li>🌦️ Show DRAMATICALLY OVERREACTED weather</li>
-          <li>📈 Translate stocks into NONSENSICAL EMOJIS</li>
+          <li>🌦️ Show DRAMATICALLY OVERREACTED weather from weird cities</li>
+          <li>📈 Nonsense EMOJI STOCKS</li>
         </ul>
         <p
           className="dumb-text font-bold"
@@ -1002,13 +1002,13 @@ export function MainContent() {
       <div className="mt-12 pt-8 border-t-4 border-dashed border-yellow-400">
         <DumbIdeaShredder />
       </div>
-      
+
       {/* Footer with poop emoji */}
       <div className="mt-12 text-center p-4 border-t-4 border-dashed border-yellow-400">
-        <a 
-          href="https://x.com/martinamps" 
-          target="_blank" 
-          rel="noopener noreferrer" 
+        <a
+          href="https://x.com/martinamps"
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-flex items-center text-white/80 hover:text-white transition-colors duration-200 dumb-text"
           style={{
             fontSize: "clamp(0.9rem, 3.5vw, 1.1rem)",
@@ -1016,10 +1016,14 @@ export function MainContent() {
             backgroundColor: "rgba(0, 0, 0, 0.2)",
             padding: "6px 12px",
             borderRadius: "20px",
-            fontWeight: "bold"
+            fontWeight: "bold",
           }}
         >
-          Built with <span className="mx-1 text-brown-400" style={{ fontSize: "1.2em" }}>💩</span> by @martinamps
+          Built with{" "}
+          <span className="mx-1 text-brown-400" style={{ fontSize: "1.2em" }}>
+            💩
+          </span>{" "}
+          by @martinamps
         </a>
       </div>
     </div>
