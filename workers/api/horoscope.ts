@@ -5,6 +5,7 @@
 type CaptchaRecord = {
   answer: string;
   created: number; // timestamp
+  attempts: number; // track number of attempts
 };
 
 // Simple in-memory token storage with expiration
@@ -65,6 +66,7 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
 
     // Extract and clean the horoscope text
     const horoscopeText = horoscopeResponse.response.trim();
+    console.log("Generated horoscope text:", horoscopeText);
 
     // Now, create a CAPTCHA challenge based on the horoscope
     const captchaResponse = await env.AI.run(
@@ -80,32 +82,83 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
         
         The challenge MUST be solvable using ONLY the horoscope text provided or common knowledge/simple logic related to the text. Do NOT require external knowledge.
         
-        Output the challenge in JSON format with the following keys:
-        - "instruction": A clear text instruction for the user (e.g., "The horoscope mentions 'unexpected news'. Type the third word of the horoscope text.")
-        - "type": The type of input required ("text", "number", "keyword_selection"). Keep it simple for a hackathon - primarily text/number input is easiest.
-        - "answer": The EXACT correct answer the user needs to provide.
+        VERY IMPORTANT: You MUST return ONLY valid JSON. Do not include any explanation, introduction, or text outside the JSON structure.
+        
+        Output the challenge in this EXACT JSON structure:
+        {
+          "instruction": "A clear text instruction for the user",
+          "type": "text",
+          "answer": "The exact correct answer"
+        }
+        
+        For the "type" field, use "text" for text input or "number" for numeric input.
         
         Example Themes & Challenge Ideas:
-        - If horoscope mentions money/finance: "Horoscope mentions 'finances'. What is 5 + 3?" (Answer: 8)
-        - If horoscope mentions communication/words: "Horoscope advises 'clear communication'. Type the first 5-letter word found in the text." (Answer: [the word])
-        - If horoscope mentions caution/slowness: "Horoscope warns 'take it slow'. How many times does the letter 's' appear in the horoscope text?" (Answer: [the count])
-        - If horoscope mentions opportunities/doors: "Horoscope mentions 'opportunity'. Type the word immediately following 'opportunity' in the text." (Answer: [the word])
-        - If horoscope mentions a specific feeling (e.g., 'happy'): "The horoscope mentions 'happy'. Type 'happy' backwards." (Answer: 'yppah')
+        - If horoscope mentions money/finance: Create a challenge about counting or sums.
+        - If horoscope mentions communication/words: Create a challenge to identify specific words in the text.
+        - If horoscope mentions caution/slowness: Create a challenge counting letters or determining word positions.
+        - If horoscope mentions opportunities/doors: Create a challenge related to extracting specific phrases.
         
         Ensure the 'instruction' is clear and directly references the horoscope inspiration. Make the 'answer' unambiguous. BE CREATIVE BUT SOLVABLE AND RIDICULOUS.
         
-        Generate ONLY the JSON output now based *only* on the provided horoscope text.`,
+        IMPORTANT: Make the answer relatively SHORT and SIMPLE (1-3 words or a small number), as users will need to type it exactly.
+        
+        FINAL REMINDER: Your entire response must be ONLY the JSON object, without any additional text, explanation, or formatting. Just the JSON itself.`,
         max_tokens: 300,
         temperature: 0.7,
       }
     );
 
     try {
-      // Parse the CAPTCHA response as JSON
-      const captchaData = JSON.parse(captchaResponse.response.trim());
+      // Log the raw CAPTCHA response for debugging
+      const rawResponse = captchaResponse.response.trim();
+      console.log("Raw CAPTCHA response:", rawResponse);
+      
+      let captchaData;
+      
+      // Try to parse the CAPTCHA response as JSON
+      try {
+        captchaData = JSON.parse(rawResponse);
+      } catch (parseError) {
+        console.error("JSON parse error:", parseError);
+        
+        // Check if the response starts with markdown or text before JSON
+        // Try to extract JSON from the response if possible
+        const jsonMatch = rawResponse.match(/(\{[\s\S]*\})/);
+        if (jsonMatch && jsonMatch[1]) {
+          console.log("Attempting to extract JSON from response");
+          try {
+            captchaData = JSON.parse(jsonMatch[1]);
+            console.log("Successfully extracted JSON from response");
+          } catch (extractError) {
+            console.error("Failed to extract JSON:", extractError);
+            throw new Error("Failed to parse CAPTCHA response as JSON");
+          }
+        } else {
+          // If no JSON object found, create a simple one based on the content
+          console.log("No JSON found, creating fallback CAPTCHA");
+          const words = rawResponse.split(/\s+/).filter(w => w.length > 3);
+          
+          if (words.length > 0) {
+            const randomWord = words[Math.floor(Math.random() * words.length)];
+            captchaData = {
+              instruction: `The AI couldn't format a proper CAPTCHA. As a fallback, please type the word "${randomWord}" from the AI's response.`,
+              type: "text",
+              answer: randomWord
+            };
+            console.log("Created fallback CAPTCHA:", captchaData);
+          } else {
+            throw new Error("Could not create fallback CAPTCHA");
+          }
+        }
+      }
+      
+      // Log successful parse
+      console.log("Successfully parsed CAPTCHA data:", captchaData);
 
       // Validate that we have the required fields
       if (!captchaData.instruction || !captchaData.type || !captchaData.answer) {
+        console.log("Missing required fields in CAPTCHA data:", captchaData);
         throw new Error("Invalid CAPTCHA data structure");
       }
 
@@ -116,6 +169,7 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
       captchaTokens.set(token, {
         answer: captchaData.answer.toString(),
         created: Date.now(),
+        attempts: 0,
       });
 
       // Return the challenge to the client (without the answer)
@@ -133,10 +187,16 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
       );
     } catch (error) {
       console.error("Error parsing CAPTCHA response:", error);
+      console.log("CAPTCHA response that failed to parse:", captchaResponse.response);
+      
+      // Try to extract more details about the error
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error details:", errorMessage);
+      
       return new Response(
         JSON.stringify({
           error: "Failed to generate CAPTCHA challenge",
-          details: error instanceof Error ? error.message : "Unknown error",
+          details: errorMessage,
         }),
         {
           status: 500,
@@ -184,27 +244,70 @@ export async function handleValidateCaptchaRequest(request: Request, env: Env): 
 
     // Retrieve the correct answer using the token
     const record = captchaTokens.get(token);
-    
-    // Delete the token immediately to prevent replay attacks
-    captchaTokens.delete(token);
 
     // Check if the token exists and is valid
     if (!record) {
       return new Response(JSON.stringify({ 
         success: false, 
-        message: "CAPTCHA expired or invalid - cosmic timing mismatch!" 
+        message: "CAPTCHA expired or invalid - cosmic timing mismatch! Try getting a new CAPTCHA challenge." 
       }), {
         headers: { "Content-Type": "application/json" },
       });
     }
+    
+    // Increment attempt counter
+    record.attempts += 1;
+    console.log(`CAPTCHA attempt ${record.attempts} for token ${token}`);
+    
+    // Maximum allowed attempts (intentionally dumb but not too frustrating)
+    const MAX_ATTEMPTS = 3;
+    
+    // Clean up both answers for comparison (case-insensitive, trim whitespace, normalize punctuation)
+    const cleanAnswer = (text) => {
+      return text.toString()
+        .toLowerCase()
+        .trim()
+        .replace(/[.,!?;:'"()]/g, '')  // Remove common punctuation
+        .replace(/\s+/g, ' ');          // Normalize whitespace
+    };
+    
+    const cleanUserAnswer = cleanAnswer(userAnswer);
+    const cleanStoredAnswer = cleanAnswer(record.answer);
+    
+    console.log(`Comparing answers - User: "${cleanUserAnswer}" vs Stored: "${cleanStoredAnswer}"`);
+    
+    // Check if the answer is correct (with some leniency)
+    const isCorrect = cleanUserAnswer === cleanStoredAnswer;
+    
+    // If correct or max attempts reached, delete the token
+    if (isCorrect || record.attempts >= MAX_ATTEMPTS) {
+      console.log(`Deleting token ${token} - isCorrect: ${isCorrect}, attempts: ${record.attempts}`);
+      captchaTokens.delete(token);
+    } else {
+      // Update the record with the new attempt count
+      captchaTokens.set(token, record);
+    }
 
-    // Check if the answer is correct (case-insensitive)
-    const isCorrect = userAnswer.toString().toLowerCase() === record.answer.toLowerCase();
-
-    // Create a randomly-themed response message
-    let message = isCorrect 
-      ? getRandomSuccessMessage() 
-      : getRandomFailureMessage();
+    // Create differently-themed response messages based on attempt count
+    let message;
+    if (isCorrect) {
+      message = getRandomSuccessMessage();
+    } else if (record.attempts >= MAX_ATTEMPTS) {
+      message = `COSMIC FAILURE! You've used all ${MAX_ATTEMPTS} attempts. The stars suggest getting a new CAPTCHA challenge.`;
+    } else {
+      // Start giving increasingly obvious hints after the first attempt
+      let hint = "";
+      if (record.attempts === 1) {
+        // First attempt - vague hint
+        hint = ` The cosmic forces whisper that the answer may be related to "${record.answer.charAt(0)}...".`;
+      } else if (record.attempts === 2) {
+        // Second attempt - more obvious hint
+        const halfLength = Math.floor(record.answer.length / 2);
+        hint = ` The astral projection reveals part of the answer: "${record.answer.substring(0, halfLength)}..."`;
+      }
+      
+      message = `${getRandomFailureMessage()} (Attempt ${record.attempts}/${MAX_ATTEMPTS})${hint}`;
+    }
 
     return new Response(
       JSON.stringify({
