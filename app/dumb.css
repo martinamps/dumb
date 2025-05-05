@@ -61,25 +61,27 @@
 }
 
 .dumb-text {
-  font-family: 'Comic Sans MS', cursive, sans-serif !important;
+  font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif !important;
   color: #ff00ff !important;
-  text-shadow: 1px 1px 0 #00ffff, -1px -1px 0 #ffff00 !important;
+  text-shadow: 1px 1px 0 black !important; /* Simplified shadow for readability */
   animation: rainbow 5s linear infinite !important;
-  letter-spacing: 0.5px !important;
-  font-size: clamp(1rem, 4vw, 1.5rem) !important; /* Responsive base font size */
+  letter-spacing: 0.8px !important; /* Increased letter spacing */
+  line-height: 1.4 !important; /* Better line height */
+  font-size: clamp(1.1rem, 4.5vw, 1.6rem) !important; /* Slightly larger base font size */
+  font-weight: 600 !important; /* Slightly bolder text */
 }
 
 .dumb-container {
   border: clamp(3px, 1.5vw, 6px) dashed yellow !important; /* Responsive border width */
-  box-shadow: 0 0 10px rgba(255, 0, 255, 0.8), 
-              0 0 20px rgba(0, 255, 255, 0.6) !important; /* Smaller shadows for mobile */
-  background-color: rgba(255, 255, 255, 0.9) !important; /* More opaque for better readability */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3), 
+              0 0 20px rgba(255, 0, 255, 0.5) !important; /* Adjusted shadows for better contrast */
+  background-color: rgba(255, 255, 255, 0.95) !important; /* More opaque for better readability */
   border-radius: clamp(10px, 3vw, 20px) !important; /* Responsive border radius */
-  padding: clamp(8px, 2vw, 15px) !important; /* Responsive padding */
+  padding: clamp(12px, 3vw, 20px) !important; /* Increased padding */
   position: relative !important;
   z-index: 1 !important;
   animation: pulse 2s infinite alternate !important;
-  margin-bottom: clamp(10px, 3vw, 20px) !important; /* Add responsive margin */
+  margin-bottom: clamp(15px, 4vw, 25px) !important; /* Increased margin for better spacing */
 }
 
 .dumb-button {

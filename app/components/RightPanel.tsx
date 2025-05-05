@@ -77,7 +77,15 @@ export function RightPanel() {
 
       {/* Haiku Widget */}
       <div className="dumb-container dumb-tilt-right">
-        <h2 className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2">
+        <h2 className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2" 
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.2)",
+            padding: "5px 8px",
+            borderRadius: "6px 6px 0 0",
+            textShadow: "1px 1px 0 black, -1px -1px 0 black",
+            letterSpacing: "1px",
+            fontSize: "clamp(1.2rem, 5vw, 1.5rem)"
+          }}>
           🤪 DUMB HAIKU!!! 🤪
         </h2>
         <div className="min-h-24">
@@ -88,7 +96,19 @@ export function RightPanel() {
           ) : error ? (
             <p className="text-red-500 font-bold">☠️ {error} ☠️</p>
           ) : (
-            <div className="font-serif text-xl dumb-text whitespace-pre-line dumb-glow">
+            <div 
+              className="font-serif text-xl dumb-text whitespace-pre-line" 
+              style={{
+                fontSize: "clamp(1.3rem, 5vw, 1.8rem)", 
+                fontWeight: "bold",
+                backgroundColor: "rgba(0, 0, 0, 0.1)",
+                padding: "10px",
+                borderRadius: "8px",
+                textShadow: "1px 1px 0 black",
+                letterSpacing: "1px",
+                lineHeight: "1.5"
+              }}
+            >
               {haiku}
             </div>
           )}
@@ -104,7 +124,15 @@ export function RightPanel() {
 
       {/* Weather Widget */}
       <div className="dumb-container dumb-tilt-left">
-        <h2 className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2">
+        <h2 className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2" 
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.2)",
+            padding: "5px 8px",
+            borderRadius: "6px 6px 0 0",
+            textShadow: "1px 1px 0 black, -1px -1px 0 black",
+            letterSpacing: "1px",
+            fontSize: "clamp(1.2rem, 5vw, 1.5rem)"
+          }}>
           ☔ WORTHLESS WEATHER!!! ☔
         </h2>
         <WeatherWidget />
