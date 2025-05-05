@@ -107,6 +107,14 @@ const htmlContent = `<!DOCTYPE html>
             animation: rainbowText 1s infinite;
         }
 
+        #redirect-link {
+            font-size: 2rem;
+            color: #00ff00;
+            text-decoration: underline;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
         .emoji-rain {
             position: absolute;
             font-size: 30px;
@@ -212,6 +220,7 @@ const htmlContent = `<!DOCTYPE html>
 
     <div id="redirect-overlay">
         <div id="redirect-text">... DOING SOMETHING DUMB !!!</div>
+        <div id="redirect-link">Redirecting to https://www.worldsdumbestapp.com/</div>
         <div id="countdown">10</div>
     </div>
 
@@ -270,7 +279,6 @@ const htmlContent = `<!DOCTYPE html>
         const countdown = document.getElementById('countdown');
 
         let clickCount = 0;
-        let randomNum;
 
         button.addEventListener('click', () => {
             // Audio effects
@@ -286,40 +294,23 @@ const htmlContent = `<!DOCTYPE html>
             clickCount++;
 
             if (clickCount === 1) {
-                // First click - generate random number and change button text
-                randomNum = Math.floor(Math.random() * 11) + 3; // 3 to 13
-
-                // Display result with animation
-                result.style.visibility = 'visible';
-                result.textContent = randomNum;
-                result.style.fontSize = '1rem';
-
-                // Grow the number
-                let size = 1;
-                const growInterval = setInterval(() => {
-                    size += 1;
-                    result.style.fontSize = \`\${size}rem\`;
-
-                    if (size >= 8) {
-                        clearInterval(growInterval);
-
-                        // Change button text
-                        button.textContent = "CLICK IT AGAIN!!!";
-                        button.style.backgroundColor = "green";
-                        button.style.fontSize = "4rem";
-
-                        // Make the button pulse more aggressively
-                        button.style.animation = "pulse 0.5s infinite alternate, shake 0.3s infinite";
-                    }
-                }, 50);
+                // First click - just change button text and style
+                button.textContent = "CLICK IT AGAIN!!!";
+                button.style.backgroundColor = "green";
+                button.style.fontSize = "4rem";
+                button.style.animation = "pulse 0.5s infinite alternate, shake 0.3s infinite";
             } else if (clickCount === 2) {
                 // Second click - trigger countdown and redirect
-
-                // Show redirect overlay
                 redirectOverlay.style.display = 'flex';
 
-                // Countdown
-                let timeLeft = randomNum;
+                // Add click handler for the redirect link
+                const redirectLink = document.getElementById('redirect-link');
+                redirectLink.addEventListener('click', () => {
+                    window.location.href = "https://www.worldsdumbestapp.com/";
+                });
+
+                // Start 10 second countdown
+                let timeLeft = 10;
                 countdown.textContent = timeLeft;
                 countdown.style.visibility = 'visible';
 
@@ -332,7 +323,7 @@ const htmlContent = `<!DOCTYPE html>
 
                     if (timeLeft <= 0) {
                         clearInterval(countdownInterval);
-                        window.location.href = "http://worldsdumbestapp.com";
+                        window.location.href = "https://www.worldsdumbestapp.com/";
                     }
                 }, 1000);
             }
