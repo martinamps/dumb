@@ -63,8 +63,9 @@
 .dumb-text {
   font-family: 'Comic Sans MS', cursive, sans-serif !important;
   color: #ff00ff !important;
-  text-shadow: 3px 3px 0 #00ffff, -3px -3px 0 #ffff00 !important;
+  text-shadow: 2px 2px 0 #00ffff, -2px -2px 0 #ffff00 !important;
   animation: rainbow 5s linear infinite !important;
+  letter-spacing: 0.5px !important;
 }
 
 .dumb-container {
@@ -154,9 +155,10 @@
   animation: spin 10s linear infinite !important;
 }
 
-/* Make elements glow with obnoxious colors */
+/* Make elements glow with obnoxious colors - but more readable */
 .dumb-glow {
-  filter: drop-shadow(0 0 5px #ff00ff) drop-shadow(0 0 10px #00ffff) !important;
+  filter: drop-shadow(0 0 3px rgba(255, 0, 255, 0.7)) drop-shadow(0 0 6px rgba(0, 255, 255, 0.6)) !important;
+  font-weight: bold !important;
 }
 
 /* Add ridiculous hover effects */

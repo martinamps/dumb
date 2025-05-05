@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import DumbIdeaShredder from "./DumbIdeaShredder";
 
 // Define types used within MainContent
 interface ZodiacSign {
@@ -867,7 +868,7 @@ export function MainContent() {
           </div>
         </div>
 
-        <div className="text-center">
+        <div className="text-center mb-8">
           <button
             type="button"
             onClick={startQuiz}
@@ -875,6 +876,11 @@ export function MainContent() {
           >
             🔄 START OVER!!! 🔄
           </button>
+        </div>
+        
+        {/* Idea Shredder Section */}
+        <div className="mt-12 pt-8 border-t-4 border-dashed border-yellow-400">
+          <DumbIdeaShredder />
         </div>
       </div>
     );
