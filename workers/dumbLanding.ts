@@ -258,11 +258,11 @@ const htmlContent = `<!DOCTYPE html>
 <body>
     <div class="marquee marquee-top">
         <div class="marquee-content">
-            🔥🔥🔥 WELCOME TO THE WORLD\\'S DUMBEST DOMAIN!!! IT\\'S SO DUMB IT HURTS!!! CLICK THE BUTTON!!! NOW!!! WHY ARE YOU STILL READING THIS?!?! CLICK ALREADY!!! 🔥🔥🔥
+            🔥🔥🔥 WELCOME TO THE WORLD'S DUMBEST DOMAIN!!! IT'S SO DUMB IT HURTS!!! CLICK THE BUTTON!!! NOW!!! WHY ARE YOU STILL READING THIS?!?! CLICK ALREADY!!! 🔥🔥🔥
         </div>
     </div>
 
-    <h1>👑 WORLD\\'S DUMBEST DOMAIN!!! 👑</h1>
+    <h1>👑 WORLD'S DUMBEST DOMAIN!!! 👑</h1>
     <h2 style="font-size: min(1.5rem, 7vw); margin: 10px; background-color: rgba(0,0,0,0.7); padding: 10px; border-radius: 10px; display: inline-block; text-shadow: 1px 1px 2px black; line-height: 1.3;">👇👇👇 CLICK THIS AMAZING BUTTON 👇👇👇</h2>
 
     <div style="margin: 30px auto 100px auto; max-width: 90%;">
@@ -464,7 +464,7 @@ const htmlContent = `<!DOCTYPE html>
         });
 
         // Console message
-        console.log('%c WORLD\\'S DUMBEST WEBSITE CONSOLE MESSAGE!!!', 'background: black; color: red; font-size: 24px; font-weight: bold;');
+        console.log('%c WORLD'S DUMBEST WEBSITE CONSOLE MESSAGE!!!', 'background: black; color: red; font-size: 24px; font-weight: bold;');
         console.log('%c WHY ARE YOU LOOKING AT THE CONSOLE? CLICK THE BUTTON!!!', 'background: yellow; color: blue; font-size: 18px;');
     </script>
 </body>
