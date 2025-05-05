@@ -79,11 +79,8 @@ const htmlContent = `<!DOCTYPE html>
 
         #countdown {
             font-size: 15rem;
-            visibility: hidden;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            margin-bottom: 2rem;
+            position: relative;
             z-index: 2000;
         }
 
@@ -106,6 +103,8 @@ const htmlContent = `<!DOCTYPE html>
             font-size: 3rem;
             margin-bottom: 20px;
             animation: rainbowText 1s infinite;
+            position: relative;
+            z-index: 1000;
         }
 
         #redirect-link {
@@ -114,6 +113,8 @@ const htmlContent = `<!DOCTYPE html>
             text-decoration: underline;
             margin-bottom: 20px;
             cursor: pointer;
+            position: relative;
+            z-index: 1000;
         }
 
         .emoji-rain {
@@ -220,9 +221,9 @@ const htmlContent = `<!DOCTYPE html>
     </div>
 
     <div id="redirect-overlay">
+        <div id="countdown">10</div>
         <div id="redirect-text">... DOING SOMETHING DUMB !!!</div>
         <div id="redirect-link">Redirecting to https://worldsdumbestapp.com/</div>
-        <div id="countdown">10</div>
     </div>
 
     <div id="bg-images"></div>
