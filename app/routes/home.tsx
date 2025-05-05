@@ -46,12 +46,12 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   };
 
   return (
-    <div className="dumb-body min-h-screen p-4 md:p-8">
+    <div className="dumb-body min-h-screen p-2 sm:p-4 md:p-8">
       <div className="dumb-emoji-background">
         {generateEmojis()}
       </div>
       
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-6">
+      <div className="w-full mx-auto flex flex-col md:flex-row gap-3 md:gap-6 max-w-[95vw] md:max-w-6xl">
         <MainContent />
         <RightPanel />
       </div>

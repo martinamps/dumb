@@ -63,38 +63,42 @@
 .dumb-text {
   font-family: 'Comic Sans MS', cursive, sans-serif !important;
   color: #ff00ff !important;
-  text-shadow: 2px 2px 0 #00ffff, -2px -2px 0 #ffff00 !important;
+  text-shadow: 1px 1px 0 #00ffff, -1px -1px 0 #ffff00 !important;
   animation: rainbow 5s linear infinite !important;
   letter-spacing: 0.5px !important;
+  font-size: clamp(1rem, 4vw, 1.5rem) !important; /* Responsive base font size */
 }
 
 .dumb-container {
-  border: 6px dashed yellow !important;
-  box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 
-              0 0 40px rgba(0, 255, 255, 0.6) !important;
-  background-color: rgba(255, 255, 255, 0.8) !important;
-  border-radius: 20px !important;
-  padding: 15px !important;
+  border: clamp(3px, 1.5vw, 6px) dashed yellow !important; /* Responsive border width */
+  box-shadow: 0 0 10px rgba(255, 0, 255, 0.8), 
+              0 0 20px rgba(0, 255, 255, 0.6) !important; /* Smaller shadows for mobile */
+  background-color: rgba(255, 255, 255, 0.9) !important; /* More opaque for better readability */
+  border-radius: clamp(10px, 3vw, 20px) !important; /* Responsive border radius */
+  padding: clamp(8px, 2vw, 15px) !important; /* Responsive padding */
   position: relative !important;
   z-index: 1 !important;
   animation: pulse 2s infinite alternate !important;
+  margin-bottom: clamp(10px, 3vw, 20px) !important; /* Add responsive margin */
 }
 
 .dumb-button {
   background: linear-gradient(to right, #ff00ff, #00ffff) !important;
   color: yellow !important;
   font-weight: bold !important;
-  font-size: 1.2em !important;
-  padding: 10px 20px !important;
-  border: 4px dotted #ff00ff !important;
-  border-radius: 30px !important;
-  box-shadow: 0 0 15px #00ffff !important;
+  font-size: clamp(1rem, 5vw, 1.2rem) !important; /* Responsive font size */
+  padding: clamp(6px, 2vw, 10px) clamp(10px, 4vw, 20px) !important; /* Responsive padding */
+  border: clamp(2px, 1vw, 4px) dotted #ff00ff !important; /* Responsive border */
+  border-radius: clamp(15px, 4vw, 30px) !important; /* Responsive border radius */
+  box-shadow: 0 0 clamp(8px, 2vw, 15px) #00ffff !important; /* Responsive shadow */
   cursor: pointer !important;
   animation: shake 0.5s infinite !important;
-  text-shadow: 2px 2px 0 #000 !important;
+  text-shadow: 1px 1px 0 #000 !important; /* Smaller text shadow for mobile */
   position: relative !important;
   z-index: 2 !important;
   transition: all 0.3s !important;
+  max-width: 100% !important; /* Ensure button doesn't overflow on mobile */
+  word-wrap: break-word !important; /* Allow text to wrap on mobile */
 }
 
 .dumb-button:hover {

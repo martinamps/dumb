@@ -4,6 +4,21 @@ const htmlContent = `<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WORLD\\'S DUMBEST DOMAIN!!1!</title>
+    <meta name="description" content="THE WORLD\\'S DUMBEST DOMAIN - CLICK THE BUTTON FOR MAX DUMBNESS!!!">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="WORLD\\'S DUMBEST DOMAIN!!1!">
+    <meta property="og:description" content="THE WORLD\\'S DUMBEST DOMAIN - CLICK THE BUTTON FOR MAX DUMBNESS!!!">
+    <meta property="og:image" content="https://worldsdumbestdomain.com/dumb.png">
+    <meta property="og:url" content="https://worldsdumbestdomain.com">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="WORLD\\'S DUMBEST DOMAIN!!1!">
+    <meta name="twitter:description" content="THE WORLD\\'S DUMBEST DOMAIN - CLICK THE BUTTON FOR MAX DUMBNESS!!!">
+    <meta name="twitter:image" content="https://worldsdumbestdomain.com/dumb.png">
+    
     <script defer data-domain="worldsdumbestdomain.com" src="https://analytics.martinamps.com/js/script.js"></script>
     <style>
         body {
@@ -14,39 +29,47 @@ const htmlContent = `<!DOCTYPE html>
             overflow: hidden;
             text-align: center;
             color: yellow;
-            text-shadow: 3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000;
+            text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+            padding-bottom: 60px; /* Space for fixed bottom marquee */
+            padding-top: 60px; /* Space for fixed top marquee */
         }
 
         h1 {
-            font-size: 4rem;
-            margin-top: 50px;
+            font-size: min(4rem, 15vw); /* Responsive font size */
+            margin-top: 30px;
+            margin-bottom: 15px;
             animation: pulse 1s infinite alternate;
+            padding: 0 10px;
         }
 
         #big-button {
             background-color: red;
             color: white;
-            font-size: 3rem;
-            padding: 20px 40px;
-            border: 10px dashed yellow;
+            font-size: min(3rem, 10vw); /* Responsive font size */
+            padding: min(20px, 5vw) min(40px, 10vw);
+            border: min(10px, 3vw) dashed yellow;
             border-radius: 50px;
             cursor: pointer;
-            margin-top: 50px;
+            margin-top: 20px;
             position: relative;
             z-index: 100;
             font-weight: bold;
             animation: shake 0.5s infinite;
             box-shadow: 0 0 30px 10px rgba(255, 255, 0, 0.7);
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            word-wrap: break-word;
         }
 
         #big-button:hover {
             background-color: green;
-            transform: scale(1.2);
+            transform: scale(1.1);
         }
 
         #result {
-            font-size: 8rem;
-            margin-top: 30px;
+            font-size: min(8rem, 20vw); /* Responsive font size */
+            margin-top: 20px;
             visibility: hidden;
         }
 
@@ -58,9 +81,10 @@ const htmlContent = `<!DOCTYPE html>
             box-sizing: border-box;
             background: black;
             color: lime;
-            padding: 10px;
-            font-size: 2rem;
+            padding: min(10px, 3vw);
+            font-size: min(2rem, 7vw); /* Responsive font size */
             font-weight: bold;
+            z-index: 1000;
         }
 
         .marquee-top {
@@ -78,10 +102,12 @@ const htmlContent = `<!DOCTYPE html>
         }
 
         #countdown {
-            font-size: 15rem;
+            font-size: min(15rem, 30vw); /* Responsive font size */
             margin-bottom: 2rem;
             position: relative;
             z-index: 2000;
+            width: 100%;
+            text-align: center;
         }
 
         #redirect-overlay {
@@ -97,29 +123,35 @@ const htmlContent = `<!DOCTYPE html>
             justify-content: center;
             align-items: center;
             color: white;
+            padding: 15px;
         }
 
         #redirect-text {
-            font-size: 3rem;
+            font-size: min(3rem, 10vw); /* Responsive font size */
             margin-bottom: 20px;
             animation: rainbowText 1s infinite;
             position: relative;
             z-index: 1000;
+            text-align: center;
+            width: 100%;
         }
 
         #redirect-link {
-            font-size: 2rem;
+            font-size: min(2rem, 8vw); /* Responsive font size */
             color: #00ff00;
             text-decoration: underline;
             margin-bottom: 20px;
             cursor: pointer;
             position: relative;
             z-index: 1000;
+            text-align: center;
+            width: 100%;
+            word-wrap: break-word;
         }
 
         .emoji-rain {
             position: absolute;
-            font-size: 30px;
+            font-size: min(30px, 8vw); /* Responsive font size */
             animation: fall linear;
             z-index: 10;
         }
@@ -192,8 +224,8 @@ const htmlContent = `<!DOCTYPE html>
 
         .bg-image {
             position: absolute;
-            width: 150px;
-            height: 150px;
+            width: min(150px, 20vw); /* Responsive size */
+            height: min(150px, 20vw); /* Responsive size */
             background-size: contain;
             background-repeat: no-repeat;
             animation: spin 5s linear infinite;
@@ -208,7 +240,7 @@ const htmlContent = `<!DOCTYPE html>
     </div>
 
     <h1>👑 WORLD\\'S DUMBEST DOMAIN!!! 👑</h1>
-    <h2>👇👇👇 CLICK THIS AMAZING BUTTON 👇👇👇</h2>
+    <h2 style="font-size: min(1.5rem, 7vw); margin: 10px;">👇👇👇 CLICK THIS AMAZING BUTTON 👇👇👇</h2>
 
     <button id="big-button">CLICK THIS DUMB BUTTON!!!</button>
 
@@ -242,7 +274,7 @@ const htmlContent = `<!DOCTYPE html>
             img.style.top = \`\${Math.random() * 100}%\`;
             img.style.animationDuration = \`\${5 + Math.random() * 10}s\`;
             img.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
-            img.style.fontSize = '100px';
+            img.style.fontSize = 'min(100px, 15vw)'; // Responsive font size
             bgImages.appendChild(img);
         }
 
@@ -284,8 +316,13 @@ const htmlContent = `<!DOCTYPE html>
 
         button.addEventListener('click', () => {
             // Audio effects
-            const audio = new Audio('data:audio/wav;base64,//uQRAAAAWMSLwUIYAAsYkXgoQwAEaYLWfkWgAI0wWs/ItAAAGDgYtAgAyN+QWaAAihwMWm4G8QQRDiMcCBcH3Cc+CDv/7xA4Tvh9Rz/y8QADBwMWgQAZG/ILNAARQ4GLTcDeIIIhxGOBAuD7hOfBB3/94gcJ3w+o5/5eIAIAAAVwWgQAVQ2ORaIQwEMAJiDg95G4nQL7mQVWI6GwRcfsZAcsKkJvxgxEjzFUgfHoSQ9Qq7KNwqHwuB13MA4a1q/DmBrHgPcmjiGoh//EwC5nGPEmS4RcfkVKOhJf+WOgoxJclFz3kgn//dBA+ya1GhurNn8zb//9NNutNuhz31f////9vt///z+IdAEAAAK4LQIAKobHItEIYCGAExBwe8jcToF9zIKrEdDYIuP2MgOWFSE34wYiR5iqQPj0JIeoVdlG4VD4XA67mAcNa1fhzA1jwHuTRxDUQ//iYBczjHiTJcIuPyKlHQkv/LHQUYkuSi57yQT//uggfZNajQ3Vm//Wk//3Nksoq/////r7////n+////+cw1+hG+X1G///hxtZOXQ+HlA+/j//5jQSGFZkJB5sOqBFYF+aDCbNBk5hVCBuB/wBpAQlGCX7rBj9n7VcDsANxVR2KtDmYTmU6YAMl61/0nZL+D7z6QoRg7i4TGE4R//+pgOHDkmbx2JD1gRPtPkj+oiNaQUc3vABQ06iL81TjYx2LFGc8c9CfVD77hSCQvn7JXhUXGcQTqYEBZPh3RWYK8xFBHGGw80j9tSS1mIrPBP8MwfvSX/uHoRoRoUMaO80pJ8L9D1pYVhLGqANWE6E4RBjg1NeInCWD95nIQxiB0+BapRg+sZkXC//uSRAAAAVlSurbAEkGLGWpIbAYwBIJAD/BoIAESZR1N94DgD5vCfoFnL9P/3YmkA87k6AT5fj2ROJ2F3zrM8kNB9sKwm4xiqcvUwRJGsWSIjsGyD9+J9uzYNSGYYr9nMnUPXFbdW');
-            audio.play();
+            try {
+                const audio = new Audio('data:audio/wav;base64,//uQRAAAAWMSLwUIYAAsYkXgoQwAEaYLWfkWgAI0wWs/ItAAAGDgYtAgAyN+QWaAAihwMWm4G8QQRDiMcCBcH3Cc+CDv/7xA4Tvh9Rz/y8QADBwMWgQAZG/ILNAARQ4GLTcDeIIIhxGOBAuD7hOfBB3/94gcJ3w+o5/5eIAIAAAVwWgQAVQ2ORaIQwEMAJiDg95G4nQL7mQVWI6GwRcfsZAcsKkJvxgxEjzFUgfHoSQ9Qq7KNwqHwuB13MA4a1q/DmBrHgPcmjiGoh//EwC5nGPEmS4RcfkVKOhJf+WOgoxJclFz3kgn//dBA+ya1GhurNn8zb//9NNutNuhz31f////9vt///z+IdAEAAAK4LQIAKobHItEIYCGAExBwe8jcToF9zIKrEdDYIuP2MgOWFSE34wYiR5iqQPj0JIeoVdlG4VD4XA67mAcNa1fhzA1jwHuTRxDUQ//iYBczjHiTJcIuPyKlHQkv/LHQUYkuSi57yQT//uggfZNajQ3Vm//Wk//3Nksoq/////r7////n+////+cw1+hG+X1G///hxtZOXQ+HlA+/j//5jQSGFZkJB5sOqBFYF+aDCbNBk5hVCBuB/wBpAQlGCX7rBj9n7VcDsANxVR2KtDmYTmU6YAMl61/0nZL+D7z6QoRg7i4TGE4R//+pgOHDkmbx2JD1gRPtPkj+oiNaQUc3vABQ06iL81TjYx2LFGc8c9CfVD77hSCQvn7JXhUXGcQTqYEBZPh3RWYK8xFBHGGw80j9tSS1mIrPBP8MwfvSX/uHoRoRoUMaO80pJ8L9D1pYVhLGqANWE6E4RBjg1NeInCWD95nIQxiB0+BapRg+sZkXC//uSRAAAAVlSurbAEkGLGWpIbAYwBIJAD/BoIAESZR1N94DgD5vCfoFnL9P/3YmkA87k6AT5fj2ROJ2F3zrM8kNB9sKwm4xiqcvUwRJGsWSIjsGyD9+J9uzYNSGYYr9nMnUPXFbdW');
+                audio.play();
+            } catch (e) {
+                // Ignore audio errors on mobile
+                console.warn("Audio couldn't play, probably mobile:", e);
+            }
 
             // Flash screen
             document.body.style.backgroundColor = 'white';
@@ -299,7 +336,7 @@ const htmlContent = `<!DOCTYPE html>
                 // First click - just change button text and style
                 button.textContent = "CLICK IT AGAIN!!!";
                 button.style.backgroundColor = "green";
-                button.style.fontSize = "4rem";
+                button.style.fontSize = "min(4rem, 12vw)"; // Responsive font size
                 button.style.animation = "pulse 0.5s infinite alternate, shake 0.3s infinite";
             } else if (clickCount === 2) {
                 // Second click - trigger countdown and redirect

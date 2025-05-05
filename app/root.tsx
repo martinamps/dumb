@@ -24,6 +24,20 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+export const meta: Route.MetaFunction = () => [
+  { title: "World's Dumbest App" },
+  { name: "description", content: "The World's Dumbest App - the most ridiculous website in existence!" },
+  { property: "og:title", content: "World's Dumbest App" },
+  { property: "og:description", content: "The most ridiculous website in existence! Featuring horoscopes, useless weather, and emoji stonks." },
+  { property: "og:image", content: "https://worldsdumbestapp.com/dumb.png" },
+  { property: "og:url", content: "https://worldsdumbestapp.com" },
+  { property: "og:type", content: "website" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: "World's Dumbest App" },
+  { name: "twitter:description", content: "The most ridiculous website in existence!" },
+  { name: "twitter:image", content: "https://worldsdumbestapp.com/dumb.png" },
+];
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">

@@ -893,7 +893,7 @@ export function MainContent() {
   // Main render logic
   return (
     <div className="flex-1 dumb-container dumb-tilt-left">
-      <h1 className="text-4xl font-bold text-center dumb-text mb-6 dumb-glow">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center dumb-text mb-3 md:mb-6 dumb-glow">
         World's DUMBEST Horoscopes!!!
       </h1>
 

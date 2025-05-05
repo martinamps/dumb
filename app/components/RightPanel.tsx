@@ -47,7 +47,7 @@ export function RightPanel() {
   };
 
   return (
-    <div className="w-full md:w-80 space-y-6">
+    <div className="w-full md:w-80 sm:max-w-[95vw] md:max-w-none space-y-3 md:space-y-6">
       {/* Custom Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
