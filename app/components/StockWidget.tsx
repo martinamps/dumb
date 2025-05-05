@@ -1,66 +1,38 @@
 import React, { useState, useEffect, useCallback } from "react";
 
-// --- Dumb Emoji Definitions (Mirroring API) ---
+// --- Simplified Dumb Emoji Definitions (Mirroring API) ---
 const vibeEmojis: Record<string, string> = {
-  '😂': "Laughably Bad",
-  '😭': "Tragically Overvalued",
-  '🥳': "Party's Over Soon",
-  '🥶': "Frozen in Fear",
-  '🥵': "Sweating Bullets",
-  '😇': "Too Good To Be True",
-  '😈': "Sinister Undertones",
-  '🤡': "Utterly Clueless",
-  '💩': "Steaming Pile of... Opportunity?",
-  '👻': "Ghosted by Investors",
-  '🤔': "Deeply Confused",
-  '🤯': "Mind Blown (Not in a Good Way)",
-  '🥴': "Feeling Dizzy",
-  '😴': "Boringly Stable",
-  '🤩': "Irrationally Exuberant",
+  "😂": "Laughably Bad",
+  "😭": "Tragically Overvalued",
+  "🥳": "Party's Over Soon",
+  "🥶": "Frozen in Fear",
+  "🤡": "Utterly Clueless",
 };
+
 const actionEmojis: Record<string, string> = {
-  '🚀': "To the Moon (or maybe just the ceiling)",
-  '📉': "Down the Drain",
-  '📈': "Going Up (like my blood pressure)",
-  '🎢': "Wild Ride Ahead",
-  '🐌': "Moving Glacially",
-  '🐢': "Slow & Steady Loses the Race",
-  '💥': "Spontaneous Combustion Likely",
-  '💨': "Vanishing Into Thin Air",
-  '🤷': "Shrugging Off Responsibility",
-  '🤞': "Fingers Crossed (Good Luck!)",
-  '💸': "Money Disappearing Act",
-  '🔥': "Burning Cash",
-  '🧊': "Frozen Assets",
-  '🎈': "Inflated Ego",
-  '⚓': "Sinking Fast",
+  "🚀": "To the Moon (or maybe just the ceiling)",
+  "📉": "Down the Drain",
+  "📈": "Going Up (like my blood pressure)",
+  "🎢": "Wild Ride Ahead",
+  "🐌": "Moving Glacially",
 };
+
 const sourceEmojis: Record<string, string> = {
-  '🔮': "Scryed from a Dusty Crystal Ball",
-  '👽': "Intercepted Alien Broadcast",
-  '🥪': "Found Scribbled on a Napkin",
-  '🎲': "Random Dice Roll",
-  '🧠': "AI Hallucination",
-  '✨': "Pure Wishful Thinking",
-  '🧐': "Overheard in a Cafe",
-  '📚': "Misread Astrology Chart",
-  '💻': "Glitch in the Matrix",
-  '🐶': "Dog Barked Twice (Means Buy?)",
-  '☕': "Coffee Ground Reading",
-  '🦆': "Consulted a Rubber Ducky",
-  '📺': "Saw it on a Cartoon",
-  '❓': "Honestly, No Idea",
-  '🤯': "Result of Sleep Deprivation", // Reusing an emoji, fine for dumbness
+  "🔮": "Scryed from a Dusty Crystal Ball",
+  "👽": "Intercepted Alien Broadcast",
+  "🎲": "Random Dice Roll",
+  "🧠": "AI Hallucination",
+  "🐶": "Dog Barked Twice (Means Buy?)",
 };
-// --- End Dumb Emoji Definitions ---
+// --- End Simplified Dumb Emoji Definitions ---
 
 // Define the type for a single stock item
 interface Stock {
   ticker: string;
   price: string;
-  movement: string; // Now a string like "+1.23" or "-0.50"
+  movement: string;
   emojis: string;
-  emojiArray: string[]; // Should be [vibe, action, source]
+  emojiArray: string[];
   name: string;
   sector: string;
   advice: string;
@@ -80,12 +52,18 @@ interface Stock {
 // Define the type for the API response
 interface StockData {
   stocks: Stock[];
-  chaosLevel?: string; // String representation now
+  chaosLevel?: string;
   mercuryRetrograde?: boolean;
   disclaimers: string[];
   selectionMethod?: string;
   methodDescription?: string;
   lastUpdated?: string;
+}
+
+// Define the type for error data
+interface ErrorData {
+  message?: string;
+  error?: string;
 }
 
 // Helper to get emoji meaning based on position
@@ -103,12 +81,15 @@ const DumbLegend = () => (
       The Official EmojiStonk™ Legend (Patent Pending)
     </h3>
     <p className="text-center text-[10px] italic text-gray-500 dark:text-gray-400 mb-3">
-      Our highly sophisticated system translates complex market data into three easy-to-misunderstand emojis:
+      Our highly sophisticated system translates complex market data into three
+      easy-to-misunderstand emojis:
     </p>
     <div className="grid grid-cols-3 gap-3 text-xs">
       {/* Column 1: Vibe */}
       <div>
-        <div className="font-bold text-center mb-1 border-b border-gray-300 dark:border-gray-700 pb-1">Vibe</div>
+        <div className="font-bold text-center mb-1 border-b border-gray-300 dark:border-gray-700 pb-1">
+          Vibe
+        </div>
         <ul className="space-y-1 text-[10px]">
           {Object.entries(vibeEmojis).map(([emoji, meaning]) => (
             <li key={`vibe-${emoji}`} className="flex items-start">
@@ -120,7 +101,9 @@ const DumbLegend = () => (
       </div>
       {/* Column 2: Action */}
       <div>
-        <div className="font-bold text-center mb-1 border-b border-gray-300 dark:border-gray-700 pb-1">Action</div>
+        <div className="font-bold text-center mb-1 border-b border-gray-300 dark:border-gray-700 pb-1">
+          Action
+        </div>
         <ul className="space-y-1 text-[10px]">
           {Object.entries(actionEmojis).map(([emoji, meaning]) => (
             <li key={`action-${emoji}`} className="flex items-start">
@@ -132,7 +115,9 @@ const DumbLegend = () => (
       </div>
       {/* Column 3: Source */}
       <div>
-        <div className="font-bold text-center mb-1 border-b border-gray-300 dark:border-gray-700 pb-1">Source</div>
+        <div className="font-bold text-center mb-1 border-b border-gray-300 dark:border-gray-700 pb-1">
+          Source
+        </div>
         <ul className="space-y-1 text-[10px]">
           {Object.entries(sourceEmojis).map(([emoji, meaning]) => (
             <li key={`source-${emoji}`} className="flex items-start">
@@ -144,11 +129,11 @@ const DumbLegend = () => (
       </div>
     </div>
     <p className="text-center text-[9px] italic text-gray-500 dark:text-gray-400 mt-3">
-      * Emoji meanings subject to change based on lunar cycles, caffeine intake, and programmer mood swings. Not legally binding in any reality.
+      * Emoji meanings subject to change based on lunar cycles, caffeine intake,
+      and programmer mood swings. Not legally binding in any reality.
     </p>
   </div>
 );
-
 
 // Stock Widget Component
 export function StockWidget() {
@@ -161,14 +146,12 @@ export function StockWidget() {
 
   const fetchStocks = useCallback(async () => {
     try {
-      // Don't reset loading if already loading to prevent flickering during refresh
-      if (!loading) setLoading(true);
+      setLoading(true);
       const response = await fetch("/api/stocks");
       if (!response.ok) {
-        // Try parsing error message from API response
         let errorMsg = "Failed to fetch stocks";
         try {
-          const errorData = await response.json();
+          const errorData = (await response.json()) as ErrorData;
           errorMsg = errorData.message || errorData.error || errorMsg;
         } catch (_) {
           // Ignore if response isn't JSON
@@ -179,46 +162,45 @@ export function StockWidget() {
       setStocks(data);
       setError(null);
 
-      // Reset selections only if compare mode isn't active or if selected stocks are gone
-      if (!compareMode ||
-          (selectedStock && !data.stocks.find(s => s.ticker === selectedStock)) ||
-          (compareStock && !data.stocks.find(s => s.ticker === compareStock))) {
+      if (
+        !compareMode ||
+        (selectedStock &&
+          !data.stocks.find((s) => s.ticker === selectedStock)) ||
+        (compareStock && !data.stocks.find((s) => s.ticker === compareStock))
+      ) {
         setSelectedStock(null);
         setCompareStock(null);
         setCompareMode(false);
       }
-
-    } catch (err: any) {
-      setError(`CRITICAL FINANCIAL DATA FAILURE!!! (${err.message || 'Unknown Error'})`);
-      setStocks(null); // Clear old data on error
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Unknown Error";
+      setError(`CRITICAL FINANCIAL DATA FAILURE!!! (${errorMessage})`);
+      setStocks(null);
     } finally {
       setLoading(false);
     }
-  }, [loading, compareMode, selectedStock, compareStock]); // Add dependencies
+  }, [compareMode, selectedStock, compareStock]);
 
   useEffect(() => {
-    fetchStocks(); // Initial fetch
+    fetchStocks();
 
-    // Refresh stocks randomly between 30-50 seconds
+    // Refresh stocks every 15 seconds
     const interval = setInterval(() => {
       fetchStocks();
-    }, Math.floor(Math.random() * 20000) + 30000);
+    }, 15000); // 15 seconds
 
     return () => clearInterval(interval);
-  }, [fetchStocks]); // fetchStocks is stable due to useCallback
+  }, [fetchStocks]);
 
   // Handle toggle compare mode
   const toggleCompareMode = () => {
     if (compareMode) {
-      // Exit compare mode
       setCompareMode(false);
       setCompareStock(null);
     } else {
-      // Enter compare mode only if a stock is selected
       if (selectedStock) {
         setCompareMode(true);
       } else {
-        // Maybe add a little message?
         alert("Select a stock first before comparing!");
       }
     }
@@ -237,38 +219,44 @@ export function StockWidget() {
 
   // Get Cosmic Verdict based on emojis
   const getCosmicVerdict = (stock: Stock | undefined): string => {
-    if (!stock || !stock.emojiArray || stock.emojiArray.length !== 3) return "The cosmos are silent.";
+    if (!stock || !stock.emojiArray || stock.emojiArray.length !== 3)
+      return "The cosmos are silent.";
 
     const [vibe, action, source] = stock.emojiArray;
 
     // Absolutely arbitrary rules for a verdict
-    if (vibe === '💩' && action === '🚀') return "Miraculously, this garbage might fly!";
-    if (vibe === '😇' && action === '📉') return "An angel falling from grace. Sell!";
-    if (source === '🐶') return "Trust the dog. Always trust the dog.";
-    if (action === '🤷') return "Even the universe doesn't know. Good luck.";
-    if (vibe === '🤡' && source === '🧠') return "A clown following AI advice? Peak market conditions!";
-    if (action === '💥') return "Run away. Just run.";
+    if (vibe === "😂" && action === "🚀")
+      return "Miraculously, this garbage might fly!";
+    if (vibe === "😭" && action === "📉")
+      return "An angel falling from grace. Sell!";
+    if (source === "🐶") return "Trust the dog. Always trust the dog.";
+    if (action === "🎢") return "Buckle up, it's gonna be a wild ride!";
+    if (vibe === "🤡" && source === "🧠")
+      return "A clown following AI advice? Peak market conditions!";
 
     // Default fallback verdict
-    return `A ${vibeEmojis[vibe] || 'Mysterious'} Vibe, predicting ${actionEmojis[action] || 'Uncertain'} Action, based on ${sourceEmojis[source] || 'Unknown'} Sources.`;
+    return `A ${vibeEmojis[vibe] || "Mysterious"} Vibe, predicting ${
+      actionEmojis[action] || "Uncertain"
+    } Action, based on ${sourceEmojis[source] || "Unknown"} Sources.`;
   };
 
   // Random rotating warning icons
   const warningIcons = ["⚠️", "🚨", "⛔", "🆘", "‼️", "❓", "☢️", "☣️"];
-  const randomWarning = () => warningIcons[Math.floor(Math.random() * warningIcons.length)];
+  const randomWarning = () =>
+    warningIcons[Math.floor(Math.random() * warningIcons.length)];
 
   // Render Loading State
-  if (loading && !stocks) { // Show initial loading state
+  if (loading && !stocks) {
     return (
       <div className="min-h-40 flex flex-col items-center justify-center">
         <p className="text-green-600 dark:text-green-400 font-bold animate-pulse text-lg">
           FETCHING COSMIC FINANCIAL DATA...
         </p>
         <p className="text-sm text-gray-500 mt-2 animate-bounce">
-          ✨🧠🎲🔮👽🥪🐶✨
+          ✨🧠🎲🔮👽🐶✨
         </p>
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-3 italic">
-           (Aligning chakras with stock tickers...)
+          (Aligning chakras with stock tickers...)
         </p>
       </div>
     );
@@ -281,30 +269,39 @@ export function StockWidget() {
         <p className="font-bold text-xl text-center animate-ping">
           {randomWarning()} MARKET MELTDOWN {randomWarning()}
         </p>
-         <p className="text-center font-mono mt-2 text-sm bg-red-100 dark:bg-red-900/50 p-2 rounded">{error}</p>
-        <p className="text-sm mt-3 text-center">
-          The EmojiStonk™ machine has encountered a dimensional rift! Try refreshing, or consult your local shaman.
+        <p className="text-center font-mono mt-2 text-sm bg-red-100 dark:bg-red-900/50 p-2 rounded">
+          {error}
         </p>
-         <button
-            type="button"
-            onClick={fetchStocks}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-colors"
-          >
-             Retry Connection to Astral Plane
-          </button>
+        <p className="text-sm mt-3 text-center">
+          The EmojiStonk™ machine has encountered a dimensional rift! Try
+          refreshing, or consult your local shaman.
+        </p>
+        <button
+          type="button"
+          onClick={fetchStocks}
+          className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-colors"
+        >
+          Retry Connection to Astral Plane
+        </button>
       </div>
     );
   }
 
   // Render Main Content
   if (!stocks) {
-      // Should not happen if not loading and no error, but good fallback
-      return <div className="text-center text-gray-500">No stock data available. The void stares back.</div>;
+    return (
+      <div className="text-center text-gray-500">
+        No stock data available. The void stares back.
+      </div>
+    );
   }
 
-  const currentSelectedStock = stocks.stocks.find(s => s.ticker === selectedStock);
-  const currentCompareStock = stocks.stocks.find(s => s.ticker === compareStock);
-
+  const currentSelectedStock = stocks.stocks.find(
+    (s) => s.ticker === selectedStock
+  );
+  const currentCompareStock = stocks.stocks.find(
+    (s) => s.ticker === compareStock
+  );
 
   return (
     <div className="min-h-40">
@@ -312,59 +309,66 @@ export function StockWidget() {
 
       {/* Stocks List */}
       <div className="space-y-2 mb-4">
-        {stocks.stocks.map((stock: Stock) => (
+        {stocks.stocks.map((stock) => (
           <button
             type="button"
             key={stock.ticker}
             onClick={() => selectStockHandler(stock.ticker)}
-            title={`Select ${stock.ticker} ${compareMode ? 'for comparison' : 'for details'}`}
+            title={`Select ${stock.ticker} ${
+              compareMode ? "for comparison" : "for details"
+            }`}
             className={`w-full text-left p-2 rounded-lg border cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 ${
               selectedStock === stock.ticker
-                ? "ring-2 ring-green-500 border-green-400 bg-green-50 dark:bg-green-900/30 shadow-md scale-[1.02]" // Highlight selected
+                ? "ring-2 ring-green-500 border-green-400 bg-green-50 dark:bg-green-900/30 shadow-md scale-[1.02]"
                 : compareStock === stock.ticker
-                ? "ring-2 ring-blue-500 border-blue-400 bg-blue-50 dark:bg-blue-900/30 shadow-md scale-[1.02]" // Highlight compare target
+                ? "ring-2 ring-blue-500 border-blue-400 bg-blue-50 dark:bg-blue-900/30 shadow-md scale-[1.02]"
                 : "border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 hover:scale-[1.01]"
             }`}
           >
             <div className="flex items-center justify-between">
               {/* Left Side: Ticker, Price, Movement */}
               <div className="flex-shrink-0 mr-2">
-                <span className="font-bold text-sm md:text-base">{stock.ticker}</span>
+                <span className="font-bold text-sm md:text-base">
+                  {stock.ticker}
+                </span>
                 <div className="text-xs text-gray-600 dark:text-gray-400">
-                    ${stock.price}
-                    <span
-                      className={`ml-1.5 font-medium ${
-                        Number.parseFloat(stock.movement) > 0
-                          ? "text-green-500"
-                          : Number.parseFloat(stock.movement) < 0
-                          ? "text-red-500"
-                          : "text-gray-500"
-                      }`}
-                    >
-                       {Number.parseFloat(stock.movement) > 0 ? "▲" : Number.parseFloat(stock.movement) < 0 ? "▼" : "■"}
-                       {Math.abs(Number.parseFloat(stock.movement))}%
-                    </span>
-                 </div>
+                  ${stock.price}
+                  <span
+                    className={`ml-1.5 font-medium ${
+                      Number.parseFloat(stock.movement) > 0
+                        ? "text-green-500"
+                        : Number.parseFloat(stock.movement) < 0
+                        ? "text-red-500"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    {Number.parseFloat(stock.movement) > 0
+                      ? "▲"
+                      : Number.parseFloat(stock.movement) < 0
+                      ? "▼"
+                      : "■"}
+                    {Math.abs(Number.parseFloat(stock.movement))}%
+                  </span>
+                </div>
               </div>
 
               {/* Right Side: Emojis with Tooltips */}
               <div className="text-xl md:text-2xl space-x-1 flex items-center">
                 {stock.emojiArray && stock.emojiArray.length === 3 ? (
-                  stock.emojiArray.map((emoji: string, i: number) => (
+                  stock.emojiArray.map((emoji, i) => (
                     <span
                       key={`${stock.ticker}-emoji-${i}`}
                       className="inline-block relative group cursor-help"
-                      title={getEmojiMeaning(emoji, i)} // Standard title for accessibility/fallback
+                      title={getEmojiMeaning(emoji, i)}
                     >
                       {emoji}
-                      {/* Custom Tooltip on Hover */}
                       <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-max max-w-xs px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none">
                         {getEmojiMeaning(emoji, i)}
                       </span>
                     </span>
                   ))
                 ) : (
-                  <span className="text-gray-400 text-sm">???</span> // Fallback if emojis are missing
+                  <span className="text-gray-400 text-sm">???</span>
                 )}
               </div>
             </div>
@@ -372,121 +376,197 @@ export function StockWidget() {
         ))}
       </div>
 
-       {/* Details/Comparison Section */}
-       {selectedStock && currentSelectedStock && (
-         <div className="mt-4 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-inner space-y-3">
+      {/* Details/Comparison Section */}
+      {selectedStock && currentSelectedStock && (
+        <div className="mt-4 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-inner space-y-3">
+          {/* Header for Selected Stock */}
+          <div className="flex justify-between items-start border-b border-gray-200 dark:border-gray-700 pb-2 mb-2">
+            <div>
+              <h3 className="font-bold text-base md:text-lg text-green-700 dark:text-green-300">
+                {currentSelectedStock.name} ({currentSelectedStock.ticker})
+              </h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {currentSelectedStock.sector}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={toggleCompareMode}
+              disabled={!selectedStock}
+              className={`text-xs px-2 py-1 rounded transition-colors ${
+                compareMode
+                  ? "bg-red-500 hover:bg-red-600 text-white"
+                  : "bg-blue-500 hover:bg-blue-600 text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
+              }`}
+            >
+              {compareMode ? "Exit Compare" : "Compare Mode"}
+            </button>
+          </div>
 
-           {/* Header for Selected Stock */}
-           <div className="flex justify-between items-start border-b border-gray-200 dark:border-gray-700 pb-2 mb-2">
-              <div>
-                 <h3 className="font-bold text-base md:text-lg text-green-700 dark:text-green-300">{currentSelectedStock.name} ({currentSelectedStock.ticker})</h3>
-                 <p className="text-xs text-gray-500 dark:text-gray-400">{currentSelectedStock.sector}</p>
-              </div>
-               <button
-                 type="button"
-                 onClick={toggleCompareMode}
-                 disabled={!selectedStock} // Disable if no stock is selected
-                 className={`text-xs px-2 py-1 rounded transition-colors ${
-                   compareMode
-                     ? "bg-red-500 hover:bg-red-600 text-white"
-                     : "bg-blue-500 hover:bg-blue-600 text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
-                 }`}
-               >
-                 {compareMode ? "Exit Compare" : "Compare Mode"}
-               </button>
-           </div>
+          {/* Primary Stock Details */}
+          <div className="text-xs space-y-2">
+            <p>
+              <span className="font-semibold">Cosmic Verdict:</span>{" "}
+              <span className="italic">
+                {getCosmicVerdict(currentSelectedStock)}
+              </span>
+            </p>
+            <p>
+              <span className="font-semibold">Expert™ Advice:</span>{" "}
+              {currentSelectedStock.advice}
+            </p>
+            <p>
+              <span className="font-semibold">Value Equivalent:</span>{" "}
+              {currentSelectedStock.unitEquivalent.value}{" "}
+              {currentSelectedStock.unitEquivalent.unit}
+            </p>
+          </div>
 
-           {/* Primary Stock Details */}
-           <div className="text-xs space-y-2">
-               <p><span className="font-semibold">Cosmic Verdict:</span> <span className="italic">{getCosmicVerdict(currentSelectedStock)}</span></p>
-               <p><span className="font-semibold">Expert™ Advice:</span> {currentSelectedStock.advice}</p>
-               <p>
-                 <span className="font-semibold">Value Equivalent:</span> {currentSelectedStock.unitEquivalent.value} {currentSelectedStock.unitEquivalent.unit}
-               </p>
-           </div>
-
-           {/* Comparison View */}
-           {compareMode && (
-              <div className="pt-3 border-t border-dashed border-gray-300 dark:border-gray-600">
-                {!compareStock ? (
-                  <p className="text-center text-sm text-blue-600 dark:text-blue-400 animate-pulse">
-                    Select another stock from the list above to compare...
-                  </p>
-                ) : currentCompareStock ? (
-                   // Show Comparison Data
-                   <div className="space-y-2">
-                      <h4 className="text-sm font-bold text-center text-blue-700 dark:text-blue-300">
-                         Comparing vs {currentCompareStock.name} ({currentCompareStock.ticker})
-                      </h4>
-                      <div className="grid grid-cols-2 gap-2 text-xs bg-blue-50 dark:bg-blue-900/30 p-2 rounded-md">
-                         {/* Metric 1: vs Pet Rock */}
-                          <div>
-                              <div className="font-semibold">{currentSelectedStock.ticker} vs Pet Rock:</div>
-                              <div>{currentSelectedStock.comparisonMetrics.vsPetRock}</div>
-                          </div>
-                          <div>
-                              <div className="font-semibold">{currentCompareStock.ticker} vs Pet Rock:</div>
-                              <div>{currentCompareStock.comparisonMetrics.vsPetRock}</div>
-                          </div>
-                          {/* Metric 2: Meme Potential */}
-                          <div>
-                              <div className="font-semibold">{currentSelectedStock.ticker} Meme Potential:</div>
-                              <div className="font-mono">{currentSelectedStock.comparisonMetrics.memePotential}</div>
-                          </div>
-                          <div>
-                              <div className="font-semibold">{currentCompareStock.ticker} Meme Potential:</div>
-                              <div className="font-mono">{currentCompareStock.comparisonMetrics.memePotential}</div>
-                          </div>
-                           {/* Metric 3: Existential Weight */}
-                          <div>
-                              <div className="font-semibold">{currentSelectedStock.ticker} Existential Wt:</div>
-                              <div>{currentSelectedStock.comparisonMetrics.existentialWeight}</div>
-                          </div>
-                           <div>
-                              <div className="font-semibold">{currentCompareStock.ticker} Existential Wt:</div>
-                              <div>{currentCompareStock.comparisonMetrics.existentialWeight}</div>
-                          </div>
-                           {/* Metric 4: Alignment with Chaos */}
-                          <div>
-                              <div className="font-semibold">{currentSelectedStock.ticker} Chaos Align:</div>
-                              <div>{currentSelectedStock.comparisonMetrics.alignmentWithChaos}</div>
-                          </div>
-                          <div>
-                              <div className="font-semibold">{currentCompareStock.ticker} Chaos Align:</div>
-                              <div>{currentCompareStock.comparisonMetrics.alignmentWithChaos}</div>
-                          </div>
+          {/* Comparison View */}
+          {compareMode && (
+            <div className="pt-3 border-t border-dashed border-gray-300 dark:border-gray-600">
+              {!compareStock ? (
+                <p className="text-center text-sm text-blue-600 dark:text-blue-400 animate-pulse">
+                  Select another stock from the list above to compare...
+                </p>
+              ) : currentCompareStock ? (
+                <div className="space-y-2">
+                  <h4 className="text-sm font-bold text-center text-blue-700 dark:text-blue-300">
+                    Comparing vs {currentCompareStock.name} (
+                    {currentCompareStock.ticker})
+                  </h4>
+                  <div className="grid grid-cols-2 gap-2 text-xs bg-blue-50 dark:bg-blue-900/30 p-2 rounded-md">
+                    {/* Metric 1: vs Pet Rock */}
+                    <div>
+                      <div className="font-semibold">
+                        {currentSelectedStock.ticker} vs Pet Rock:
                       </div>
-                      <p className="text-center text-[9px] italic text-gray-500 dark:text-gray-400">
-                          *Comparison metrics generated by highly unstable quantum foam analysis. Do not operate heavy machinery after reading.
-                      </p>
-                   </div>
-                ) : (
-                   // This shouldn't happen if compareStock is set but not found, but good fallback
-                    <p className="text-center text-sm text-red-500">Error: Could not find comparison stock data.</p>
-                )}
-              </div>
-           )}
+                      <div>
+                        {currentSelectedStock.comparisonMetrics.vsPetRock}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-semibold">
+                        {currentCompareStock.ticker} vs Pet Rock:
+                      </div>
+                      <div>
+                        {currentCompareStock.comparisonMetrics.vsPetRock}
+                      </div>
+                    </div>
+                    {/* Metric 2: Meme Potential */}
+                    <div>
+                      <div className="font-semibold">
+                        {currentSelectedStock.ticker} Meme Potential:
+                      </div>
+                      <div className="font-mono">
+                        {currentSelectedStock.comparisonMetrics.memePotential}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-semibold">
+                        {currentCompareStock.ticker} Meme Potential:
+                      </div>
+                      <div className="font-mono">
+                        {currentCompareStock.comparisonMetrics.memePotential}
+                      </div>
+                    </div>
+                    {/* Metric 3: Existential Weight */}
+                    <div>
+                      <div className="font-semibold">
+                        {currentSelectedStock.ticker} Existential Wt:
+                      </div>
+                      <div>
+                        {
+                          currentSelectedStock.comparisonMetrics
+                            .existentialWeight
+                        }
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-semibold">
+                        {currentCompareStock.ticker} Existential Wt:
+                      </div>
+                      <div>
+                        {
+                          currentCompareStock.comparisonMetrics
+                            .existentialWeight
+                        }
+                      </div>
+                    </div>
+                    {/* Metric 4: Alignment with Chaos */}
+                    <div>
+                      <div className="font-semibold">
+                        {currentSelectedStock.ticker} Chaos Align:
+                      </div>
+                      <div>
+                        {
+                          currentSelectedStock.comparisonMetrics
+                            .alignmentWithChaos
+                        }
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-semibold">
+                        {currentCompareStock.ticker} Chaos Align:
+                      </div>
+                      <div>
+                        {
+                          currentCompareStock.comparisonMetrics
+                            .alignmentWithChaos
+                        }
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-center text-[9px] italic text-gray-500 dark:text-gray-400">
+                    *Comparison metrics generated by highly unstable quantum
+                    foam analysis. Do not operate heavy machinery after reading.
+                  </p>
+                </div>
+              ) : (
+                <p className="text-center text-sm text-red-500">
+                  Error: Could not find comparison stock data.
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+      )}
 
-         </div>
-       )}
+      {/* Global Info Footer */}
+      <div className="mt-4 text-center text-[10px] text-gray-500 dark:text-gray-400 space-y-0.5">
+        {stocks.methodDescription && (
+          <p>
+            Selection Method:{" "}
+            <span className="italic">{stocks.methodDescription}</span>
+          </p>
+        )}
+        {stocks.chaosLevel && <p>Current Chaos Level: {stocks.chaosLevel}</p>}
+        {stocks.mercuryRetrograde !== undefined && (
+          <p>
+            Mercury Status:{" "}
+            <span
+              className={
+                stocks.mercuryRetrograde
+                  ? "font-bold text-red-500 animate-pulse"
+                  : "text-green-500"
+              }
+            >
+              {stocks.mercuryRetrograde ? "RETROGRADE 🔄" : "Direct ➡️"}
+            </span>
+          </p>
+        )}
+      </div>
 
-       {/* Global Info Footer */}
-       <div className="mt-4 text-center text-[10px] text-gray-500 dark:text-gray-400 space-y-0.5">
-           {stocks.methodDescription && <p>Selection Method: <span className="italic">{stocks.methodDescription}</span></p>}
-           {stocks.chaosLevel && <p>Current Chaos Level: {stocks.chaosLevel}</p>}
-           {stocks.mercuryRetrograde !== undefined && <p>Mercury Status: <span className={stocks.mercuryRetrograde ? "font-bold text-red-500 animate-pulse" : "text-green-500"}>{stocks.mercuryRetrograde ? "RETROGRADE 🔄" : "Direct ➡️"}</span></p>}
-       </div>
-
-       {/* Disclaimers */}
-       <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 text-[9px] text-center text-gray-500 dark:text-gray-400 italic space-y-0.5">
-           {stocks.disclaimers.map((disclaimer: string, i: number) => (
-             <p key={`disclaimer-${i}`}>{disclaimer}</p>
-           ))}
-           <p className="font-bold mt-1 text-red-600 dark:text-red-400">
-             {randomWarning()} Investing based on random emojis may lead to financial ruin or unexpected llamas. {randomWarning()}
-           </p>
-       </div>
-
+      {/* Disclaimers */}
+      <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 text-[9px] text-center text-gray-500 dark:text-gray-400 italic space-y-0.5">
+        {stocks.disclaimers.map((disclaimer, i) => (
+          <p key={`disclaimer-${disclaimer.slice(0, 10)}-${i}`}>{disclaimer}</p>
+        ))}
+        <p className="font-bold mt-1 text-red-600 dark:text-red-400">
+          {randomWarning()} Investing based on random emojis may lead to
+          financial ruin or unexpected llamas. {randomWarning()}
+        </p>
+      </div>
     </div>
   );
 }

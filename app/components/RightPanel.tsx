@@ -105,7 +105,7 @@ export function RightPanel() {
       {/* Weather Widget */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4">
         <h2 className="text-xl font-semibold mb-3 text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-2">
-          Dramatically Overreacted Weather
+          Worthless Weather
         </h2>
         <WeatherWidget />
       </div>
