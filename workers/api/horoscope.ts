@@ -11,8 +11,8 @@ type CaptchaRecord = {
 // Simple in-memory token storage with expiration
 const captchaTokens: Map<string, CaptchaRecord> = new Map();
 
-// Clean up expired tokens every 5 minutes (if this were a real app)
-setInterval(() => {
+// Function to clean expired tokens (called within request handlers, not in global scope)
+function cleanExpiredTokens() {
   const now = Date.now();
   for (const [token, record] of captchaTokens.entries()) {
     // Remove tokens older than 5 minutes
@@ -20,7 +20,7 @@ setInterval(() => {
       captchaTokens.delete(token);
     }
   }
-}, 5 * 60 * 1000);
+}
 
 // Valid zodiac signs
 const validZodiacSigns = [
@@ -31,6 +31,8 @@ const validZodiacSigns = [
 // Handle the CAPTCHA generation request
 export async function handleGetCaptchaRequest(request: Request, env: Env): Promise<Response> {
   try {
+    // Clean up expired tokens
+    cleanExpiredTokens();
     // Check if it's a POST request
     if (request.method !== "POST") {
       return new Response(JSON.stringify({ error: "Method not allowed" }), {
@@ -222,6 +224,8 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
 // Handle CAPTCHA validation
 export async function handleValidateCaptchaRequest(request: Request, env: Env): Promise<Response> {
   try {
+    // Clean up expired tokens
+    cleanExpiredTokens();
     // Check if it's a POST request
     if (request.method !== "POST") {
       return new Response(JSON.stringify({ error: "Method not allowed" }), {
@@ -370,6 +374,8 @@ function getRandomFailureMessage(): string {
 // Handle the actual horoscope generation after a successful CAPTCHA
 export async function handleGetHoroscopeRequest(request: Request, env: Env): Promise<Response> {
   try {
+    // Clean up expired tokens
+    cleanExpiredTokens();
     // Check if it's a POST request
     if (request.method !== "POST") {
       return new Response(JSON.stringify({ error: "Method not allowed" }), {
