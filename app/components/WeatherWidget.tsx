@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  Suspense,
+} from "react";
 
 // Define the type for the weather API response - replace 'any'
 interface WeatherData {
@@ -125,73 +131,133 @@ const getRandomWeirdPin = () => {
   return weirdPins[Math.floor(Math.random() * weirdPins.length)];
 };
 
-// Extremely simplified static map component that looks like a real map
+// Create a ClientOnly wrapper component
+const ClientOnly: React.FC<{
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+}> = ({ children, fallback }) => {
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) {
+    return fallback ? <>{fallback}</> : null;
+  }
+
+  return <>{children}</>;
+};
+
+// Dynamic map component that uses lat/lon to generate a unique map for each location
 const WeatherMap = React.memo(
   ({
-    cityName,
+    lat,
+    lon,
     pinEmoji,
+    cityName,
   }: {
     lat?: number;
     lon?: number;
     pinEmoji: string;
     cityName: string;
   }) => {
+    // Memoize the coordinates so they don't change on every render
+    const coordinates = useMemo(() => {
+      const seedLat = lat ?? Math.random() * 180 - 90;
+      const seedLon = lon ?? Math.random() * 360 - 180;
+      return { lat: seedLat, lon: seedLon };
+    }, [lat, lon]); // Only recalculate if lat/lon props change
+
+    const [MapComponent, setMapComponent] =
+      useState<React.ComponentType | null>(null);
+
+    // Load map only once when component mounts
+    useEffect(() => {
+      let isMounted = true;
+
+      // Dynamically import Leaflet components only on client side
+      Promise.all([
+        import("react-leaflet").then((module) => ({
+          MapContainer: module.MapContainer,
+          TileLayer: module.TileLayer,
+          Marker: module.Marker,
+        })),
+        import("leaflet").then((L) => L.default),
+      ]).then(([{ MapContainer, TileLayer, Marker }, L]) => {
+        if (!isMounted) return;
+
+        // Create the icon once per pinEmoji change
+        const emojiIcon = L.divIcon({
+          html: `<div class="animate-bounce" style="font-size:2.5rem;line-height:1;filter:drop-shadow(2px 2px 2px rgba(0,0,0,0.5));">${pinEmoji}</div>`,
+          className: "bg-transparent border-none",
+          iconSize: [40, 40],
+          iconAnchor: [20, 20],
+        });
+
+        const LeafletMap = () => (
+          <MapContainer
+            center={[coordinates.lat, coordinates.lon]}
+            zoom={6}
+            style={{ height: "100%", width: "100%" }}
+            zoomControl={false}
+            scrollWheelZoom={false}
+            doubleClickZoom={false}
+            dragging={false}
+            boxZoom={false}
+            touchZoom={false}
+            keyboard={false}
+            className="z-10"
+            attributionControl={false}
+          >
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              maxZoom={19}
+              tileSize={256}
+              keepBuffer={1}
+              updateWhenZooming={false}
+              updateWhenIdle={true}
+              errorTileUrl="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+            />
+            <Marker
+              position={[coordinates.lat, coordinates.lon]}
+              icon={emojiIcon}
+            />
+          </MapContainer>
+        );
+
+        setMapComponent(() => LeafletMap);
+      });
+
+      return () => {
+        isMounted = false;
+      };
+    }, [pinEmoji, coordinates]); // Only re-run if pinEmoji or coordinates change
+
     return (
       <div className="my-2 rounded-lg overflow-hidden">
-        {/* Simple map card with fixed content */}
-        <div className="rounded-lg border-4 border-purple-500 overflow-hidden">
-          {/* Map content - no internal padding */}
-          <div className="h-[120px] w-full bg-[#e6f2ff] relative overflow-hidden">
-            {/* Fixed grid background */}
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage:
-                  "linear-gradient(to right, rgba(200,220,240,0.6) 1px, transparent 1px), linear-gradient(to bottom, rgba(200,220,240,0.6) 1px, transparent 1px)",
-                backgroundSize: "20px 20px",
-              }}
-            />
+        <div className="rounded-lg border-4 border-purple-500 overflow-hidden relative">
+          <div className="h-[160px] w-full relative overflow-hidden">
+            <ClientOnly
+              fallback={
+                <div className="h-full w-full flex items-center justify-center bg-purple-100 dark:bg-purple-900/30">
+                  <span className="dumb-text animate-pulse">
+                    LOADING MAP!!!
+                  </span>
+                </div>
+              }
+            >
+              {MapComponent && <MapComponent />}
+            </ClientOnly>
 
-            {/* Roads */}
-            <div className="absolute inset-0">
-              <div className="absolute h-[1px] w-full top-[40%] bg-gray-300" />
-              <div className="absolute h-full w-[1px] left-[30%] bg-gray-300" />
-              <div className="absolute h-full w-[1px] left-[60%] bg-gray-300" />
-              <div className="absolute h-[1px] w-full top-[70%] bg-gray-300" />
-            </div>
-
-            {/* Blue rivers */}
-            <div className="absolute inset-0">
-              <div className="absolute h-4 w-full bg-blue-200 opacity-60 top-1/3 transform rotate-3" />
-              <div className="absolute h-2 w-full bg-blue-300 opacity-60 top-2/3 transform -rotate-2" />
-            </div>
-
-            {/* Regions - subtle colored areas */}
-            <div className="absolute inset-0">
-              <div className="absolute h-20 w-20 rounded-full bg-green-100 opacity-30 top-5 left-10" />
-              <div className="absolute h-16 w-24 rounded-full bg-yellow-50 opacity-30 bottom-2 right-20" />
-            </div>
-
-            {/* City text with nicer styling */}
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-              <div className="bg-white px-3 py-1 rounded shadow-sm border border-gray-200 text-sm font-bold text-gray-800">
-                {cityName}
-              </div>
-            </div>
-
-            {/* Emoji pin overlay */}
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[80%] z-20">
-              <div className="text-3xl filter drop-shadow-md">{pinEmoji}</div>
-            </div>
-
-            {/* Navigation UI elements */}
-            <div className="absolute top-0 right-0 bottom-0 left-0 pointer-events-none">
+            {/* Fun overlay elements */}
+            <div className="absolute top-0 right-0 bottom-0 left-0 pointer-events-none z-20">
               {/* Zoom controls */}
-              <div className="absolute top-2 left-2 bg-white rounded-md shadow-sm z-20 flex flex-col">
-                <div className="w-5 h-5 flex items-center justify-center text-xs font-bold border-b border-gray-200">
+              <div className="absolute top-2 left-2 bg-white/80 rounded-md shadow-sm flex flex-col">
+                <div className="w-5 h-5 flex items-center justify-center text-xs font-bold border-b border-gray-200 dumb-text">
                   +
                 </div>
-                <div className="w-5 h-5 flex items-center justify-center text-xs font-bold">
+                <div className="w-5 h-5 flex items-center justify-center text-xs font-bold dumb-text">
                   −
                 </div>
               </div>
@@ -199,11 +265,6 @@ const WeatherMap = React.memo(
               {/* Drag handle */}
               <div className="absolute bottom-7 right-3 bg-white/80 rounded-full w-5 h-5 flex items-center justify-center">
                 <div className="w-3 h-3 rounded-full border-2 border-gray-400" />
-              </div>
-
-              {/* Tiny copyright - just a small line */}
-              <div className="absolute bottom-0 left-0 right-0 h-[6px] bg-white flex items-center px-2">
-                <div className="h-[2px] w-full bg-gray-200" />
               </div>
             </div>
           </div>
@@ -213,7 +274,7 @@ const WeatherMap = React.memo(
   }
 );
 
-WeatherMap.displayName = "WeatherMap"; // Add display name for React DevTools
+WeatherMap.displayName = "WeatherMap";
 
 // Weather Widget Component
 export function WeatherWidget() {
@@ -373,9 +434,14 @@ export function WeatherWidget() {
             </div>
           </div>
 
-          {/* Add the simplified map component */}
+          {/* Add the dynamic map component with actual coordinates */}
           {weather && (
-            <WeatherMap pinEmoji={pinEmoji} cityName={weather.city} />
+            <WeatherMap
+              pinEmoji={pinEmoji}
+              cityName={weather.city}
+              lat={weather.realWeather?.lat}
+              lon={weather.realWeather?.lon}
+            />
           )}
 
           <div className="dumb-container dumb-tilt-left p-2 rounded-lg border-4 border-dashed border-yellow-500">

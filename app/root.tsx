@@ -22,19 +22,36 @@ export const links: Route.LinksFunction = () => [
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Comic+Neue:wght@400;700&display=swap",
   },
+  {
+    rel: "stylesheet",
+    href: "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
+    integrity: "sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=",
+    crossOrigin: "anonymous",
+  },
 ];
 
 export const meta: Route.MetaFunction = () => [
   { title: "World's Dumbest App" },
-  { name: "description", content: "The World's Dumbest App - the most ridiculous website in existence!" },
+  {
+    name: "description",
+    content:
+      "The World's Dumbest App - the most ridiculous website in existence!",
+  },
   { property: "og:title", content: "World's Dumbest App" },
-  { property: "og:description", content: "The most ridiculous website in existence! Featuring horoscopes, useless weather, and emoji stonks." },
+  {
+    property: "og:description",
+    content:
+      "The most ridiculous website in existence! Featuring horoscopes, useless weather, and emoji stonks.",
+  },
   { property: "og:image", content: "https://worldsdumbestapp.com/dumb.png" },
   { property: "og:url", content: "https://worldsdumbestapp.com" },
   { property: "og:type", content: "website" },
   { name: "twitter:card", content: "summary_large_image" },
   { name: "twitter:title", content: "World's Dumbest App" },
-  { name: "twitter:description", content: "The most ridiculous website in existence!" },
+  {
+    name: "twitter:description",
+    content: "The most ridiculous website in existence!",
+  },
   { name: "twitter:image", content: "https://worldsdumbestapp.com/dumb.png" },
 ];
 
