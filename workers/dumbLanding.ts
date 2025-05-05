@@ -266,7 +266,7 @@ const htmlContent = `<!DOCTYPE html>
     <h2 style="font-size: min(1.5rem, 7vw); margin: 10px; background-color: rgba(0,0,0,0.7); padding: 10px; border-radius: 10px; display: inline-block; text-shadow: 1px 1px 2px black; line-height: 1.3;">👇👇👇 CLICK THIS AMAZING BUTTON 👇👇👇</h2>
 
     <div style="margin: 30px auto 100px auto; max-width: 90%;">
-        <button id="big-button">CLICK THIS DUMB BUTTON!!!</button>
+        <button id="big-button">DUMB BUTTON!!!</button>
     </div>
 
     <div id="result">??</div>
@@ -366,7 +366,6 @@ const htmlContent = `<!DOCTYPE html>
         let clickCount = 0;
 
         button.addEventListener('click', () => {
-            // Remove problematic audio
             // Flash screen
             document.body.style.backgroundColor = 'white';
             setTimeout(() => {
@@ -382,10 +381,8 @@ const htmlContent = `<!DOCTYPE html>
                 button.style.fontSize = "min(4rem, 12vw)"; // Responsive font size
                 button.style.animation = "pulse 0.5s infinite alternate, shake 0.3s infinite";
             } else if (clickCount === 2) {
-                // Store button reference and hide it safely
-                button.style.visibility = 'hidden'; // Hide but keep in DOM
-                
                 // Second click - trigger countdown and redirect
+                button.style.visibility = 'hidden'; // Hide but keep in DOM
                 redirectOverlay.style.display = 'flex';
 
                 // Start 10 second countdown
@@ -407,61 +404,30 @@ const htmlContent = `<!DOCTYPE html>
             }
         });
 
-        // Make button run away sometimes (mobile friendly version)
-        button.addEventListener('mouseover', (e) => {
-            if (Math.random() > 0.7) {
-                // Calculate safe area to prevent button going off-screen
-                const maxX = Math.max(50, window.innerWidth - button.offsetWidth - 30);
-                const maxY = Math.max(100, window.innerHeight - button.offsetHeight - 80);
-                
-                // Ensure button stays within view (at least 50px from edges)
-                const safeX = Math.min(Math.max(30, Math.random() * maxX), maxX);
-                const safeY = Math.min(Math.max(100, Math.random() * maxY), maxY);
-                
-                // Set to fixed position to keep visible during scroll
-                button.style.position = 'fixed';
-                button.style.left = \`\${safeX}px\`;
-                button.style.top = \`\${safeY}px\`;
-                
-                // Reset position after a delay to ensure it doesn't get stuck
-                setTimeout(() => {
-                    // Only try to reset if we haven't started redirect countdown
-                    // and the button still exists in the DOM and is visible
-                    if (clickCount < 2 && button && button.style && button.style.visibility !== 'hidden') {
-                        button.style.position = 'relative';
-                        button.style.left = 'auto';
-                        button.style.top = 'auto';
-                    }
-                }, 3000);
-            }
-        });
-        
-        // Also add touch event for mobile users
-        button.addEventListener('touchstart', (e) => {
-            // 30% chance of button running away on touch
-            if (Math.random() > 0.7) {
-                const viewportHeight = window.innerHeight;
-                const viewportWidth = window.innerWidth;
-                
-                // Make sure button stays within 80% of the viewport
-                const safeX = Math.min(Math.max(20, Math.random() * (viewportWidth * 0.8)), viewportWidth * 0.8);
-                const safeY = Math.min(Math.max(100, Math.random() * (viewportHeight * 0.7)), viewportHeight * 0.7);
-                
-                button.style.position = 'fixed';
-                button.style.left = \`\${safeX}px\`;
-                button.style.top = \`\${safeY}px\`;
-                
-                // Reset after a short delay
-                setTimeout(() => {
-                    // Only try to reset if button is still visible and accessible
-                    if (clickCount < 2 && button && button.style && button.style.visibility !== 'hidden') {
-                        button.style.position = 'relative';
-                        button.style.left = 'auto';
-                        button.style.top = 'auto';
-                    }
-                }, 2500);
-            }
-        });
+        // Simple hover effect for desktop - button runs away sometimes
+        if (window.matchMedia('(hover: hover)').matches) {
+            button.addEventListener('mouseover', (e) => {
+                if (Math.random() > 0.7) {
+                    const maxX = Math.max(50, window.innerWidth - button.offsetWidth - 30);
+                    const maxY = Math.max(100, window.innerHeight - button.offsetHeight - 80);
+                    
+                    const safeX = Math.min(Math.max(30, Math.random() * maxX), maxX);
+                    const safeY = Math.min(Math.max(100, Math.random() * maxY), maxY);
+                    
+                    button.style.position = 'fixed';
+                    button.style.left = \`\${safeX}px\`;
+                    button.style.top = \`\${safeY}px\`;
+                    
+                    setTimeout(() => {
+                        if (clickCount < 2 && button && button.style && button.style.visibility !== 'hidden') {
+                            button.style.position = 'relative';
+                            button.style.left = 'auto';
+                            button.style.top = 'auto';
+                        }
+                    }, 2000);
+                }
+            });
+        }
 
         // Console message
         console.log('%c WORLD'S DUMBEST WEBSITE CONSOLE MESSAGE!!!', 'background: black; color: red; font-size: 24px; font-weight: bold;');
