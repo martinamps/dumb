@@ -31,18 +31,43 @@ export default {
       url.hostname === "worldsdumbestdomain.com" ||
       url.hostname === "www.worldsdumbestdomain.com"
     ) {
-      // Serve the static dumb_domain.html file
-      return new Response(
-        // The HTML content from public/dumb_domain.html will be included in your deployment
-        await fetch(new Request(`${url.origin}/dumb_domain.html`)).then((res) =>
-          res.text()
-        ),
-        {
-          headers: {
-            "Content-Type": "text/html;charset=UTF-8",
-          },
+      // Instead of fetching the file from the same origin (which causes 522 errors),
+      // directly return the dumb_domain.html content if it's specifically requested
+      if (url.pathname === "/dumb_domain.html" || url.pathname === "/") {
+        // If there's a binding for static assets, use that
+        if (env.ASSETS) {
+          return env.ASSETS.fetch(request);
+        } else {
+          // Return a simple placeholder if the asset isn't available
+          return new Response(
+            `<!DOCTYPE html>
+            <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>World's Dumbest Domain</title>
+              <style>
+                body { font-family: sans-serif; text-align: center; padding: 50px; }
+                h1 { color: #ff6b6b; }
+              </style>
+            </head>
+            <body>
+              <h1>World's Dumbest Domain</h1>
+              <p>This is indeed the world's dumbest domain. Nothing to see here!</p>
+              <p>Visit <a href="https://dumb.dev">dumb.dev</a> for the real content.</p>
+            </body>
+            </html>`,
+            {
+              headers: {
+                "Content-Type": "text/html;charset=UTF-8",
+              },
+            }
+          );
         }
-      );
+      }
+      
+      // For all other paths under this domain, redirect to the main site
+      return Response.redirect("https://dumb.dev", 302);
     }
 
     // Route API requests to their respective handlers

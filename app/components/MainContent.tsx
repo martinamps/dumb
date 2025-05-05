@@ -372,20 +372,16 @@ export function MainContent() {
         // If successful, fetch the full horoscope
         fetchHoroscope(determinedSign);
       } else {
-        // If validation failed, fetch a new CAPTCHA for the same sign
-        if (determinedSign) {
-          fetchCaptcha(determinedSign);
-        }
+        // For failed validation, we'll just show the error message
+        // We won't fetch a new CAPTCHA immediately - let user try again with the same one
+        // The token will eventually expire after 3 attempts (as configured in the API)
       }
     } catch (error) {
       console.error("Captcha validation error:", error);
       setCaptchaError(
         "The cosmic forces rejected your answer. Please try again."
       );
-      // Optionally refetch captcha on error as well
-      if (determinedSign) {
-        fetchCaptcha(determinedSign);
-      }
+      // Do not fetch a new CAPTCHA on error - let user retry with the same one
     } finally {
       setCaptchaLoading(false);
     }
@@ -561,6 +557,10 @@ export function MainContent() {
         <div className="py-6 text-center">
           <p className="text-green-600 dark:text-green-400 font-bold">
             {captchaMessage}
+          </p>
+          <p className="mt-2 text-gray-600 dark:text-gray-400 text-sm">
+            Congratulations on solving our purposely dumb CAPTCHA! 
+            Your equally dumb horoscope is being calculated...
           </p>
           {horoscopeLoading && (
             <p className="mt-4 animate-pulse">
