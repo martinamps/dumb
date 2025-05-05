@@ -382,12 +382,14 @@ const htmlContent = `<!DOCTYPE html>
                 button.style.fontSize = "min(4rem, 12vw)"; // Responsive font size
                 button.style.animation = "pulse 0.5s infinite alternate, shake 0.3s infinite";
             } else if (clickCount === 2) {
+                // Store button reference and hide it safely
+                button.style.visibility = 'hidden'; // Hide but keep in DOM
+                
                 // Second click - trigger countdown and redirect
                 redirectOverlay.style.display = 'flex';
 
                 // Start 10 second countdown
                 let timeLeft = 10;
-                countdown.style.visibility = 'visible';
                 countdown.textContent = timeLeft;
 
                 const countdownInterval = setInterval(() => {
@@ -423,7 +425,9 @@ const htmlContent = `<!DOCTYPE html>
                 
                 // Reset position after a delay to ensure it doesn't get stuck
                 setTimeout(() => {
-                    if (clickCount < 2) { // Only reset if we haven't started redirect countdown
+                    // Only try to reset if we haven't started redirect countdown
+                    // and the button still exists in the DOM and is visible
+                    if (clickCount < 2 && button && button.style && button.style.visibility !== 'hidden') {
                         button.style.position = 'relative';
                         button.style.left = 'auto';
                         button.style.top = 'auto';
@@ -449,7 +453,8 @@ const htmlContent = `<!DOCTYPE html>
                 
                 // Reset after a short delay
                 setTimeout(() => {
-                    if (clickCount < 2) {
+                    // Only try to reset if button is still visible and accessible
+                    if (clickCount < 2 && button && button.style && button.style.visibility !== 'hidden') {
                         button.style.position = 'relative';
                         button.style.left = 'auto';
                         button.style.top = 'auto';
