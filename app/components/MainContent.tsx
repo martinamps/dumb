@@ -1180,30 +1180,6 @@ export function MainContent() {
       <div className="mt-12 pt-8 border-t-4 border-dashed border-yellow-400">
         <DumbIdeaShredder />
       </div>
-
-      {/* Footer with poop emoji - at the very bottom */}
-      <div className="mt-12 text-center p-4 border-t-4 border-dashed border-yellow-400">
-        <a
-          href="https://x.com/martinamps"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center text-white/80 hover:text-white transition-colors duration-200 dumb-text"
-          style={{
-            fontSize: "clamp(0.9rem, 3.5vw, 1.1rem)",
-            textShadow: "1px 1px 0 black",
-            backgroundColor: "rgba(0, 0, 0, 0.2)",
-            padding: "6px 12px",
-            borderRadius: "20px",
-            fontWeight: "bold",
-          }}
-        >
-          Built with{" "}
-          <span className="mx-1 text-brown-400" style={{ fontSize: "1.2em" }}>
-            💩
-          </span>{" "}
-          by @martinamps
-        </a>
-      </div>
     </div>
   );
 }

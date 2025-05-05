@@ -157,6 +157,13 @@
   transform: rotate(2deg) !important;
 }
 
+/* Disable tilting on mobile devices to fix layout issues */
+@media (max-width: 768px) {
+  .dumb-tilt-left, .dumb-tilt-right {
+    transform: rotate(0deg) !important;
+  }
+}
+
 /* Add spin animation */
 .dumb-spin {
   animation: spin 10s linear infinite !important;

@@ -26,8 +26,8 @@ const FlipDigit = ({ digit, flipping, isChangingDigit = false, initialLoad = fal
   }, [initialLoad, digit]);
   
   return (
-    <div className="relative inline-block w-8 h-12 bg-gray-900 rounded-sm mx-1 overflow-hidden">
-      <div className={`absolute inset-0 flex items-center justify-center text-amber-400 font-mono text-xl font-bold 
+    <div className="relative inline-block w-6 sm:w-8 h-10 sm:h-12 bg-gray-900 rounded-sm mx-0.5 sm:mx-1 overflow-hidden">
+      <div className={`absolute inset-0 flex items-center justify-center text-amber-400 font-mono text-lg sm:text-xl font-bold 
         ${initialLoad ? 'animate-slow-countup' : ''}
         ${flipping ? (isChangingDigit ? 'animate-dramatic-flip' : 'animate-spin-up') : ''}
       `}>
@@ -59,7 +59,7 @@ const FlipCounter = ({ current, total, flipping, previousTotal, initialLoad = fa
   };
   
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center scale-90 sm:scale-100 transform-gpu">
       <FlipDigit 
         digit={currentStr[0]} 
         flipping={flipping} 
@@ -81,7 +81,7 @@ const FlipCounter = ({ current, total, flipping, previousTotal, initialLoad = fa
         initialLoad={initialLoad}
         startDigit={startingStr[2]} 
       />
-      <div className="mx-2 text-amber-500 font-mono">/</div>
+      <div className="mx-1 sm:mx-2 text-amber-500 font-mono">/</div>
       <FlipDigit 
         digit={totalStr[0]} 
         flipping={isDigitChanging(0) && flipping} 
@@ -296,12 +296,14 @@ const DumbIdeaShredder = () => {
   }, [isShredding, shreds.length]);
   
   return (
-    <div className="flex flex-col items-center justify-center p-4 dumb-container" style={{
+    <div className="flex flex-col items-center justify-center p-4 md:p-6 dumb-container" style={{
       borderWidth: "6px",
       borderColor: "#ff00ff",
       marginTop: "40px",
+      marginBottom: "20px", /* Add margin at bottom for spacing */
       boxShadow: "0 0 20px rgba(255, 0, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.3)",
       backgroundColor: "rgba(255, 255, 255, 0.92)",
+      paddingTop: "clamp(24px, 8vw, 32px)", /* Additional top padding to prevent content being cut off on mobile */
     }}>
       <h2 className="text-3xl font-bold mb-6 text-center dumb-text dumb-glow" style={{
         fontSize: "clamp(1.5rem, 5vw, 2rem)",
@@ -317,7 +319,7 @@ const DumbIdeaShredder = () => {
         {showInput ? (
           <div className="mb-8">
             <div className="mb-3 p-2 bg-black bg-opacity-10 rounded-lg border-2 border-dashed border-yellow-400">
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
                 <span className="text-xl dumb-text font-bold" style={{ 
                   textShadow: "1px 1px 0 black",
                   letterSpacing: "0.5px",
@@ -325,7 +327,7 @@ const DumbIdeaShredder = () => {
                 }}>
                   🌟 YOUR DUMB IDEA HERE:
                 </span>
-                <div className="flex-shrink-0">
+                <div className="flex-shrink-0 ml-0 sm:ml-2">
                   <FlipCounter 
                     current={idea.length} 
                     total={requiredChars} 
