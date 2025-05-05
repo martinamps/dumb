@@ -4,19 +4,19 @@ const htmlContent = `<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WORLD'S DUMBEST DOMAIN!!1!</title>
-    <meta name="description" content="THE WORLD\\'S DUMBEST DOMAIN - CLICK THE BUTTON FOR MAX DUMBNESS!!!">
+    <meta name="description" content="THE WORLD'S DUMBEST DOMAIN - CLICK THE BUTTON FOR MAX DUMBNESS!!!">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="WORLD\\'S DUMBEST DOMAIN!!1!">
-    <meta property="og:description" content="THE WORLD\\'S DUMBEST DOMAIN - CLICK THE BUTTON FOR MAX DUMBNESS!!!">
+    <meta property="og:title" content="WORLD'S DUMBEST DOMAIN!!1!">
+    <meta property="og:description" content="THE WORLD'S DUMBEST DOMAIN - CLICK THE BUTTON FOR MAX DUMBNESS!!!">
     <meta property="og:image" content="https://worldsdumbestdomain.com/dumb.png">
     <meta property="og:url" content="https://worldsdumbestdomain.com">
     <meta property="og:type" content="website">
     
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="WORLD\\'S DUMBEST DOMAIN!!1!">
-    <meta name="twitter:description" content="THE WORLD\\'S DUMBEST DOMAIN - CLICK THE BUTTON FOR MAX DUMBNESS!!!">
+    <meta name="twitter:title" content="WORLD'S DUMBEST DOMAIN!!1!">
+    <meta name="twitter:description" content="THE WORLD'S DUMBEST DOMAIN - CLICK THE BUTTON FOR MAX DUMBNESS!!!">
     <meta name="twitter:image" content="https://worldsdumbestdomain.com/dumb.png">
     
     <script defer data-domain="worldsdumbestdomain.com" src="https://analytics.martinamps.com/js/script.js"></script>
