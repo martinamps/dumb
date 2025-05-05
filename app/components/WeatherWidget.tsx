@@ -265,19 +265,19 @@ export function WeatherWidget() {
 
   // Render the countdown timer separately from the weather display
   const CountdownTimer = () => (
-    <div className="flex justify-center items-center text-[9px] text-gray-500 dark:text-gray-400 mt-2">
+    <div className="flex justify-center items-center text-[9px] dumb-text font-bold mt-2">
       <span className="flex items-center">
-        <span className="mr-1">Updating in</span>
+        <span className="mr-1">UPDATING IN</span>
         <span className="font-mono font-semibold">{countdown}</span>
-        <span className="animate-pulse ml-1">...</span>
+        <span className="animate-pulse ml-1">!!!</span>
       </span>
       <button
         type="button"
         onClick={() => fetchWeather()} // Direct call, no need for separate handler
-        className="ml-2 text-blue-500 dark:text-blue-400 underline"
+        className="ml-2 text-blue-500 dark:text-blue-400 underline font-bold"
         disabled={loading} // Disable refresh button while loading
       >
-        Refresh
+        REFRESH NOW!!!
       </button>
     </div>
   );
@@ -285,11 +285,11 @@ export function WeatherWidget() {
   if (loading && !weather) {
     return (
       <div className="min-h-40 flex flex-col items-center justify-center">
-        <p className="text-orange-600 dark:text-orange-400 font-bold animate-pulse">
+        <p className="dumb-text font-bold text-2xl animate-pulse">
           FETCHING CRITICAL WEATHER DATA!!!
         </p>
-        <p className="text-sm text-gray-500 mt-2">
-          (your survival depends on it)
+        <p className="dumb-text text-xl mt-2">
+          (YOUR SURVIVAL DEPENDS ON IT!!!)
         </p>
       </div>
     );
@@ -297,12 +297,12 @@ export function WeatherWidget() {
 
   if (error) {
     return (
-      <div className="min-h-40 flex flex-col items-center justify-center text-red-600 dark:text-red-400">
-        <p className="font-bold text-center">
-          {randomWarning()} WEATHER SYSTEM FAILURE {randomWarning()}
+      <div className="min-h-40 flex flex-col items-center justify-center">
+        <p className="dumb-text font-bold text-2xl text-center">
+          {randomWarning()} WEATHER SYSTEM FAILURE!!! {randomWarning()}
         </p>
-        <p className="text-sm mt-2">
-          Brace for unknown meteorological conditions!
+        <p className="dumb-text text-xl mt-2">
+          BRACE FOR UNKNOWN METEOROLOGICAL CONDITIONS!!!
         </p>
       </div>
     );
@@ -313,10 +313,10 @@ export function WeatherWidget() {
       {weather && weirdTemp && (
         <div className="space-y-2">
           <div className="text-center">
-            <span className="text-xl font-bold">{weather.city}</span>
+            <span className="text-xl font-bold dumb-text">{weather.city}</span>
             <div className="flex items-center justify-center gap-2 mt-1">
               <span
-                className="text-lg group relative"
+                className="text-lg group relative dumb-text"
                 title={weirdTemp.explanation}
               >
                 {weirdTemp.temperature}{" "}
@@ -324,7 +324,7 @@ export function WeatherWidget() {
                   {weirdTemp.unit} [{weirdTemp.suffix}]
                 </span>
                 {/* Tooltip on hover */}
-                <span className="invisible group-hover:visible absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded whitespace-nowrap z-30">
+                <span className="invisible group-hover:visible absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded whitespace-nowrap z-30 font-normal" style={{textShadow: 'none', color: 'white'}}>
                   {weirdTemp.explanation}
                 </span>
               </span>
@@ -344,23 +344,23 @@ export function WeatherWidget() {
             />
           )}
 
-          <div className="bg-yellow-100 dark:bg-yellow-900 p-2 rounded-lg border-2 border-yellow-300 dark:border-yellow-700">
-            <p className="text-red-600 dark:text-red-400 font-bold text-center text-xs">
-              {randomWarning()} URGENT ALERT {randomWarning()}
+          <div className="dumb-container dumb-tilt-left p-2 rounded-lg border-4 border-dashed border-yellow-500">
+            <p className="dumb-text font-bold text-center text-lg">
+              {randomWarning()} URGENT WEATHER ALERT!!! {randomWarning()}
             </p>
-            <p className="text-xs text-center mt-1 leading-tight">
+            <p className="dumb-text text-center mt-1 leading-tight text-base">
               {weather.condition}
             </p>
           </div>
 
-          <div className="bg-red-100 dark:bg-red-900 p-2 rounded-lg border border-red-300 dark:border-red-700">
-            <p className="text-xs font-bold text-center leading-tight break-words">
+          <div className="dumb-container dumb-tilt-right p-2 rounded-lg border-4 border-dashed border-red-500">
+            <p className="dumb-text font-bold text-center leading-tight break-words text-base">
               {weather.forecast}
             </p>
           </div>
 
-          <div className="mt-1 text-[10px] text-center italic">
-            <p className="font-bold text-orange-600 dark:text-orange-400 leading-tight">
+          <div className="mt-1 text-center">
+            <p className="dumb-text font-bold leading-tight text-base">
               {weather.advice}
             </p>
           </div>
@@ -372,11 +372,11 @@ export function WeatherWidget() {
 
       {loading && weather && (
         <div className="min-h-40 flex flex-col items-center justify-center">
-          <p className="text-sm text-orange-600 dark:text-orange-400 font-semibold animate-pulse">
-            FETCHING CRITICAL WEATHER DATA
+          <p className="dumb-text text-2xl font-bold animate-pulse">
+            UPDATING CRITICAL WEATHER DATA!!!
           </p>
-          <p className="text-[10px] text-gray-500 mt-1">
-            (your survival depends on it)
+          <p className="dumb-text text-xl mt-2">
+            (STAY TUNED FOR RIDICULOUS UPDATES!!!)
           </p>
         </div>
       )}

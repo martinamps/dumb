@@ -51,24 +51,24 @@ export function RightPanel() {
       {/* Custom Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-sm w-full mx-4">
-            <h3 className="text-lg font-medium mb-4 text-gray-900 dark:text-gray-100">
-              Do you really want a new haiku?
+          <div className="dumb-container dumb-spin p-6 rounded-lg max-w-sm w-full mx-4">
+            <h3 className="text-lg font-bold mb-4 dumb-text">
+              ⁉️⁉️ DO YOU ACTUALLY WANT A NEW HAIKU??? ⁉️⁉️
             </h3>
             <div className="flex justify-end space-x-3">
               <button
                 type="button"
                 onClick={closeModal}
-                className="px-4 py-2 bg-gray-300 dark:bg-gray-700 rounded-md text-gray-800 dark:text-gray-200 hover:bg-gray-400 dark:hover:bg-gray-600"
+                className="dumb-button dumb-tilt-left"
               >
-                nah
+                NAH!!
               </button>
               <button
                 type="button"
                 onClick={closeModal}
-                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
+                className="dumb-button dumb-tilt-right"
               >
-                nvm
+                NVM!!!
               </button>
             </div>
           </div>
@@ -76,19 +76,19 @@ export function RightPanel() {
       )}
 
       {/* Haiku Widget */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4">
-        <h2 className="text-xl font-semibold mb-3 text-purple-600 dark:text-purple-400 border-b border-gray-200 dark:border-gray-700 pb-2">
-          Dumb Haiku
+      <div className="dumb-container dumb-tilt-right">
+        <h2 className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2">
+          🤪 DUMB HAIKU!!! 🤪
         </h2>
         <div className="min-h-24">
           {loading ? (
-            <p className="italic text-gray-600 dark:text-gray-400">
-              Loading...
+            <p className="italic dumb-text animate-pulse">
+              LOADING DUMB WORDS...
             </p>
           ) : error ? (
-            <p className="text-red-500">{error}</p>
+            <p className="text-red-500 font-bold">☠️ {error} ☠️</p>
           ) : (
-            <div className="font-serif text-gray-800 dark:text-gray-200 whitespace-pre-line">
+            <div className="font-serif text-xl dumb-text whitespace-pre-line dumb-glow">
               {haiku}
             </div>
           )}
@@ -96,24 +96,24 @@ export function RightPanel() {
         <button
           type="button"
           onClick={generateNewHaiku}
-          className="mt-3 px-3 py-1 text-sm bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-colors w-full"
+          className="dumb-button mt-3 w-full dumb-hover"
         >
-          Generate New Haiku
+          🔄✨ GENERATE NEW HAIKU!!! ✨🔄
         </button>
       </div>
 
       {/* Weather Widget */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4">
-        <h2 className="text-xl font-semibold mb-3 text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-2">
-          Worthless Weather
+      <div className="dumb-container dumb-tilt-left">
+        <h2 className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2">
+          ☔ WORTHLESS WEATHER!!! ☔
         </h2>
         <WeatherWidget />
       </div>
 
       {/* Stock Widget */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4">
-        <h2 className="text-xl font-semibold mb-3 text-green-600 dark:text-green-400 border-b border-gray-200 dark:border-gray-700 pb-2">
-          EmojiStonk
+      <div className="dumb-container dumb-tilt-right">
+        <h2 className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2">
+          💰 EMOJISTONK!!! 💰
         </h2>
         <StockWidget />
       </div>

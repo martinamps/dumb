@@ -501,46 +501,51 @@ export function MainContent() {
   // Render functions for different states
   const renderStartScreen = () => (
     <div className="text-center py-10">
-      <h2 className="text-2xl font-bold mb-6 text-purple-600 dark:text-purple-400">
-        Unlock Your Cosmic Horoscope
+      <h2 className="text-2xl font-bold mb-6 dumb-text">
+        ✨ Unlock Your COSMIC Horoscope!!! ✨
       </h2>
-      <p className="mb-8 text-gray-700 dark:text-gray-300">
-        Discover what the stars have pessimistically prepared for your future
-        through our scientifically dubious personality assessment.
+      <p className="mb-8 dumb-text text-xl">
+        Discover what the stars have PESSIMISTICALLY prepared for your FUTURE!!!
+        through our SCIENTIFICALLY DUBIOUS personality assessment!!!
       </p>
       <button
         type="button"
         onClick={startQuiz}
-        className="px-6 py-3 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700 transition-colors"
+        className="dumb-button"
       >
-        Begin Cosmic Personality Quiz
+        👉👉👉 BEGIN COSMIC QUIZ NOW!!! 👈👈👈
       </button>
     </div>
   );
 
   const renderQuizQuestion = () => (
     <div className="py-6">
-      <div className="mb-2 text-sm text-gray-500 dark:text-gray-400 text-center">
-        Question {currentQuestion + 1} of {quizQuestions.length}
+      <div className="mb-2 text-xl font-bold dumb-text text-center">
+        ⭐ QUESTION {currentQuestion + 1} OF {quizQuestions.length} ⭐
       </div>
-      <h3 className="text-xl font-bold mb-6 text-center text-purple-600 dark:text-purple-400">
+      <h3 className="text-2xl font-bold mb-6 text-center dumb-text dumb-glow">
         {quizQuestions[currentQuestion].question}
       </h3>
       <div className="grid gap-4 max-w-md mx-auto">
-        {quizQuestions[currentQuestion].options.map((option, index) => (
-          <button
-            type="button"
-            // Use a more stable key if option.text is unique per question
-            key={`${currentQuestion}-${option.value}-${option.text.slice(
-              0,
-              5
-            )}`}
-            onClick={() => selectAnswer(option.value)}
-            className="p-4 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-left hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
-          >
-            {option.text}
-          </button>
-        ))}
+        {quizQuestions[currentQuestion].options.map((option, index) => {
+          // Add random tilt to each answer button
+          const tiltClass = index % 2 === 0 ? "dumb-tilt-left" : "dumb-tilt-right";
+          
+          return (
+            <button
+              type="button"
+              key={`${currentQuestion}-${option.value}-${option.text.slice(
+                0,
+                5
+              )}`}
+              onClick={() => selectAnswer(option.value)}
+              className={`p-4 dumb-button text-left ${tiltClass} dumb-hover`}
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              {option.text}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -553,23 +558,23 @@ export function MainContent() {
 
     return (
       <div className="py-6 text-center">
-        <div className="mb-4 text-6xl">{signData.emoji}</div>
-        <h3 className="text-2xl font-bold mb-2 text-purple-600 dark:text-purple-400">
-          {signData.name}
+        <div className="mb-4 text-8xl animate-bounce">{signData.emoji}</div>
+        <h3 className="text-3xl font-bold mb-2 dumb-text dumb-glow">
+          YOU ARE A {signData.name.toUpperCase()}!!!
         </h3>
-        <p className="text-gray-600 dark:text-gray-400 mb-1">
+        <p className="dumb-text mb-1 text-xl">
           {signData.dates}
         </p>
-        <p className="text-gray-600 dark:text-gray-400 mb-4">
-          Element: {signData.element} • Ruling Planet: {signData.planet}
+        <p className="dumb-text mb-4 text-xl">
+          🔥Element: {signData.element}🔥 • 🌟Ruling Planet: {signData.planet}🌟
         </p>
-        <div className="p-4 bg-purple-100 dark:bg-purple-900/30 rounded-lg mb-6 max-w-md mx-auto">
-          <p className="text-sm italic">
-            Through rigorous cosmic analysis, our algorithm has determined you
-            are a <span className="font-bold">{signData.name}</span>!
+        <div className="p-4 bg-purple-100 dark:bg-purple-900/30 rounded-lg mb-6 max-w-md mx-auto dumb-container dumb-tilt-right">
+          <p className="text-xl dumb-text">
+            Through RIGOROUS COSMIC ANALYSIS, our SUPER SMART algorithm has determined you
+            are a <span className="font-bold dumb-glow">{signData.name.toUpperCase()}!!!</span>
           </p>
-          <p className="text-sm mt-2 italic">
-            Prepare for your astrologically-aligned verification challenge.
+          <p className="text-xl mt-2 dumb-text">
+            Prepare for your ASTROLOGICALLY-ALIGNED verification challenge!!!
           </p>
         </div>
       </div>
@@ -581,7 +586,9 @@ export function MainContent() {
       // Show loading only on initial captcha fetch
       return (
         <div className="py-6 text-center">
-          <p className="animate-pulse">Consulting the astral plane...</p>
+          <p className="animate-pulse dumb-text text-2xl">
+            CONSULTING THE ASTRAL PLANE... ✨🔮✨
+          </p>
         </div>
       );
     }
@@ -590,7 +597,7 @@ export function MainContent() {
       // Show error only if captcha never loaded
       return (
         <div className="py-6 text-center">
-          <p className="text-red-500">{captchaError}</p>
+          <p className="text-red-500 font-bold text-xl dumb-glow">⚠️ {captchaError} ⚠️</p>
           <button
             type="button"
             onClick={() => {
@@ -598,9 +605,9 @@ export function MainContent() {
                 fetchCaptcha(determinedSign);
               }
             }} // Check determinedSign before calling
-            className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700 transition-colors"
+            className="dumb-button mt-4"
           >
-            Try Again
+            TRY AGAIN!!! 🔄
           </button>
         </div>
       );
@@ -612,16 +619,16 @@ export function MainContent() {
       // Don't show CAPTCHA form if validation succeeded
       return (
         <div className="py-6 text-center">
-          <p className="text-green-600 dark:text-green-400 font-bold">
+          <p className="dumb-text font-bold text-2xl dumb-glow">
             {captchaMessage}
           </p>
-          <p className="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-            Congratulations on solving our purposely dumb CAPTCHA! 
-            Your equally dumb horoscope is being calculated...
+          <p className="mt-2 dumb-text text-xl">
+            CONGRATULATIONS on solving our PURPOSELY DUMB CAPTCHA!!! 
+            Your EQUALLY DUMB horoscope is being calculated...
           </p>
           {horoscopeLoading && (
-            <p className="mt-4 animate-pulse">
-              Decoding your cosmic destiny...
+            <p className="mt-4 animate-pulse dumb-text text-2xl">
+              🔮 DECODING YOUR COSMIC DESTINY... 🔮
             </p>
           )}
         </div>
@@ -636,23 +643,23 @@ export function MainContent() {
 
     return (
       <div className="py-6 max-w-xl mx-auto">
-        <h3 className="text-xl font-bold mb-2 text-center text-purple-600 dark:text-purple-400">
-          {randomWarning()} Astrological Verification Required {randomWarning()}
+        <h3 className="text-2xl font-bold mb-4 text-center dumb-text dumb-glow">
+          {randomWarning()} ASTROLOGICAL VERIFICATION REQUIRED!!! {randomWarning()}
         </h3>
 
-        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-6">
-          <h4 className="font-bold text-sm mb-2 text-yellow-800 dark:text-yellow-200">
-            Your Personal Daily{" "}
+        <div className="dumb-container dumb-tilt-left mb-6">
+          <h4 className="font-bold text-xl mb-2 dumb-text">
+            ✨ YOUR PERSONAL DAILY{" "}
             {captchaData.sign.charAt(0).toUpperCase() +
-              captchaData.sign.slice(1)}{" "}
-            Horoscope Preview:
+              captchaData.sign.slice(1).toUpperCase()}{" "}
+            HOROSCOPE PREVIEW!!! ✨
           </h4>
-          <p className="text-sm italic">{captchaData.horoscope}</p>
+          <p className="text-lg dumb-text">{captchaData.horoscope}</p>
         </div>
 
-        <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4 mb-4">
-          <p className="font-bold text-sm mb-2">CAPTCHA Challenge:</p>
-          <p className="text-sm">{formattedCaptchaDisplayInstruction}</p>
+        <div className="dumb-container dumb-tilt-right mb-4">
+          <p className="font-bold text-xl mb-2 dumb-text">🔮 CAPTCHA CHALLENGE!!! 🔮</p>
+          <p className="text-lg dumb-text">{formattedCaptchaDisplayInstruction}</p>
         </div>
 
         <form
@@ -666,39 +673,40 @@ export function MainContent() {
             type="text"
             value={captchaAnswer}
             onChange={(e) => setCaptchaAnswer(e.target.value)}
-            placeholder="Your cosmic answer..."
-            className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800"
+            placeholder="YOUR COSMIC ANSWER..."
+            className="flex-1 p-4 border-4 border-dotted border-yellow-300 rounded-lg bg-white text-xl font-bold"
+            style={{fontFamily: "'Comic Sans MS', cursive, sans-serif"}}
             aria-label="CAPTCHA Answer"
             disabled={captchaLoading}
           />
           <button
             type="submit"
             disabled={captchaLoading || !captchaAnswer}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="dumb-button px-4 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {captchaLoading ? "Verifying..." : "Verify"}
+            {captchaLoading ? "VERIFYING..." : "VERIFY!!!"}
           </button>
         </form>
 
         {captchaMessage && !captchaSuccess && (
-          <div className="mt-2 text-center">
-            <p className="text-red-500 text-sm">
-              {captchaMessage}
+          <div className="mt-4 text-center">
+            <p className="text-red-500 text-xl font-bold dumb-glow">
+              ⚠️ {captchaMessage} ⚠️
             </p>
             {captchaMessage.includes("CAPTCHA expired") && (
               <button
                 type="button"
                 onClick={() => determinedSign && fetchCaptcha(determinedSign)}
-                className="mt-2 text-xs bg-purple-600 text-white px-3 py-1 rounded-md hover:bg-purple-700"
+                className="mt-4 dumb-button"
               >
-                Get New Astrological Challenge
+                🔄 GET NEW CHALLENGE!!! 🔄
               </button>
             )}
           </div>
         )}
         {captchaError && (
-          <p className="mt-2 text-red-500 text-sm text-center">
-            {captchaError}
+          <p className="mt-4 text-red-500 text-xl font-bold text-center dumb-glow">
+            ⚠️ {captchaError} ⚠️
           </p>
         )}
       </div>
@@ -711,7 +719,9 @@ export function MainContent() {
     if (horoscopeLoading) {
       return (
         <div className="py-6 text-center">
-          <p className="animate-pulse">Decoding your cosmic destiny...</p>
+          <p className="animate-pulse dumb-text text-2xl">
+            🔮 DECODING YOUR COSMIC DESTINY... 🔮
+          </p>
         </div>
       );
     }
@@ -719,13 +729,13 @@ export function MainContent() {
     if (horoscopeError) {
       return (
         <div className="py-6 text-center">
-          <p className="text-red-500">{horoscopeError}</p>
+          <p className="text-red-500 font-bold text-xl dumb-glow">⚠️ {horoscopeError} ⚠️</p>
           <button
             type="button"
             onClick={startQuiz} // Allow restarting if horoscope fetch fails
-            className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700 transition-colors"
+            className="mt-4 dumb-button"
           >
-            Start Over
+            🔄 START OVER!!! 🔄
           </button>
         </div>
       );
@@ -733,19 +743,19 @@ export function MainContent() {
 
     return (
       <div className="py-6 max-w-2xl mx-auto">
-        <h3 className="text-2xl font-bold mb-4 text-center text-purple-600 dark:text-purple-400">
-          Your Cosmic Destiny Revealed
+        <h3 className="text-3xl font-bold mb-6 text-center dumb-text dumb-glow">
+          🌟✨ YOUR COSMIC DESTINY REVEALED!!! ✨🌟
         </h3>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
+        <div className="dumb-container mb-6">
           <div className="flex justify-between items-center mb-4">
             <div>
-              <h4 className="text-xl font-bold">
+              <h4 className="text-2xl font-bold dumb-text">
                 {horoscope.sign.charAt(0).toUpperCase() +
-                  horoscope.sign.slice(1)}{" "}
-                Horoscope
+                  horoscope.sign.slice(1).toUpperCase()}{" "}
+                HOROSCOPE!!!
               </h4>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-xl dumb-text">
                 {new Date(horoscope.date).toLocaleDateString("en-US", {
                   weekday: "long",
                   year: "numeric",
@@ -754,7 +764,7 @@ export function MainContent() {
                 })}
               </p>
             </div>
-            <div className="text-4xl">
+            <div className="text-6xl animate-bounce">
               {zodiacSigns.find((s) => s.sign === horoscope.sign)?.emoji ||
                 "♈"}
             </div>
@@ -767,70 +777,70 @@ export function MainContent() {
                 .map((paragraph: string, i: number) => (
                   <p
                     key={`horoscope-p-${paragraph.slice(0, 10)}-${i}`}
-                    className="mb-3"
+                    className="mb-3 text-xl dumb-text"
                   >
                     {paragraph}
-                  </p> // More stable key
+                  </p>
                 ))}
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4">
-              <h5 className="font-bold mb-2">Cosmic Power Level</h5>
+            <div className="dumb-container dumb-tilt-left p-4">
+              <h5 className="font-bold mb-2 dumb-text">⚡ COSMIC POWER LEVEL ⚡</h5>
               <div className="flex items-center gap-2">
                 <div
-                  className="h-4 flex-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"
+                  className="h-6 flex-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden border-2 border-dotted border-purple-500"
                   aria-hidden="true"
                 >
                   <div
-                    className="h-full bg-purple-600 dark:bg-purple-400 rounded-full"
+                    className="h-full bg-purple-600 dark:bg-purple-400 rounded-full animate-pulse"
                     style={{ width: `${horoscope.cosmicPower * 10}%` }}
                   />
                 </div>
-                <span className="text-sm font-mono">
-                  {horoscope.cosmicPower}/10
+                <span className="text-xl font-bold dumb-text">
+                  {horoscope.cosmicPower}/10!!!
                 </span>
               </div>
             </div>
 
-            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-              <h5 className="font-bold mb-2">Lucky Elements</h5>
-              <ul className="text-sm space-y-1">
+            <div className="dumb-container dumb-tilt-right p-4">
+              <h5 className="font-bold mb-2 dumb-text">🍀 LUCKY ELEMENTS!!! 🍀</h5>
+              <ul className="text-xl space-y-1 dumb-text">
                 <li>
                   <span className="font-bold">Color:</span>{" "}
-                  {horoscope.luckyColor}
+                  {horoscope.luckyColor.toUpperCase()}!!!
                 </li>
                 <li>
                   <span className="font-bold">Number:</span>{" "}
-                  {horoscope.luckyNumber}
+                  {horoscope.luckyNumber}!!!
                 </li>
                 <li>
                   <span className="font-bold">Emoji:</span>{" "}
-                  {horoscope.luckyEmoji}
+                  {horoscope.luckyEmoji} {horoscope.luckyEmoji} {horoscope.luckyEmoji}
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="mt-4 bg-red-50 dark:bg-red-900/20 rounded-lg p-4">
-            <h5 className="font-bold mb-2">Avoid At All Costs Today</h5>
-            <p className="text-sm italic">{horoscope.unluckyScenario}</p>
+          <div className="mt-4 dumb-container dumb-tilt-left p-4 border-4 border-dashed border-red-500">
+            <h5 className="font-bold mb-2 dumb-text">⛔ AVOID AT ALL COSTS TODAY!!! ⛔</h5>
+            <p className="text-xl dumb-text">{horoscope.unluckyScenario}</p>
           </div>
 
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <h5 className="font-bold mb-2">Compatible Signs</h5>
+              <h5 className="font-bold mb-2 dumb-text">💚 COMPATIBLE SIGNS!!! 💚</h5>
               <div className="flex gap-2 flex-wrap">
                 {horoscope.compatibleSigns.map((sign: string) => {
                   const signData = zodiacSigns.find((s) => s.sign === sign);
                   return (
                     <div
                       key={`comp-${sign}`}
-                      className="bg-green-50 dark:bg-green-900/20 p-2 rounded flex items-center gap-1 text-xs"
+                      className="dumb-container dumb-tilt-right p-2 flex items-center gap-1 text-lg"
                     >
-                      <span>{signData?.emoji}</span>
-                      <span>{signData?.name ?? sign}</span>
+                      <span className="text-2xl">{signData?.emoji}</span>
+                      <span className="dumb-text">{(signData?.name ?? sign).toUpperCase()}</span>
                     </div>
                   );
                 })}
@@ -838,17 +848,17 @@ export function MainContent() {
             </div>
 
             <div>
-              <h5 className="font-bold mb-2">Incompatible Signs</h5>
+              <h5 className="font-bold mb-2 dumb-text">💔 INCOMPATIBLE SIGNS!!! 💔</h5>
               <div className="flex gap-2 flex-wrap">
                 {horoscope.incompatibleSigns.map((sign: string) => {
                   const signData = zodiacSigns.find((s) => s.sign === sign);
                   return (
                     <div
                       key={`incomp-${sign}`}
-                      className="bg-red-50 dark:bg-red-900/20 p-2 rounded flex items-center gap-1 text-xs"
+                      className="dumb-container dumb-tilt-left p-2 flex items-center gap-1 text-lg"
                     >
-                      <span>{signData?.emoji}</span>
-                      <span>{signData?.name ?? sign}</span>
+                      <span className="text-2xl">{signData?.emoji}</span>
+                      <span className="dumb-text">{(signData?.name ?? sign).toUpperCase()}</span>
                     </div>
                   );
                 })}
@@ -861,9 +871,9 @@ export function MainContent() {
           <button
             type="button"
             onClick={startQuiz}
-            className="px-6 py-3 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700 transition-colors"
+            className="dumb-button px-8 py-4 text-xl"
           >
-            Start Over
+            🔄 START OVER!!! 🔄
           </button>
         </div>
       </div>
@@ -872,9 +882,9 @@ export function MainContent() {
 
   // Main render logic
   return (
-    <div className="flex-1 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-      <h1 className="text-4xl font-bold text-center text-purple-600 dark:text-purple-400 mb-6">
-        World's Dumbest Horoscopes
+    <div className="flex-1 dumb-container dumb-tilt-left">
+      <h1 className="text-4xl font-bold text-center dumb-text mb-6 dumb-glow">
+        World's DUMBEST Horoscopes!!!
       </h1>
 
       {currentQuestion === -1 && !quizComplete && renderStartScreen()}
