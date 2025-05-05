@@ -3,7 +3,7 @@ const htmlContent = `<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WORLD\\'S DUMBEST DOMAIN!!1!</title>
+    <title>WORLD'S DUMBEST DOMAIN!!1!</title>
     <meta name="description" content="THE WORLD\\'S DUMBEST DOMAIN - CLICK THE BUTTON FOR MAX DUMBNESS!!!">
     
     <!-- Open Graph Meta Tags -->
@@ -26,12 +26,15 @@ const htmlContent = `<!DOCTYPE html>
             padding: 0;
             font-family: 'Comic Sans MS', cursive, sans-serif;
             background: repeating-linear-gradient(45deg, #ff00ff, #00ffff 10%, #ff00ff 20%);
-            overflow: hidden;
+            overflow-x: hidden; /* Allow vertical scrolling, hide horizontal */
             text-align: center;
             color: yellow;
             text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
-            padding-bottom: 60px; /* Space for fixed bottom marquee */
-            padding-top: 60px; /* Space for fixed top marquee */
+            padding-bottom: 80px; /* Extra space for fixed bottom marquee */
+            padding-top: 80px; /* Extra space for fixed top marquee */
+            min-height: 100vh; /* Ensure full viewport height */
+            line-height: 1.4; /* Improved line height for readability */
+            letter-spacing: 0.5px; /* Slightly increased letter spacing */
         }
 
         h1 {
@@ -39,27 +42,33 @@ const htmlContent = `<!DOCTYPE html>
             margin-top: 30px;
             margin-bottom: 15px;
             animation: pulse 1s infinite alternate;
-            padding: 0 10px;
+            padding: 5px 15px;
+            background-color: rgba(0,0,0,0.6); /* Add background for better contrast */
+            display: inline-block;
+            border-radius: 15px;
+            text-shadow: 2px 2px 4px black; /* Stronger text shadow */
+            border: 2px solid white; /* Add border for emphasis */
         }
 
         #big-button {
             background-color: red;
             color: white;
-            font-size: min(3rem, 10vw); /* Responsive font size */
+            font-size: min(3rem, 8vw); /* Responsive font size */
             padding: min(20px, 5vw) min(40px, 10vw);
             border: min(10px, 3vw) dashed yellow;
             border-radius: 50px;
             cursor: pointer;
-            margin-top: 20px;
+            margin: 0 auto;
             position: relative;
             z-index: 100;
             font-weight: bold;
             animation: shake 0.5s infinite;
             box-shadow: 0 0 30px 10px rgba(255, 255, 0, 0.7);
             max-width: 90%;
-            margin-left: auto;
-            margin-right: auto;
+            width: max-content;
+            display: inline-block;
             word-wrap: break-word;
+            -webkit-tap-highlight-color: rgba(0,0,0,0); /* Remove tap highlight on mobile */
         }
 
         #big-button:hover {
@@ -79,20 +88,27 @@ const htmlContent = `<!DOCTYPE html>
             white-space: nowrap;
             overflow: hidden;
             box-sizing: border-box;
-            background: black;
+            background: rgba(0,0,0,0.85);
             color: lime;
             padding: min(10px, 3vw);
-            font-size: min(2rem, 7vw); /* Responsive font size */
+            font-size: min(2rem, 5vw); /* Smaller font size for better fit */
             font-weight: bold;
             z-index: 1000;
+            height: auto;
+            text-shadow: 1px 1px 2px black; /* Text shadow for better readability */
+            letter-spacing: 0.8px; /* Increased letter spacing */
+            border-top: 2px solid lime; /* Border for better visibility */
+            border-bottom: 2px solid lime;
         }
 
         .marquee-top {
             top: 0;
+            max-height: 60px;
         }
 
         .marquee-bottom {
             bottom: 0;
+            max-height: 60px;
         }
 
         .marquee-content {
@@ -240,9 +256,17 @@ const htmlContent = `<!DOCTYPE html>
     </div>
 
     <h1>👑 WORLD\\'S DUMBEST DOMAIN!!! 👑</h1>
-    <h2 style="font-size: min(1.5rem, 7vw); margin: 10px;">👇👇👇 CLICK THIS AMAZING BUTTON 👇👇👇</h2>
+    <h2 style="font-size: min(1.5rem, 7vw); margin: 10px; background-color: rgba(0,0,0,0.7); padding: 10px; border-radius: 10px; display: inline-block; text-shadow: 1px 1px 2px black; line-height: 1.3;">👇👇👇 CLICK THIS AMAZING BUTTON 👇👇👇</h2>
 
-    <button id="big-button">CLICK THIS DUMB BUTTON!!!</button>
+    <div style="margin: 30px auto 100px auto; max-width: 90%;">
+        <button id="big-button">CLICK THIS DUMB BUTTON!!!</button>
+    </div>
+
+    <div id="catch-button" style="margin-top: 20px; margin-bottom: 30px; display: none;">
+        <button style="background-color: #ff00ff; color: white; font-size: min(1.5rem, 6vw); padding: 10px 20px; border: 3px solid yellow; border-radius: 10px; animation: pulse 0.5s infinite; margin: 0 auto; display: block; text-shadow: 1px 1px 3px black; box-shadow: 0 0 15px yellow; font-weight: bold; letter-spacing: 0.5px;">
+            EMERGENCY BUTTON CATCHER! (MIGHT WORK???)
+        </button>
+    </div>
 
     <div id="result">??</div>
 
@@ -311,8 +335,20 @@ const htmlContent = `<!DOCTYPE html>
         const result = document.getElementById('result');
         const redirectOverlay = document.getElementById('redirect-overlay');
         const countdown = document.getElementById('countdown');
+        const catchButtonContainer = document.getElementById('catch-button');
 
         let clickCount = 0;
+        let buttonRunawayCount = 0;
+        
+        // For mobile devices, show emergency button catcher after a few tries
+        // Detect mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (isMobile) {
+            // After a short delay, make the emergency button available anyway
+            setTimeout(() => {
+                catchButtonContainer.style.display = 'block';
+            }, 5000);
+        }
 
         button.addEventListener('click', () => {
             // Audio effects
@@ -368,19 +404,102 @@ const htmlContent = `<!DOCTYPE html>
             }
         });
 
-        // Make button run away sometimes
+        // Make button run away sometimes (mobile friendly version)
         button.addEventListener('mouseover', (e) => {
             if (Math.random() > 0.7) {
-                const maxX = window.innerWidth - button.offsetWidth;
-                const maxY = window.innerHeight - button.offsetHeight;
+                // Calculate safe area to prevent button going off-screen
+                const maxX = Math.max(50, window.innerWidth - button.offsetWidth - 30);
+                const maxY = Math.max(100, window.innerHeight - button.offsetHeight - 80);
+                
+                // Ensure button stays within view (at least 50px from edges)
+                const safeX = Math.min(Math.max(30, Math.random() * maxX), maxX);
+                const safeY = Math.min(Math.max(100, Math.random() * maxY), maxY);
+                
+                // Set to fixed position to keep visible during scroll
+                button.style.position = 'fixed';
+                button.style.left = \`\${safeX}px\`;
+                button.style.top = \`\${safeY}px\`;
 
-                button.style.position = 'absolute';
-                button.style.left = \`\${Math.random() * maxX}px\`;
-                button.style.top = \`\${Math.random() * maxY}px\`;
+                // Reset position after a delay to ensure it doesn't get stuck
+                setTimeout(() => {
+                    if (clickCount < 2) { // Only reset if we haven't started redirect countdown
+                        button.style.position = 'relative';
+                        button.style.left = 'auto';
+                        button.style.top = 'auto';
+                    }
+                }, 3000);
 
-                // Add bounce sound
-                const audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU');
-                audio.play();
+                // Add bounce sound with error handling for mobile
+                try {
+                    const audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU');
+                    audio.play();
+                } catch (e) {
+                    // Ignore audio errors on mobile
+                }
+            }
+        });
+        
+        // Also add touch event for mobile users
+        button.addEventListener('touchstart', (e) => {
+            // 30% chance of button running away on touch (lower than mouseover to be less frustrating)
+            if (Math.random() > 0.7) {
+                // Similar logic as mouseover but with slightly different positioning
+                const viewportHeight = window.innerHeight;
+                const viewportWidth = window.innerWidth;
+                
+                // Make sure button stays within 80% of the viewport
+                const safeX = Math.min(Math.max(20, Math.random() * (viewportWidth * 0.8)), viewportWidth * 0.8);
+                const safeY = Math.min(Math.max(100, Math.random() * (viewportHeight * 0.7)), viewportHeight * 0.7);
+                
+                button.style.position = 'fixed';
+                button.style.left = \`\${safeX}px\`;
+                button.style.top = \`\${safeY}px\`;
+                
+                // On mobile, show the emergency button catcher after the main button moves a few times
+                if (Math.random() > 0.5) {
+                    document.getElementById('catch-button').style.display = 'block';
+                }
+                
+                // Reset after a short delay
+                setTimeout(() => {
+                    if (clickCount < 2) {
+                        button.style.position = 'relative';
+                        button.style.left = 'auto';
+                        button.style.top = 'auto';
+                    }
+                }, 2500);
+            }
+        });
+        
+        // Add emergency button catcher functionality
+        const catchButton = document.getElementById('catch-button').querySelector('button');
+        catchButton.addEventListener('click', () => {
+            // 50% chance it actually works
+            if (Math.random() > 0.5) {
+                // Reset main button position
+                button.style.position = 'relative';
+                button.style.left = 'auto';
+                button.style.top = 'auto';
+                
+                // Flash the screen green to indicate success
+                document.body.style.backgroundColor = 'green';
+                setTimeout(() => {
+                    document.body.style.backgroundColor = '';
+                }, 200);
+            } else {
+                // Make it even worse! Move the main button again
+                const viewportHeight = window.innerHeight;
+                const viewportWidth = window.innerWidth;
+                
+                button.style.position = 'fixed';
+                button.style.left = \`\${Math.random() * (viewportWidth * 0.8)}px\`;
+                button.style.top = \`\${Math.random() * (viewportHeight * 0.7)}px\`;
+                
+                // Flash the screen red to indicate failure
+                document.body.style.backgroundColor = 'red';
+                setTimeout(() => {
+                    document.body.style.backgroundColor = '';
+                }, 200);
             }
         });
 
