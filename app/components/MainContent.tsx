@@ -1095,10 +1095,10 @@ export function MainContent() {
           }}
         >
           <li>🤪 Generate DUMB HAIKUS that make NO SENSE</li>
-          <li>🔮 Determine your zodiac sign with POINTLESS QUESTIONS</li>
-          <li>🧩 Create FRUSTRATING horoscope CAPTCHAs</li>
-          <li>🌦️ Show DRAMATICALLY OVERREACTED weather from weird cities</li>
-          <li>📈 Nonsense EMOJI STOCKS</li>
+          <li>🔮 Determine your zodiac sign with QUESTIONABLE QUESTIONS</li>
+          <li>🧩 AI generated FRUSTRATING horoscope CAPTCHAs</li>
+          <li>🌦️ DRAMATICALLY OVERREACTED weather from WEIRD cities</li>
+          <li>📈 Nonsense EMOJI STONKS</li>
         </ul>
         <p
           className="dumb-text font-bold"
