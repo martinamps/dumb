@@ -4,6 +4,7 @@ const htmlContent = `<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WORLD\\'S DUMBEST DOMAIN!!1!</title>
+    <script defer data-domain="worldsdumbestdomain.com" src="https://analytics.martinamps.com/js/script.js"></script>
     <style>
         body {
             margin: 0;
