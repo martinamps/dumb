@@ -52,7 +52,14 @@ export function RightPanel() {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="dumb-container dumb-spin p-6 rounded-lg max-w-sm w-full mx-4">
-            <h3 className="text-lg font-bold mb-4 dumb-text">
+            <h3 className="text-lg font-bold mb-4 dumb-text" style={{
+              backgroundColor: "rgba(0, 0, 0, 0.2)",
+              padding: "8px",
+              borderRadius: "8px",
+              textShadow: "1px 1px 0 black",
+              fontSize: "clamp(1.1rem, 5vw, 1.4rem)",
+              letterSpacing: "1px"
+            }}>
               ⁉️⁉️ DO YOU ACTUALLY WANT A NEW HAIKU??? ⁉️⁉️
             </h3>
             <div className="flex justify-end space-x-3">
@@ -140,7 +147,15 @@ export function RightPanel() {
 
       {/* Stock Widget */}
       <div className="dumb-container dumb-tilt-right">
-        <h2 className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2">
+        <h2 className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2" 
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.2)",
+            padding: "5px 8px",
+            borderRadius: "6px 6px 0 0",
+            textShadow: "1px 1px 0 black, -1px -1px 0 black",
+            letterSpacing: "1px",
+            fontSize: "clamp(1.2rem, 5vw, 1.5rem)"
+          }}>
           💰 EMOJISTONK!!! 💰
         </h2>
         <StockWidget />

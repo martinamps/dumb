@@ -367,36 +367,40 @@ export function MainContent() {
       }
 
       const data: ValidateResponse = await response.json();
-      
+
       // If we get the "token expired" error message and we have the answer client-side,
       // do a client-side validation as fallback (intentionally insecure but ensures users don't get stuck)
-      if (!data.success && 
-          data.message.includes("CAPTCHA expired") && 
-          captchaData.answer) {
-        
+      if (
+        !data.success &&
+        data.message.includes("CAPTCHA expired") &&
+        captchaData.answer
+      ) {
         console.log("Using client-side CAPTCHA validation as fallback");
-        
+
         // Simple client-side validation with same cleaning logic as the server
         const cleanAnswer = (text) => {
-          return text.toString()
+          return text
+            .toString()
             .toLowerCase()
             .trim()
-            .replace(/[.,!?;:'"()]/g, '') 
-            .replace(/\s+/g, ' '); 
+            .replace(/[.,!?;:'"()]/g, "")
+            .replace(/\s+/g, " ");
         };
-        
+
         const cleanUserAnswer = cleanAnswer(captchaAnswer);
         const cleanStoredAnswer = cleanAnswer(captchaData.answer);
-        
+
         // If the answer matches, override the server response
         if (cleanUserAnswer === cleanStoredAnswer) {
           setCaptchaSuccess(true);
-          setCaptchaMessage("COSMIC FALLBACK ACTIVATED! Your answer was correct, but the stars lost track of time!");
+          setCaptchaMessage(
+            "COSMIC FALLBACK ACTIVATED! Your answer was correct, but the stars lost track of time!"
+          );
           fetchHoroscope(determinedSign);
           return;
         }
       }
-      
+
       // Otherwise proceed with normal server response
       setCaptchaSuccess(data.success);
       setCaptchaMessage(data.message);
@@ -410,32 +414,35 @@ export function MainContent() {
       }
     } catch (error) {
       console.error("Captcha validation error:", error);
-      
+
       // If server validation fails completely but we have the answer client-side,
       // still try client-side validation as a last resort
       if (captchaData?.answer) {
         console.log("Server validation failed, trying client-side fallback");
-        
+
         const cleanAnswer = (text) => {
-          return text.toString()
+          return text
+            .toString()
             .toLowerCase()
             .trim()
-            .replace(/[.,!?;:'"()]/g, '') 
-            .replace(/\s+/g, ' '); 
+            .replace(/[.,!?;:'"()]/g, "")
+            .replace(/\s+/g, " ");
         };
-        
+
         const cleanUserAnswer = cleanAnswer(captchaAnswer);
         const cleanStoredAnswer = cleanAnswer(captchaData.answer);
-        
+
         if (cleanUserAnswer === cleanStoredAnswer) {
           setCaptchaSuccess(true);
-          setCaptchaMessage("COSMIC EMERGENCY BACKUP ENGAGED! Server validation failed, but the stars aligned anyway!");
+          setCaptchaMessage(
+            "COSMIC EMERGENCY BACKUP ENGAGED! Server validation failed, but the stars aligned anyway!"
+          );
           fetchHoroscope(determinedSign);
           setCaptchaLoading(false);
           return;
         }
       }
-      
+
       setCaptchaError(
         "The cosmic forces rejected your answer. Please try again."
       );
@@ -509,11 +516,7 @@ export function MainContent() {
         Discover what the stars have PESSIMISTICALLY prepared for your FUTURE!!!
         through our SCIENTIFICALLY DUBIOUS personality assessment!!!
       </p>
-      <button
-        type="button"
-        onClick={startQuiz}
-        className="dumb-button"
-      >
+      <button type="button" onClick={startQuiz} className="dumb-button">
         👉👉👉 BEGIN COSMIC QUIZ NOW!!! 👈👈👈
       </button>
     </div>
@@ -530,8 +533,9 @@ export function MainContent() {
       <div className="grid gap-4 max-w-md mx-auto">
         {quizQuestions[currentQuestion].options.map((option, index) => {
           // Add random tilt to each answer button
-          const tiltClass = index % 2 === 0 ? "dumb-tilt-left" : "dumb-tilt-right";
-          
+          const tiltClass =
+            index % 2 === 0 ? "dumb-tilt-left" : "dumb-tilt-right";
+
           return (
             <button
               type="button"
@@ -563,16 +567,17 @@ export function MainContent() {
         <h3 className="text-3xl font-bold mb-2 dumb-text dumb-glow">
           YOU ARE A {signData.name.toUpperCase()}!!!
         </h3>
-        <p className="dumb-text mb-1 text-xl">
-          {signData.dates}
-        </p>
+        <p className="dumb-text mb-1 text-xl">{signData.dates}</p>
         <p className="dumb-text mb-4 text-xl">
           🔥Element: {signData.element}🔥 • 🌟Ruling Planet: {signData.planet}🌟
         </p>
         <div className="p-4 bg-purple-100 dark:bg-purple-900/30 rounded-lg mb-6 max-w-md mx-auto dumb-container dumb-tilt-right">
           <p className="text-xl dumb-text">
-            Through RIGOROUS COSMIC ANALYSIS, our SUPER SMART algorithm has determined you
-            are a <span className="font-bold dumb-glow">{signData.name.toUpperCase()}!!!</span>
+            Through RIGOROUS COSMIC ANALYSIS, our SUPER SMART algorithm has
+            determined you are a{" "}
+            <span className="font-bold dumb-glow">
+              {signData.name.toUpperCase()}!!!
+            </span>
           </p>
           <p className="text-xl mt-2 dumb-text">
             Prepare for your ASTROLOGICALLY-ALIGNED verification challenge!!!
@@ -598,7 +603,9 @@ export function MainContent() {
       // Show error only if captcha never loaded
       return (
         <div className="py-6 text-center">
-          <p className="text-red-500 font-bold text-xl dumb-glow">⚠️ {captchaError} ⚠️</p>
+          <p className="text-red-500 font-bold text-xl dumb-glow">
+            ⚠️ {captchaError} ⚠️
+          </p>
           <button
             type="button"
             onClick={() => {
@@ -624,8 +631,8 @@ export function MainContent() {
             {captchaMessage}
           </p>
           <p className="mt-2 dumb-text text-xl">
-            CONGRATULATIONS on solving our PURPOSELY DUMB CAPTCHA!!! 
-            Your EQUALLY DUMB horoscope is being calculated...
+            CONGRATULATIONS on solving our PURPOSELY DUMB CAPTCHA!!! Your
+            EQUALLY DUMB horoscope is being calculated...
           </p>
           {horoscopeLoading && (
             <p className="mt-4 animate-pulse dumb-text text-2xl">
@@ -645,7 +652,8 @@ export function MainContent() {
     return (
       <div className="py-6 max-w-xl mx-auto">
         <h3 className="text-2xl font-bold mb-4 text-center dumb-text dumb-glow">
-          {randomWarning()} ASTROLOGICAL VERIFICATION REQUIRED!!! {randomWarning()}
+          {randomWarning()} ASTROLOGICAL VERIFICATION REQUIRED!!!{" "}
+          {randomWarning()}
         </h3>
 
         <div className="dumb-container dumb-tilt-left mb-6">
@@ -659,8 +667,12 @@ export function MainContent() {
         </div>
 
         <div className="dumb-container dumb-tilt-right mb-4">
-          <p className="font-bold text-xl mb-2 dumb-text">🔮 CAPTCHA CHALLENGE!!! 🔮</p>
-          <p className="text-lg dumb-text">{formattedCaptchaDisplayInstruction}</p>
+          <p className="font-bold text-xl mb-2 dumb-text">
+            🔮 CAPTCHA CHALLENGE!!! 🔮
+          </p>
+          <p className="text-lg dumb-text">
+            {formattedCaptchaDisplayInstruction}
+          </p>
         </div>
 
         <form
@@ -678,8 +690,8 @@ export function MainContent() {
             className="flex-1 p-4 border-4 border-dotted border-yellow-300 rounded-lg bg-white text-xl font-bold"
             style={{
               fontFamily: "'Comic Sans MS', cursive, sans-serif",
-              color: '#000000',
-              backgroundColor: '#ffffff'
+              color: "#000000",
+              backgroundColor: "#ffffff",
             }}
             aria-label="CAPTCHA Answer"
             disabled={captchaLoading}
@@ -734,7 +746,9 @@ export function MainContent() {
     if (horoscopeError) {
       return (
         <div className="py-6 text-center">
-          <p className="text-red-500 font-bold text-xl dumb-glow">⚠️ {horoscopeError} ⚠️</p>
+          <p className="text-red-500 font-bold text-xl dumb-glow">
+            ⚠️ {horoscopeError} ⚠️
+          </p>
           <button
             type="button"
             onClick={startQuiz} // Allow restarting if horoscope fetch fails
@@ -792,7 +806,9 @@ export function MainContent() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="dumb-container dumb-tilt-left p-4">
-              <h5 className="font-bold mb-2 dumb-text">⚡ COSMIC POWER LEVEL ⚡</h5>
+              <h5 className="font-bold mb-2 dumb-text">
+                ⚡ COSMIC POWER LEVEL ⚡
+              </h5>
               <div className="flex items-center gap-2">
                 <div
                   className="h-6 flex-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden border-2 border-dotted border-purple-500"
@@ -810,7 +826,9 @@ export function MainContent() {
             </div>
 
             <div className="dumb-container dumb-tilt-right p-4">
-              <h5 className="font-bold mb-2 dumb-text">🍀 LUCKY ELEMENTS!!! 🍀</h5>
+              <h5 className="font-bold mb-2 dumb-text">
+                🍀 LUCKY ELEMENTS!!! 🍀
+              </h5>
               <ul className="text-xl space-y-1 dumb-text">
                 <li>
                   <span className="font-bold">Color:</span>{" "}
@@ -822,20 +840,25 @@ export function MainContent() {
                 </li>
                 <li>
                   <span className="font-bold">Emoji:</span>{" "}
-                  {horoscope.luckyEmoji} {horoscope.luckyEmoji} {horoscope.luckyEmoji}
+                  {horoscope.luckyEmoji} {horoscope.luckyEmoji}{" "}
+                  {horoscope.luckyEmoji}
                 </li>
               </ul>
             </div>
           </div>
 
           <div className="mt-4 dumb-container dumb-tilt-left p-4 border-4 border-dashed border-red-500">
-            <h5 className="font-bold mb-2 dumb-text">⛔ AVOID AT ALL COSTS TODAY!!! ⛔</h5>
+            <h5 className="font-bold mb-2 dumb-text">
+              ⛔ AVOID AT ALL COSTS TODAY!!! ⛔
+            </h5>
             <p className="text-xl dumb-text">{horoscope.unluckyScenario}</p>
           </div>
 
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <h5 className="font-bold mb-2 dumb-text">💚 COMPATIBLE SIGNS!!! 💚</h5>
+              <h5 className="font-bold mb-2 dumb-text">
+                💚 COMPATIBLE SIGNS!!! 💚
+              </h5>
               <div className="flex gap-2 flex-wrap">
                 {horoscope.compatibleSigns.map((sign: string) => {
                   const signData = zodiacSigns.find((s) => s.sign === sign);
@@ -845,7 +868,9 @@ export function MainContent() {
                       className="dumb-container dumb-tilt-right p-2 flex items-center gap-1 text-lg"
                     >
                       <span className="text-2xl">{signData?.emoji}</span>
-                      <span className="dumb-text">{(signData?.name ?? sign).toUpperCase()}</span>
+                      <span className="dumb-text">
+                        {(signData?.name ?? sign).toUpperCase()}
+                      </span>
                     </div>
                   );
                 })}
@@ -853,7 +878,9 @@ export function MainContent() {
             </div>
 
             <div>
-              <h5 className="font-bold mb-2 dumb-text">💔 INCOMPATIBLE SIGNS!!! 💔</h5>
+              <h5 className="font-bold mb-2 dumb-text">
+                💔 INCOMPATIBLE SIGNS!!! 💔
+              </h5>
               <div className="flex gap-2 flex-wrap">
                 {horoscope.incompatibleSigns.map((sign: string) => {
                   const signData = zodiacSigns.find((s) => s.sign === sign);
@@ -863,7 +890,9 @@ export function MainContent() {
                       className="dumb-container dumb-tilt-left p-2 flex items-center gap-1 text-lg"
                     >
                       <span className="text-2xl">{signData?.emoji}</span>
-                      <span className="dumb-text">{(signData?.name ?? sign).toUpperCase()}</span>
+                      <span className="dumb-text">
+                        {(signData?.name ?? sign).toUpperCase()}
+                      </span>
                     </div>
                   );
                 })}
@@ -881,18 +910,80 @@ export function MainContent() {
             🔄 START OVER!!! 🔄
           </button>
         </div>
-        
-        {/* Idea Shredder Section */}
-        <div className="mt-12 pt-8 border-t-4 border-dashed border-yellow-400">
-          <DumbIdeaShredder />
-        </div>
       </div>
     );
   };
 
+  // Intro banner component
+  const WelcomeBanner = () => (
+    <div className="dumb-container dumb-tilt-right mb-6 py-3 px-4">
+      <h2
+        className="text-xl font-bold mb-2 dumb-text text-center"
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.2)",
+          padding: "6px 10px",
+          borderRadius: "8px",
+          textShadow: "1px 1px 0 black, -1px -1px 0 black",
+          letterSpacing: "1px",
+          fontSize: "clamp(1.2rem, 5vw, 1.6rem)",
+        }}
+      >
+        🎉 WELCOME TO THE WORLD'S DUMBEST HACKATHON PROJECT!!! 🎉
+      </h2>
+      <div className="text-center">
+        <p
+          className="dumb-text mb-2"
+          style={{
+            fontSize: "clamp(1rem, 4vw, 1.2rem)",
+            backgroundColor: "rgba(255, 255, 255, 0.3)",
+            padding: "8px",
+            borderRadius: "6px",
+            textShadow: "1px 1px 0 black",
+          }}
+        >
+          This RIDICULOUSLY USELESS website was created for the World's Dumbest
+          Hackathon using QUESTIONABLY INTELLIGENT AI models to:
+        </p>
+        <ul
+          className="dumb-text space-y-1 mb-4 mx-auto max-w-xl"
+          style={{
+            textAlign: "left",
+            listStyleType: "none",
+            fontSize: "clamp(0.9rem, 4vw, 1.1rem)",
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
+            padding: "8px 12px",
+            borderRadius: "6px",
+            textShadow: "1px 1px 0 black",
+          }}
+        >
+          <li>🤪 Generate DUMB HAIKUS that make NO SENSE</li>
+          <li>🔮 Determine your zodiac sign with POINTLESS QUESTIONS</li>
+          <li>🧩 Create FRUSTRATING horoscope CAPTCHAs</li>
+          <li>🌦️ Show DRAMATICALLY OVERREACTED weather</li>
+          <li>📈 Translate stocks into NONSENSICAL EMOJIS</li>
+        </ul>
+        <p
+          className="dumb-text font-bold"
+          style={{
+            fontSize: "clamp(0.9rem, 4vw, 1.1rem)",
+            backgroundColor: "rgba(255, 255, 255, 0.3)",
+            padding: "8px",
+            borderRadius: "6px",
+            textShadow: "1px 1px 0 black",
+          }}
+        >
+          We'd GREATLY appreciate if you could submit DUMB IDEAS at the bottom
+          for what to add next!
+        </p>
+      </div>
+    </div>
+  );
+
   // Main render logic
   return (
     <div className="flex-1 dumb-container dumb-tilt-left">
+      <WelcomeBanner />
+
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center dumb-text mb-3 md:mb-6 dumb-glow">
         World's DUMBEST Horoscopes!!!
       </h1>
@@ -906,6 +997,11 @@ export function MainContent() {
         </>
       )}
       {horoscopeVisible && renderHoroscope()}
+
+      {/* Ideas shredder always visible */}
+      <div className="mt-12 pt-8 border-t-4 border-dashed border-yellow-400">
+        <DumbIdeaShredder />
+      </div>
     </div>
   );
 }

@@ -86,21 +86,22 @@
 
 .dumb-button {
   background: linear-gradient(to right, #ff00ff, #00ffff) !important;
-  color: yellow !important;
+  color: white !important; /* Changed from yellow to white for better contrast */
   font-weight: bold !important;
-  font-size: clamp(1rem, 5vw, 1.2rem) !important; /* Responsive font size */
-  padding: clamp(6px, 2vw, 10px) clamp(10px, 4vw, 20px) !important; /* Responsive padding */
+  font-size: clamp(1.1rem, 5vw, 1.3rem) !important; /* Slightly larger font size */
+  padding: clamp(8px, 2.5vw, 12px) clamp(12px, 4.5vw, 24px) !important; /* Increased padding */
   border: clamp(2px, 1vw, 4px) dotted #ff00ff !important; /* Responsive border */
   border-radius: clamp(15px, 4vw, 30px) !important; /* Responsive border radius */
-  box-shadow: 0 0 clamp(8px, 2vw, 15px) #00ffff !important; /* Responsive shadow */
+  box-shadow: 0 0 clamp(8px, 2vw, 15px) rgba(0, 0, 0, 0.5) !important; /* More subdued shadow */
   cursor: pointer !important;
   animation: shake 0.5s infinite !important;
-  text-shadow: 1px 1px 0 #000 !important; /* Smaller text shadow for mobile */
+  text-shadow: 1px 1px 0 black, -1px -1px 0 black !important; /* Stronger text shadow for better readability */
   position: relative !important;
   z-index: 2 !important;
   transition: all 0.3s !important;
   max-width: 100% !important; /* Ensure button doesn't overflow on mobile */
   word-wrap: break-word !important; /* Allow text to wrap on mobile */
+  letter-spacing: 1px !important; /* Added letter spacing */
 }
 
 .dumb-button:hover {
@@ -163,8 +164,11 @@
 
 /* Make elements glow with obnoxious colors - but more readable */
 .dumb-glow {
-  filter: drop-shadow(0 0 3px rgba(255, 0, 255, 0.7)) drop-shadow(0 0 6px rgba(0, 255, 255, 0.6)) !important;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 4px rgba(255, 0, 255, 0.6)) !important;
   font-weight: bold !important;
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  padding: 5px !important;
+  border-radius: 6px !important;
 }
 
 /* Add ridiculous hover effects */

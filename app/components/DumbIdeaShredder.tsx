@@ -180,18 +180,29 @@ const DumbIdeaShredder = () => {
     setShowInput(false);
     setCardVisible(true);
     
-    // Start card animation
-    setCardPosition({ top: -150, opacity: 1 });
+    // Start card animation - now from higher up for more dramatic effect
+    setCardPosition({ top: -180, opacity: 1 });
     
-    // Animate card into shredder
+    // Animate card into view first - hover above shredder longer
     setTimeout(() => {
-      setCardPosition({ top: 30, opacity: 1 });
-    }, 100);
+      setCardPosition({ top: -40, opacity: 1 });
+    }, 300);
     
-    // Start shredding after card enters
+    // Hold the card in view for user to read
+    setTimeout(() => {
+      // Add a slight bounce effect before shredding
+      setCardPosition({ top: -30, opacity: 1 });
+    }, 1500);
+    
+    // Move card toward shredder after a longer delay
+    setTimeout(() => {
+      setCardPosition({ top: 0, opacity: 1 });
+    }, 3000);
+    
+    // Start shredding after card enters - with increased delay
     setTimeout(() => {
       // Create shreds from the text
-      const shredCount = Math.max(20, idea.length / 2);
+      const shredCount = Math.max(25, idea.length / 2); // More shreds for better effect
       const newShreds = [];
       
       for (let i = 0; i < shredCount; i++) {
@@ -214,9 +225,10 @@ const DumbIdeaShredder = () => {
       
       setShreds(newShreds);
       setCardPosition({ top: 120, opacity: 0 }); // Card disappears into shredder
-    }, 1500);
+    }, 4500);
     
     // Reset after animation completes with a new random requirement
+    // Increased from 6000 to 9000 to account for the longer card animation
     setTimeout(() => {
       const newRequirement = getRandomRequirement();
       setIdea('');
@@ -227,8 +239,8 @@ const DumbIdeaShredder = () => {
       setPreviousRequired(newRequirement);
       setRequiredChars(newRequirement);
       setInitialLoad(true); // Reset to show the countup animation for the new requirement
-      setTimeout(() => setInitialLoad(false), 5000);
-    }, 6000);
+      setTimeout(() => setInitialLoad(false), 1000); // Faster initialization
+    }, 9000);
   };
   
   useEffect(() => {
@@ -284,34 +296,65 @@ const DumbIdeaShredder = () => {
   }, [isShredding, shreds.length]);
   
   return (
-    <div className="flex flex-col items-center justify-center p-4 dumb-container">
-      <h2 className="text-3xl font-bold mb-6 text-center dumb-text dumb-glow">
-        GOT IDEAS TO MAKE THIS SITE EVEN DUMBER???
+    <div className="flex flex-col items-center justify-center p-4 dumb-container" style={{
+      borderWidth: "6px",
+      borderColor: "#ff00ff",
+      marginTop: "40px",
+      boxShadow: "0 0 20px rgba(255, 0, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.3)",
+      backgroundColor: "rgba(255, 255, 255, 0.92)",
+    }}>
+      <h2 className="text-3xl font-bold mb-6 text-center dumb-text dumb-glow" style={{
+        fontSize: "clamp(1.5rem, 5vw, 2rem)",
+        padding: "10px",
+        backgroundColor: "rgba(0, 0, 0, 0.2)",
+        borderRadius: "10px",
+        textShadow: "2px 2px 0 black"
+      }}>
+        📝 IDEA SUBMISSION STATION!!! 📝
       </h2>
       
       <div className="w-full max-w-md relative">
         {showInput ? (
           <div className="mb-8">
-            <div className="mb-3 flex justify-between items-center">
-              <span className="text-xl dumb-text">🌟 SUBMIT YOUR IDEA:</span>
-              <div className="flex-shrink-0">
-                <FlipCounter 
-                  current={idea.length} 
-                  total={requiredChars} 
-                  flipping={flipAnimating}
-                  previousTotal={previousRequired}
-                  initialLoad={initialLoad}
-                />
+            <div className="mb-3 p-2 bg-black bg-opacity-10 rounded-lg border-2 border-dashed border-yellow-400">
+              <div className="flex justify-between items-center">
+                <span className="text-xl dumb-text font-bold" style={{ 
+                  textShadow: "1px 1px 0 black",
+                  letterSpacing: "0.5px",
+                  fontSize: "clamp(1.1rem, 4vw, 1.3rem)"
+                }}>
+                  🌟 YOUR DUMB IDEA HERE:
+                </span>
+                <div className="flex-shrink-0">
+                  <FlipCounter 
+                    current={idea.length} 
+                    total={requiredChars} 
+                    flipping={flipAnimating}
+                    previousTotal={previousRequired}
+                    initialLoad={initialLoad}
+                  />
+                </div>
               </div>
+              <p className="text-sm dumb-text mt-1 mb-2" style={{
+                backgroundColor: "rgba(0,0,0,0.2)",
+                padding: "4px 8px",
+                borderRadius: "6px",
+                fontWeight: "bold",
+                textShadow: "1px 1px 0 black",
+                fontSize: "clamp(0.8rem, 3vw, 0.9rem)"
+              }}>
+                What's the MOST ABSURD feature we should add to this RIDICULOUS website?
+              </p>
             </div>
             <textarea
               value={idea}
               onChange={(e) => setIdea(e.target.value)}
-              className="w-full p-4 border-4 border-dashed border-yellow-400 rounded-lg shadow-lg mb-2 h-32 focus:ring focus:ring-yellow-400 text-black"
-              placeholder={`Share your idea here! We need exactly ${requiredChars} characters...`}
+              className="w-full p-4 border-4 border-dashed border-purple-400 rounded-lg shadow-lg mb-3 h-36 focus:ring focus:ring-purple-400 text-black"
+              placeholder={`Type your BRILLIANTLY DUMB idea here! Our sophisticated idea processing system requires EXACTLY ${requiredChars} characters...`}
               style={{
                 fontFamily: "'Comic Sans MS', cursive, sans-serif", 
-                fontSize: '16px',
+                fontSize: '18px',
+                fontWeight: 'bold',
                 color: '#000000',
                 backgroundColor: '#ffffff'
               }}
@@ -323,9 +366,19 @@ const DumbIdeaShredder = () => {
             )}
             <button
               onClick={handleSubmit}
-              className="dumb-button w-full py-3 px-4"
+              className="dumb-button w-full py-4 px-6"
+              style={{
+                fontSize: "clamp(1.1rem, 4vw, 1.3rem)",
+                fontWeight: "bold",
+                letterSpacing: "1px",
+                background: "linear-gradient(to right, #ff00ff, #00ffff, #ff00ff)",
+                backgroundSize: "200% auto",
+                animation: "backgroundShift 3s ease infinite, shake 0.5s infinite",
+                border: "4px dotted yellow",
+                textShadow: "2px 2px 0 black, -1px -1px 0 black"
+              }}
             >
-              ✨ SUBMIT BRILLIANT IDEA! ✨
+              🚀 SUBMIT YOUR GENIUS IDEA!!! 🚀
             </button>
           </div>
         ) : null}
@@ -333,11 +386,11 @@ const DumbIdeaShredder = () => {
         {/* Idea Card (positioned behind shredder) */}
         {cardVisible && (
           <div 
-            className="absolute left-0 right-0 mx-auto w-72 bg-white p-4 rounded shadow-md z-0 border-4 border-dashed border-yellow-400"
+            className="absolute left-0 right-0 mx-auto w-72 bg-white p-4 rounded-lg shadow-lg z-0 border-4 border-dashed border-purple-400"
             style={{
               top: `${cardPosition.top}px`,
               opacity: cardPosition.opacity,
-              transition: 'all 1.5s ease-in-out',
+              transition: 'all 2s ease-in-out',
               transformOrigin: 'center bottom',
               textAlign: 'center',
               fontSize: '16px',
@@ -349,9 +402,13 @@ const DumbIdeaShredder = () => {
               fontFamily: "'Comic Sans MS', cursive, sans-serif",
               color: '#000000',
               backgroundColor: '#ffffff',
-              fontWeight: 'bold'
+              fontWeight: 'bold',
+              boxShadow: '0 0 20px rgba(255, 0, 255, 0.5), 0 10px 20px rgba(0, 0, 0, 0.2)'
             }}
           >
+            <div className="text-xs font-bold mb-2 text-center" style={{ color: '#ff00ff' }}>
+              AMAZING IDEA SUBMISSION #9,483
+            </div>
             <span style={{ color: '#000000' }}>{idea}</span>
           </div>
         )}
@@ -421,9 +478,27 @@ const DumbIdeaShredder = () => {
         </div>
         
         {isShredding && (
-          <div className="mt-8 text-center text-3xl dumb-text" style={{overflow: 'hidden'}}>
-            <div className="inline-block transform transition-all duration-1000 animate-bounce">
-              💥 SURPRISE! YOUR IDEA IS BEING DESTROYED!!! 💥
+          <div className="mt-8 text-center text-3xl dumb-text" style={{
+            overflow: 'hidden',
+            padding: "10px",
+            backgroundColor: "rgba(0, 0, 0, 0.2)",
+            borderRadius: "10px",
+            maxWidth: "90%",
+            margin: "0 auto",
+            marginTop: "30px"
+          }}>
+            <div className="inline-block transform transition-all duration-1000 animate-bounce" style={{
+              textShadow: "2px 2px 0 black, -1px -1px 0 black",
+              fontWeight: "bold",
+              fontSize: "clamp(1.3rem, 5vw, 1.8rem)"
+            }}>
+              💥 PLOT TWIST! YOUR GENIUS IDEA IS BEING SHREDDED!!! 💥
+            </div>
+            <div className="text-sm mt-2" style={{
+              textShadow: "1px 1px 0 black",
+              fontWeight: "bold"
+            }}>
+              Don't worry, we've already collected over 9,000 ideas... and ignored ALL of them! 😈
             </div>
           </div>
         )}
@@ -431,9 +506,28 @@ const DumbIdeaShredder = () => {
       
       {/* Animation explanations - Show only when not shredding */}
       {!isShredding && (
-        <div className="mt-6 text-center dumb-text text-lg">
-          <p className="mb-2">WE'VE COLLECTED <span className="font-bold dumb-glow">9,482</span> AMAZING SUGGESTIONS!!!</p>
-          <p>THE MORE RIDICULOUS YOUR IDEA, THE BETTER!!! 🤪</p>
+        <div className="mt-6 text-center dumb-text" style={{
+          backgroundColor: "rgba(0, 0, 0, 0.15)",
+          padding: "10px",
+          borderRadius: "10px",
+          maxWidth: "90%",
+          margin: "0 auto"
+        }}>
+          <p className="mb-2" style={{
+            fontSize: "clamp(1rem, 4vw, 1.2rem)",
+            fontWeight: "bold",
+            textShadow: "1px 1px 0 black"
+          }}>
+            We've received <span className="font-bold dumb-glow">9,482</span> AMAZING ideas so far!
+          </p>
+          <p style={{
+            fontSize: "clamp(0.9rem, 3.5vw, 1.1rem)",
+            fontWeight: "bold",
+            textShadow: "1px 1px 0 black",
+            fontStyle: "italic"
+          }}>
+            The more ABSURD and RIDICULOUS your suggestion, the better!!! 🤪👍
+          </p>
         </div>
       )}
       

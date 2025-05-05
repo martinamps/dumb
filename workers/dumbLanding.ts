@@ -24,7 +24,7 @@ const htmlContent = `<!DOCTYPE html>
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-family: 'Comic Sans MS', sans-serif;
             background: repeating-linear-gradient(45deg, #ff00ff, #00ffff 10%, #ff00ff 20%);
             overflow-x: hidden; /* Allow vertical scrolling, hide horizontal */
             text-align: center;
@@ -118,12 +118,17 @@ const htmlContent = `<!DOCTYPE html>
         }
 
         #countdown {
-            font-size: min(15rem, 30vw); /* Responsive font size */
+            font-size: min(15rem, 30vw);
             margin-bottom: 2rem;
             position: relative;
             z-index: 2000;
             width: 100%;
             text-align: center;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.8);
+            font-weight: bold;
+            background: rgba(0,0,0,0.5);
+            padding: 20px 0;
+            border-radius: 20px;
         }
 
         #redirect-overlay {
@@ -132,7 +137,7 @@ const htmlContent = `<!DOCTYPE html>
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.95);
             z-index: 1000;
             display: none;
             flex-direction: column;
@@ -143,17 +148,21 @@ const htmlContent = `<!DOCTYPE html>
         }
 
         #redirect-text {
-            font-size: min(3rem, 10vw); /* Responsive font size */
+            font-size: min(3rem, 10vw);
             margin-bottom: 20px;
             animation: rainbowText 1s infinite;
             position: relative;
             z-index: 1000;
             text-align: center;
             width: 100%;
+            background: rgba(0,0,0,0.5);
+            padding: 15px 0;
+            border-radius: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
         }
 
         #redirect-link {
-            font-size: min(2rem, 8vw); /* Responsive font size */
+            font-size: min(2rem, 8vw);
             color: #00ff00;
             text-decoration: underline;
             margin-bottom: 20px;
@@ -163,6 +172,10 @@ const htmlContent = `<!DOCTYPE html>
             text-align: center;
             width: 100%;
             word-wrap: break-word;
+            background: rgba(0,0,0,0.5);
+            padding: 15px 0;
+            border-radius: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
         }
 
         .emoji-rain {
@@ -219,13 +232,7 @@ const htmlContent = `<!DOCTYPE html>
         }
 
         .cursor {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'%3E%3C/path%3E%3Cpath d='M12 5v14'%3E%3C/path%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 10000;
-            display: none;
+            display: none !important;
         }
 
         #bg-images {
@@ -262,24 +269,12 @@ const htmlContent = `<!DOCTYPE html>
         <button id="big-button">CLICK THIS DUMB BUTTON!!!</button>
     </div>
 
-    <div id="catch-button" style="margin-top: 20px; margin-bottom: 30px; display: none;">
-        <button style="background-color: #ff00ff; color: white; font-size: min(1.5rem, 6vw); padding: 10px 20px; border: 3px solid yellow; border-radius: 10px; animation: pulse 0.5s infinite; margin: 0 auto; display: block; text-shadow: 1px 1px 3px black; box-shadow: 0 0 15px yellow; font-weight: bold; letter-spacing: 0.5px;">
-            EMERGENCY BUTTON CATCHER! (MIGHT WORK???)
-        </button>
-    </div>
-
     <div id="result">??</div>
 
     <div class="marquee marquee-bottom">
         <div class="marquee-content">
             💯💯💯 THIS WEBSITE WON 87 DESIGN AWARDS!!! CREATED BY A CERTIFIED DUMMY!!! 100% SATISFACTION GUARANTEED OR YOUR MONEY BACK!!! 💯💯💯
         </div>
-    </div>
-
-    <div id="redirect-overlay">
-        <div id="countdown">10</div>
-        <div id="redirect-text">... DOING SOMETHING DUMB !!!</div>
-        <div id="redirect-link">Redirecting to https://worldsdumbestapp.com/</div>
     </div>
 
     <div id="bg-images"></div>
@@ -335,20 +330,8 @@ const htmlContent = `<!DOCTYPE html>
         const result = document.getElementById('result');
         const redirectOverlay = document.getElementById('redirect-overlay');
         const countdown = document.getElementById('countdown');
-        const catchButtonContainer = document.getElementById('catch-button');
 
         let clickCount = 0;
-        let buttonRunawayCount = 0;
-        
-        // For mobile devices, show emergency button catcher after a few tries
-        // Detect mobile device
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        if (isMobile) {
-            // After a short delay, make the emergency button available anyway
-            setTimeout(() => {
-                catchButtonContainer.style.display = 'block';
-            }, 5000);
-        }
 
         button.addEventListener('click', () => {
             // Audio effects
@@ -455,11 +438,6 @@ const htmlContent = `<!DOCTYPE html>
                 button.style.left = \`\${safeX}px\`;
                 button.style.top = \`\${safeY}px\`;
                 
-                // On mobile, show the emergency button catcher after the main button moves a few times
-                if (Math.random() > 0.5) {
-                    document.getElementById('catch-button').style.display = 'block';
-                }
-                
                 // Reset after a short delay
                 setTimeout(() => {
                     if (clickCount < 2) {
@@ -468,38 +446,6 @@ const htmlContent = `<!DOCTYPE html>
                         button.style.top = 'auto';
                     }
                 }, 2500);
-            }
-        });
-        
-        // Add emergency button catcher functionality
-        const catchButton = document.getElementById('catch-button').querySelector('button');
-        catchButton.addEventListener('click', () => {
-            // 50% chance it actually works
-            if (Math.random() > 0.5) {
-                // Reset main button position
-                button.style.position = 'relative';
-                button.style.left = 'auto';
-                button.style.top = 'auto';
-                
-                // Flash the screen green to indicate success
-                document.body.style.backgroundColor = 'green';
-                setTimeout(() => {
-                    document.body.style.backgroundColor = '';
-                }, 200);
-            } else {
-                // Make it even worse! Move the main button again
-                const viewportHeight = window.innerHeight;
-                const viewportWidth = window.innerWidth;
-                
-                button.style.position = 'fixed';
-                button.style.left = \`\${Math.random() * (viewportWidth * 0.8)}px\`;
-                button.style.top = \`\${Math.random() * (viewportHeight * 0.7)}px\`;
-                
-                // Flash the screen red to indicate failure
-                document.body.style.backgroundColor = 'red';
-                setTimeout(() => {
-                    document.body.style.backgroundColor = '';
-                }, 200);
             }
         });
 
