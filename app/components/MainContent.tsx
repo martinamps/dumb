@@ -1066,7 +1066,7 @@ export function MainContent() {
           fontSize: "clamp(1.2rem, 5vw, 1.6rem)",
         }}
       >
-        🎉 WELCOME TO THE WORLD'S APP!!! 🎉
+        🎉 WELCOME TO THE WORLD'S DUMBEST APP!!! 🎉
       </h2>
       <div className="text-center">
         <p

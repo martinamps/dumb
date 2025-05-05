@@ -339,7 +339,7 @@ const htmlContent = `<!DOCTYPE html>
                 display: block;
             "
         >
-            Click here to go NOW!
+            Redirecting to https://www.worldsdumbestapp.com/
         </a>
     </div>
 
