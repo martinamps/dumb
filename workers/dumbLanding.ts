@@ -1,5 +1,3 @@
-import { type Env } from "./bindings";
-
 const htmlContent = `<!DOCTYPE html>
 <html lang="en">
 <head>
