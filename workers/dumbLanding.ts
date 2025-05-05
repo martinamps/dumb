@@ -38,16 +38,18 @@ const htmlContent = `<!DOCTYPE html>
         }
 
         h1 {
-            font-size: min(4rem, 15vw); /* Responsive font size */
-            margin-top: 30px;
+            font-size: min(3.5rem, 12vw); /* Smaller responsive font size */
+            margin-top: 50px; /* Increased top margin to ensure it's below the marquee */
             margin-bottom: 15px;
             animation: pulse 1s infinite alternate;
-            padding: 5px 15px;
+            padding: 10px 15px; /* Increased padding */
             background-color: rgba(0,0,0,0.6); /* Add background for better contrast */
             display: inline-block;
             border-radius: 15px;
             text-shadow: 2px 2px 4px black; /* Stronger text shadow */
             border: 2px solid white; /* Add border for emphasis */
+            width: 85%; /* Limit width on mobile */
+            max-width: 800px; /* Maximum width on desktop */
         }
 
         #big-button {
@@ -69,11 +71,21 @@ const htmlContent = `<!DOCTYPE html>
             display: inline-block;
             word-wrap: break-word;
             -webkit-tap-highlight-color: rgba(0,0,0,0); /* Remove tap highlight on mobile */
+            touch-action: manipulation; /* Prevent browser handling of touch actions */
+            user-select: none; /* Prevent text selection */
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE/Edge */
         }
 
         #big-button:hover {
             background-color: green;
             transform: scale(1.1);
+        }
+
+        #big-button:active {
+            transform: scale(0.95); /* Visual feedback when pressed */
+            background-color: darkgreen;
         }
 
         #result {
@@ -263,7 +275,7 @@ const htmlContent = `<!DOCTYPE html>
     </div>
 
     <h1>👑 WORLD'S DUMBEST DOMAIN!!! 👑</h1>
-    <h2 style="font-size: min(1.5rem, 7vw); margin: 10px; background-color: rgba(0,0,0,0.7); padding: 10px; border-radius: 10px; display: inline-block; text-shadow: 1px 1px 2px black; line-height: 1.3;">👇👇👇 CLICK THIS AMAZING BUTTON 👇👇👇</h2>
+    <h2 style="font-size: min(1.5rem, 7vw); margin: 10px; background-color: rgba(0,0,0,0.7); padding: 10px; border-radius: 10px; display: block; text-shadow: 1px 1px 2px black; line-height: 1.3;">👇👇👇 CLICK THIS AMAZING BUTTON 👇👇👇</h2>
 
     <div style="margin: 30px auto 100px auto; max-width: 90%;">
         <button id="big-button">DUMB BUTTON!!!</button>
@@ -362,38 +374,29 @@ const htmlContent = `<!DOCTYPE html>
         const result = document.getElementById('result');
         const redirectOverlay = document.getElementById('redirect-overlay');
         const countdown = document.getElementById('countdown');
-
         let clickCount = 0;
 
-        button.addEventListener('click', () => {
-            // Flash screen
-            document.body.style.backgroundColor = 'white';
-            setTimeout(() => {
-                document.body.style.backgroundColor = '';
-            }, 100);
-
+        // Handle button action (for both click and touch)
+        function handleButtonAction() {
+            console.log('Button activated! Count:', clickCount + 1);
+            
             clickCount++;
-
+            
             if (clickCount === 1) {
-                // First click - just change button text and style
                 button.textContent = "CLICK IT AGAIN!!!";
                 button.style.backgroundColor = "green";
-                button.style.fontSize = "min(4rem, 12vw)"; // Responsive font size
+                button.style.fontSize = "min(4rem, 12vw)";
                 button.style.animation = "pulse 0.5s infinite alternate, shake 0.3s infinite";
             } else if (clickCount === 2) {
-                // Second click - trigger countdown and redirect
-                button.style.visibility = 'hidden'; // Hide but keep in DOM
+                button.style.visibility = 'hidden';
                 redirectOverlay.style.display = 'flex';
-
-                // Start 10 second countdown
+                
                 let timeLeft = 10;
                 countdown.textContent = timeLeft;
 
                 const countdownInterval = setInterval(() => {
                     timeLeft--;
                     countdown.textContent = timeLeft;
-
-                    // Dramatic flashing
                     document.body.style.backgroundColor = \`rgb(\${Math.random() * 255}, \${Math.random() * 255}, \${Math.random() * 255})\`;
 
                     if (timeLeft <= 0) {
@@ -402,15 +405,41 @@ const htmlContent = `<!DOCTYPE html>
                     }
                 }, 1000);
             }
+        }
+
+        // Add click event for all devices
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleButtonAction();
         });
 
-        // Simple hover effect for desktop - button runs away sometimes
+        // Add touch event specifically for mobile
+        button.addEventListener('touchend', (e) => {
+            e.preventDefault(); // Prevent any default behavior
+            e.stopPropagation(); // Stop event from propagating
+            console.log('Touch event detected');
+            handleButtonAction();
+        });
+
+        // Add touchstart handler for better mobile feedback
+        button.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            // Visual feedback on touch
+            button.style.transform = "scale(0.95)";
+        });
+        
+        // Reset visual feedback after touch
+        button.addEventListener('touchcancel', () => {
+            button.style.transform = "scale(1)";
+        });
+
+        // Desktop-only hover effect
         if (window.matchMedia('(hover: hover)').matches) {
-            button.addEventListener('mouseover', (e) => {
-                if (Math.random() > 0.7) {
+            button.addEventListener('mouseover', () => {
+                if (Math.random() > 0.7 && clickCount < 2) {
                     const maxX = Math.max(50, window.innerWidth - button.offsetWidth - 30);
                     const maxY = Math.max(100, window.innerHeight - button.offsetHeight - 80);
-                    
                     const safeX = Math.min(Math.max(30, Math.random() * maxX), maxX);
                     const safeY = Math.min(Math.max(100, Math.random() * maxY), maxY);
                     
@@ -419,7 +448,7 @@ const htmlContent = `<!DOCTYPE html>
                     button.style.top = \`\${safeY}px\`;
                     
                     setTimeout(() => {
-                        if (clickCount < 2 && button && button.style && button.style.visibility !== 'hidden') {
+                        if (clickCount < 2 && button.style.visibility !== 'hidden') {
                             button.style.position = 'relative';
                             button.style.left = 'auto';
                             button.style.top = 'auto';
@@ -430,7 +459,7 @@ const htmlContent = `<!DOCTYPE html>
         }
 
         // Console message
-        console.log('%c WORLD'S DUMBEST WEBSITE CONSOLE MESSAGE!!!', 'background: black; color: red; font-size: 24px; font-weight: bold;');
+        console.log('%c WORLD\\'S DUMBEST WEBSITE CONSOLE MESSAGE!!!', 'background: black; color: red; font-size: 24px; font-weight: bold;');
         console.log('%c WHY ARE YOU LOOKING AT THE CONSOLE? CLICK THE BUTTON!!!', 'background: yellow; color: blue; font-size: 18px;');
     </script>
 </body>
