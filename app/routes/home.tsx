@@ -1,4 +1,5 @@
 import type { Route } from "./+types/home";
+import { useState, useEffect } from "react";
 import { MainContent } from "../components/MainContent";
 import { RightPanel } from "../components/RightPanel";
 
@@ -18,9 +19,12 @@ export function loader({ context }: Route.LoaderArgs) {
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  // Create random floating emojis for the background
-  const generateEmojis = () => {
-    const emojis = ['🤪', '💩', '🙃', '🤡', '👽', '🤖', '👾', '🤯', '🧠', '👁️', '🔥', '⭐', '💫', '🌈'];
+  // Client-side emojis to avoid hydration mismatch
+  const [emojis, setEmojis] = useState<React.ReactNode[]>([]);
+  
+  // Use useEffect to generate emojis only on the client side
+  useEffect(() => {
+    const emojiList = ['🤪', '💩', '🙃', '🤡', '👽', '🤖', '👾', '🤯', '🧠', '👁️', '🔥', '⭐', '💫', '🌈'];
     const floatingEmojis = [];
     
     for (let i = 0; i < 20; i++) {
@@ -37,23 +41,25 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           className="floating-emoji" 
           style={style}
         >
-          {emojis[Math.floor(Math.random() * emojis.length)]}
+          {emojiList[Math.floor(Math.random() * emojiList.length)]}
         </div>
       );
     }
     
-    return floatingEmojis;
-  };
+    setEmojis(floatingEmojis);
+  }, []);
 
   return (
     <div className="dumb-body min-h-screen p-2 sm:p-4 md:p-8 flex flex-col">
       <div className="dumb-emoji-background">
-        {generateEmojis()}
+        {emojis}
       </div>
       
       <div className="w-full mx-auto flex flex-col md:flex-row gap-3 md:gap-6 max-w-[95vw] md:max-w-6xl flex-grow">
         <MainContent />
-        <RightPanel />
+        <div className="hidden md:block">
+          <RightPanel />
+        </div>
       </div>
       
       {/* Footer with poop emoji - Now at the very bottom of the page */}

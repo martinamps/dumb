@@ -735,7 +735,7 @@ export function MainContent() {
             placeholder="YOUR COSMIC ANSWER..."
             className="flex-1 p-4 border-4 border-dotted border-yellow-300 rounded-lg bg-white text-xl font-bold"
             style={{
-              fontFamily: "'Comic Sans MS', cursive, sans-serif",
+              fontFamily: "'Comic Sans MS', sans-serif",
               color: "#000000",
               backgroundColor: "#ffffff",
             }}
@@ -963,18 +963,21 @@ export function MainContent() {
   // Custom Modal component for haiku
   const HaikuModal = () => {
     if (!showModal) return null;
-    
+
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="dumb-container dumb-spin p-6 rounded-lg max-w-sm w-full mx-4">
-          <h3 className="text-lg font-bold mb-4 dumb-text" style={{
-            backgroundColor: "rgba(0, 0, 0, 0.2)",
-            padding: "8px",
-            borderRadius: "8px",
-            textShadow: "1px 1px 0 black",
-            fontSize: "clamp(1.1rem, 5vw, 1.4rem)",
-            letterSpacing: "1px"
-          }}>
+          <h3
+            className="text-lg font-bold mb-4 dumb-text"
+            style={{
+              backgroundColor: "rgba(0, 0, 0, 0.2)",
+              padding: "8px",
+              borderRadius: "8px",
+              textShadow: "1px 1px 0 black",
+              fontSize: "clamp(1.1rem, 5vw, 1.4rem)",
+              letterSpacing: "1px",
+            }}
+          >
             ⁉️⁉️ DO YOU ACTUALLY WANT A NEW HAIKU??? ⁉️⁉️
           </h3>
           <div className="flex justify-end space-x-3">
@@ -1001,15 +1004,17 @@ export function MainContent() {
   // Haiku Widget component
   const HaikuWidget = () => (
     <div className="dumb-container dumb-tilt-right mb-6">
-      <h2 className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2" 
+      <h2
+        className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2"
         style={{
           backgroundColor: "rgba(0, 0, 0, 0.2)",
           padding: "5px 8px",
           borderRadius: "6px 6px 0 0",
           textShadow: "1px 1px 0 black, -1px -1px 0 black",
           letterSpacing: "1px",
-          fontSize: "clamp(1.2rem, 5vw, 1.5rem)"
-        }}>
+          fontSize: "clamp(1.2rem, 5vw, 1.5rem)",
+        }}
+      >
         🤪 DUMB HAIKU!!! 🤪
       </h2>
       <div className="min-h-24">
@@ -1020,17 +1025,17 @@ export function MainContent() {
         ) : haikuError ? (
           <p className="text-red-500 font-bold">☠️ {haikuError} ☠️</p>
         ) : (
-          <div 
-            className="font-serif text-xl dumb-text whitespace-pre-line" 
+          <div
+            className="font-serif text-xl dumb-text whitespace-pre-line"
             style={{
-              fontSize: "clamp(1.3rem, 5vw, 1.8rem)", 
+              fontSize: "clamp(1.3rem, 5vw, 1.8rem)",
               fontWeight: "bold",
               backgroundColor: "rgba(0, 0, 0, 0.1)",
               padding: "10px",
               borderRadius: "8px",
               textShadow: "1px 1px 0 black",
               letterSpacing: "1px",
-              lineHeight: "1.5"
+              lineHeight: "1.5",
             }}
           >
             {haiku}
@@ -1117,7 +1122,7 @@ export function MainContent() {
     <div className="flex-1 dumb-container dumb-tilt-left">
       {/* Modal for haiku - Only shows when showModal is true */}
       <HaikuModal />
-      
+
       <WelcomeBanner />
 
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center dumb-text mb-3 md:mb-6 dumb-glow">
@@ -1135,39 +1140,43 @@ export function MainContent() {
       )}
       {horoscopeVisible && renderHoroscope()}
 
-      {/* Widgets from the right panel - now displayed inline */}
-      <div className="mt-12 pt-8 border-t-4 border-dashed border-yellow-400">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-1">
+      {/* Widgets from the right panel - only displayed on mobile */}
+      <div className="mt-12 pt-8 border-t-4 border-dashed border-yellow-400 md:hidden">
+        <div className="grid grid-cols-1 gap-6">
+          <div>
             <HaikuWidget />
           </div>
-          <div className="md:col-span-1">
+          <div>
             <div className="dumb-container dumb-tilt-left">
-              <h2 className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2" 
+              <h2
+                className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2"
                 style={{
                   backgroundColor: "rgba(0, 0, 0, 0.2)",
                   padding: "5px 8px",
                   borderRadius: "6px 6px 0 0",
                   textShadow: "1px 1px 0 black, -1px -1px 0 black",
                   letterSpacing: "1px",
-                  fontSize: "clamp(1.2rem, 5vw, 1.5rem)"
-                }}>
+                  fontSize: "clamp(1.2rem, 5vw, 1.5rem)",
+                }}
+              >
                 ☔ WORTHLESS WEATHER!!! ☔
               </h2>
               <WeatherWidget />
             </div>
           </div>
-          <div className="md:col-span-1">
+          <div>
             <div className="dumb-container dumb-tilt-right">
-              <h2 className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2" 
+              <h2
+                className="text-xl font-bold mb-3 dumb-text border-b border-yellow-400 dark:border-yellow-600 pb-2"
                 style={{
                   backgroundColor: "rgba(0, 0, 0, 0.2)",
                   padding: "5px 8px",
                   borderRadius: "6px 6px 0 0",
                   textShadow: "1px 1px 0 black, -1px -1px 0 black",
                   letterSpacing: "1px",
-                  fontSize: "clamp(1.2rem, 5vw, 1.5rem)"
-                }}>
+                  fontSize: "clamp(1.2rem, 5vw, 1.5rem)",
+                }}
+              >
                 💰 EMOJISTONK!!! 💰
               </h2>
               <StockWidget />

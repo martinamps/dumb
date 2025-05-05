@@ -125,51 +125,87 @@ const getRandomWeirdPin = () => {
   return weirdPins[Math.floor(Math.random() * weirdPins.length)];
 };
 
-// Map component defined outside of the WeatherWidget to prevent re-rendering
+// Extremely simplified static map component that looks like a real map
 const WeatherMap = React.memo(
   ({
-    lat,
-    lon,
-    pinEmoji,
     cityName,
+    pinEmoji,
   }: {
-    lat: number;
-    lon: number;
+    lat?: number;
+    lon?: number;
     pinEmoji: string;
     cityName: string;
   }) => {
-    // The iframe URL with closer zoom level to show city names (zoom level 12 is city-level detail)
-    // Using a much tighter bounding box to focus on the location
-    const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${
-      lon - 0.5
-    }%2C${lat - 0.5}%2C${lon + 0.5}%2C${lat + 0.5}&layer=mapnik&zoom=10`;
-
     return (
-      <div className="mt-2 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700">
-        <div className="relative">
-          {/* Map iframe with CSS to hide controls */}
-          <div className="relative" style={{ height: "200px" }}>
-            <iframe
-              src={mapUrl}
-              width="100%"
-              height="200"
-              frameBorder="0"
-              scrolling="no"
-              title={`Map of ${cityName}`}
-              className="w-full"
-              style={{ zIndex: 1 }}
+      <div className="my-2 rounded-lg overflow-hidden">
+        {/* Simple map card with fixed content */}
+        <div className="rounded-lg border-4 border-purple-500 overflow-hidden">
+          {/* Map content - no internal padding */}
+          <div className="h-[120px] w-full bg-[#e6f2ff] relative overflow-hidden">
+            {/* Fixed grid background */}
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, rgba(200,220,240,0.6) 1px, transparent 1px), linear-gradient(to bottom, rgba(200,220,240,0.6) 1px, transparent 1px)",
+                backgroundSize: "20px 20px",
+              }}
             />
 
-            {/* Position emoji pin over map */}
-            <div className="absolute inset-0 flex items-center justify-center text-5xl z-10 pointer-events-none">
-              {pinEmoji}
+            {/* Roads */}
+            <div className="absolute inset-0">
+              <div className="absolute h-[1px] w-full top-[40%] bg-gray-300" />
+              <div className="absolute h-full w-[1px] left-[30%] bg-gray-300" />
+              <div className="absolute h-full w-[1px] left-[60%] bg-gray-300" />
+              <div className="absolute h-[1px] w-full top-[70%] bg-gray-300" />
             </div>
 
-            {/* Overlay to hide attribution and controls */}
-            <div className="absolute bottom-0 left-0 right-0 h-6 bg-gray-100 dark:bg-gray-800 z-20" />
-            <div className="absolute top-0 left-0 right-0 h-6 bg-gray-100 dark:bg-gray-800 z-20" />
-            <div className="absolute top-6 bottom-6 left-0 w-6 bg-gray-100 dark:bg-gray-800 z-20" />
-            <div className="absolute top-6 bottom-6 right-0 w-6 bg-gray-100 dark:bg-gray-800 z-20" />
+            {/* Blue rivers */}
+            <div className="absolute inset-0">
+              <div className="absolute h-4 w-full bg-blue-200 opacity-60 top-1/3 transform rotate-3" />
+              <div className="absolute h-2 w-full bg-blue-300 opacity-60 top-2/3 transform -rotate-2" />
+            </div>
+
+            {/* Regions - subtle colored areas */}
+            <div className="absolute inset-0">
+              <div className="absolute h-20 w-20 rounded-full bg-green-100 opacity-30 top-5 left-10" />
+              <div className="absolute h-16 w-24 rounded-full bg-yellow-50 opacity-30 bottom-2 right-20" />
+            </div>
+
+            {/* City text with nicer styling */}
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+              <div className="bg-white px-3 py-1 rounded shadow-sm border border-gray-200 text-sm font-bold text-gray-800">
+                {cityName}
+              </div>
+            </div>
+
+            {/* Emoji pin overlay */}
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[80%] z-20">
+              <div className="text-3xl filter drop-shadow-md">{pinEmoji}</div>
+            </div>
+
+            {/* Navigation UI elements */}
+            <div className="absolute top-0 right-0 bottom-0 left-0 pointer-events-none">
+              {/* Zoom controls */}
+              <div className="absolute top-2 left-2 bg-white rounded-md shadow-sm z-20 flex flex-col">
+                <div className="w-5 h-5 flex items-center justify-center text-xs font-bold border-b border-gray-200">
+                  +
+                </div>
+                <div className="w-5 h-5 flex items-center justify-center text-xs font-bold">
+                  −
+                </div>
+              </div>
+
+              {/* Drag handle */}
+              <div className="absolute bottom-7 right-3 bg-white/80 rounded-full w-5 h-5 flex items-center justify-center">
+                <div className="w-3 h-3 rounded-full border-2 border-gray-400" />
+              </div>
+
+              {/* Tiny copyright - just a small line */}
+              <div className="absolute bottom-0 left-0 right-0 h-[6px] bg-white flex items-center px-2">
+                <div className="h-[2px] w-full bg-gray-200" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -265,12 +301,12 @@ export function WeatherWidget() {
 
   // Render the countdown timer separately from the weather display
   const CountdownTimer = () => (
-    <div className="flex justify-center items-center text-[9px] dumb-text font-bold mt-2">
-      <span className="flex items-center">
+    <div className="flex flex-wrap justify-center items-center text-[9px] dumb-text font-bold mt-2 px-2">
+      <div className="flex items-center">
         <span className="mr-1">UPDATING IN</span>
         <span className="font-mono font-semibold">{countdown}</span>
         <span className="animate-pulse ml-1">!!!</span>
-      </span>
+      </div>
       <button
         type="button"
         onClick={() => fetchWeather()} // Direct call, no need for separate handler
@@ -337,14 +373,9 @@ export function WeatherWidget() {
             </div>
           </div>
 
-          {/* Add the map component with stable props */}
-          {weather.realWeather?.lat && weather.realWeather?.lon && (
-            <WeatherMap
-              lat={weather.realWeather.lat}
-              lon={weather.realWeather.lon}
-              pinEmoji={pinEmoji}
-              cityName={weather.city}
-            />
+          {/* Add the simplified map component */}
+          {weather && (
+            <WeatherMap pinEmoji={pinEmoji} cityName={weather.city} />
           )}
 
           <div className="dumb-container dumb-tilt-left p-2 rounded-lg border-4 border-dashed border-yellow-500">
