@@ -24,12 +24,25 @@ function cleanExpiredTokens() {
 
 // Valid zodiac signs
 const validZodiacSigns = [
-  "aries", "taurus", "gemini", "cancer", "leo", "virgo", 
-  "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"
+  "aries",
+  "taurus",
+  "gemini",
+  "cancer",
+  "leo",
+  "virgo",
+  "libra",
+  "scorpio",
+  "sagittarius",
+  "capricorn",
+  "aquarius",
+  "pisces",
 ];
 
 // Handle the CAPTCHA generation request
-export async function handleGetCaptchaRequest(request: Request, env: Env): Promise<Response> {
+export async function handleGetCaptchaRequest(
+  request: Request,
+  env: Env
+): Promise<Response> {
   try {
     // Clean up expired tokens
     cleanExpiredTokens();
@@ -46,7 +59,11 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
     const { sign } = body;
 
     // Validate the sign
-    if (!sign || typeof sign !== "string" || !validZodiacSigns.includes(sign.toLowerCase())) {
+    if (
+      !sign ||
+      typeof sign !== "string" ||
+      !validZodiacSigns.includes(sign.toLowerCase())
+    ) {
       return new Response(JSON.stringify({ error: "Invalid zodiac sign" }), {
         status: 400,
         headers: { "Content-Type": "application/json" },
@@ -55,7 +72,7 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
 
     // First, fetch a horoscope for the given sign from an AI model
     const horoscopeResponse = await env.AI.run(
-      "@cf/meta/llama-3.1-8b-instruct",
+      "@cf/meta/llama-3.1-8b-instruct-fp8-fast",
       {
         prompt: `Generate a daily horoscope for ${sign}. Make it ridiculous, over-the-top, and absurdly specific, with bizarre predictions and advice.
         Include some strange references, like obscure animals, foods, or activities.
@@ -72,7 +89,7 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
 
     // Now, create a CAPTCHA challenge based on the horoscope
     const captchaResponse = await env.AI.run(
-      "@cf/meta/llama-3.1-8b-instruct",
+      "@cf/meta/llama-3.1-8b-instruct-fp8-fast",
       {
         prompt: `You are the 'Astrologically Aligned CAPTCHA Generator'.
         Read the following daily horoscope text carefully:
@@ -115,15 +132,15 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
       // Log the raw CAPTCHA response for debugging
       const rawResponse = captchaResponse.response.trim();
       console.log("Raw CAPTCHA response:", rawResponse);
-      
+
       let captchaData;
-      
+
       // Try to parse the CAPTCHA response as JSON
       try {
         captchaData = JSON.parse(rawResponse);
       } catch (parseError) {
         console.error("JSON parse error:", parseError);
-        
+
         // Check if the response starts with markdown or text before JSON
         // Try to extract JSON from the response if possible
         const jsonMatch = rawResponse.match(/(\{[\s\S]*\})/);
@@ -139,8 +156,8 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
         } else {
           // If no JSON object found, create a simple one based on the content
           console.log("No JSON found, creating fallback CAPTCHA");
-          const words = rawResponse.split(/\s+/).filter(w => w.length > 3);
-          
+          const words = rawResponse.split(/\s+/).filter((w) => w.length > 3);
+
           if (words.length > 0) {
             // Use timestamp to select a word deterministically
             const wordIndex = Date.now() % words.length;
@@ -148,7 +165,7 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
             captchaData = {
               instruction: `The AI couldn't format a proper CAPTCHA. As a fallback, please type the word "${selectedWord}" from the AI's response.`,
               type: "text",
-              answer: selectedWord
+              answer: selectedWord,
             };
             console.log("Created fallback CAPTCHA:", captchaData);
           } else {
@@ -156,12 +173,16 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
           }
         }
       }
-      
+
       // Log successful parse
       console.log("Successfully parsed CAPTCHA data:", captchaData);
 
       // Validate that we have the required fields
-      if (!captchaData.instruction || !captchaData.type || !captchaData.answer) {
+      if (
+        !captchaData.instruction ||
+        !captchaData.type ||
+        !captchaData.answer
+      ) {
         console.log("Missing required fields in CAPTCHA data:", captchaData);
         throw new Error("Invalid CAPTCHA data structure");
       }
@@ -176,7 +197,8 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
         attempts: 0,
       });
 
-      // Return the challenge to the client (without the answer)
+      // Return the challenge to the client (including the answer for this dumb CAPTCHA)
+      // Note: This is insecure but it's fine for a "World's Dumbest" app
       return new Response(
         JSON.stringify({
           sign,
@@ -184,6 +206,7 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
           instruction: captchaData.instruction,
           type: captchaData.type,
           token,
+          answer: captchaData.answer, // Intentionally insecure - include answer for client-side fallback
         }),
         {
           headers: { "Content-Type": "application/json" },
@@ -191,12 +214,16 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
       );
     } catch (error) {
       console.error("Error parsing CAPTCHA response:", error);
-      console.log("CAPTCHA response that failed to parse:", captchaResponse.response);
-      
+      console.log(
+        "CAPTCHA response that failed to parse:",
+        captchaResponse.response
+      );
+
       // Try to extract more details about the error
-      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       console.error("Error details:", errorMessage);
-      
+
       return new Response(
         JSON.stringify({
           error: "Failed to generate CAPTCHA challenge",
@@ -224,7 +251,10 @@ export async function handleGetCaptchaRequest(request: Request, env: Env): Promi
 }
 
 // Handle CAPTCHA validation
-export async function handleValidateCaptchaRequest(request: Request, env: Env): Promise<Response> {
+export async function handleValidateCaptchaRequest(
+  request: Request,
+  env: Env
+): Promise<Response> {
   try {
     // Clean up expired tokens
     cleanExpiredTokens();
@@ -253,41 +283,50 @@ export async function handleValidateCaptchaRequest(request: Request, env: Env): 
 
     // Check if the token exists and is valid
     if (!record) {
-      return new Response(JSON.stringify({ 
-        success: false, 
-        message: "CAPTCHA expired or invalid - cosmic timing mismatch! Try getting a new CAPTCHA challenge." 
-      }), {
-        headers: { "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message:
+            "CAPTCHA expired or invalid - cosmic timing mismatch! Try getting a new CAPTCHA challenge.",
+        }),
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
     }
-    
+
     // Increment attempt counter
     record.attempts += 1;
     console.log(`CAPTCHA attempt ${record.attempts} for token ${token}`);
-    
+
     // Maximum allowed attempts (intentionally dumb but not too frustrating)
     const MAX_ATTEMPTS = 3;
-    
+
     // Clean up both answers for comparison (case-insensitive, trim whitespace, normalize punctuation)
     const cleanAnswer = (text) => {
-      return text.toString()
+      return text
+        .toString()
         .toLowerCase()
         .trim()
-        .replace(/[.,!?;:'"()]/g, '')  // Remove common punctuation
-        .replace(/\s+/g, ' ');          // Normalize whitespace
+        .replace(/[.,!?;:'"()]/g, "") // Remove common punctuation
+        .replace(/\s+/g, " "); // Normalize whitespace
     };
-    
+
     const cleanUserAnswer = cleanAnswer(userAnswer);
     const cleanStoredAnswer = cleanAnswer(record.answer);
-    
-    console.log(`Comparing answers - User: "${cleanUserAnswer}" vs Stored: "${cleanStoredAnswer}"`);
-    
+
+    console.log(
+      `Comparing answers - User: "${cleanUserAnswer}" vs Stored: "${cleanStoredAnswer}"`
+    );
+
     // Check if the answer is correct (with some leniency)
     const isCorrect = cleanUserAnswer === cleanStoredAnswer;
-    
+
     // If correct or max attempts reached, delete the token
     if (isCorrect || record.attempts >= MAX_ATTEMPTS) {
-      console.log(`Deleting token ${token} - isCorrect: ${isCorrect}, attempts: ${record.attempts}`);
+      console.log(
+        `Deleting token ${token} - isCorrect: ${isCorrect}, attempts: ${record.attempts}`
+      );
       captchaTokens.delete(token);
     } else {
       // Update the record with the new attempt count
@@ -305,14 +344,21 @@ export async function handleValidateCaptchaRequest(request: Request, env: Env): 
       let hint = "";
       if (record.attempts === 1) {
         // First attempt - vague hint
-        hint = ` The cosmic forces whisper that the answer may be related to "${record.answer.charAt(0)}...".`;
+        hint = ` The cosmic forces whisper that the answer may be related to "${record.answer.charAt(
+          0
+        )}...".`;
       } else if (record.attempts === 2) {
         // Second attempt - more obvious hint
         const halfLength = Math.floor(record.answer.length / 2);
-        hint = ` The astral projection reveals part of the answer: "${record.answer.substring(0, halfLength)}..."`;
+        hint = ` The astral projection reveals part of the answer: "${record.answer.substring(
+          0,
+          halfLength
+        )}..."`;
       }
-      
-      message = `${getRandomFailureMessage()} (Attempt ${record.attempts}/${MAX_ATTEMPTS})${hint}`;
+
+      message = `${getRandomFailureMessage()} (Attempt ${
+        record.attempts
+      }/${MAX_ATTEMPTS})${hint}`;
     }
 
     return new Response(
@@ -351,7 +397,7 @@ function getRandomSuccessMessage(): string {
     "ASTRAL PROJECTION SUCCESSFUL! Your consciousness has successfully validated with our system!",
     "COSMIC AUTHENTICATION COMPLETE! The stars have recognized your typing prowess!",
     "DESTINY FULFILLED! You have passed the test that was written in your charts at birth!",
-    "ENLIGHTENMENT ACHIEVED! The astrological algorithms bow to your superior insight!"
+    "ENLIGHTENMENT ACHIEVED! The astrological algorithms bow to your superior insight!",
   ];
   // Use current milliseconds as a pseudo-random seed
   const index = Date.now() % messages.length;
@@ -370,7 +416,7 @@ function getRandomFailureMessage(): string {
     "ASTRAL REJECTION! Your keyboard aura requires cleansing before proceeding!",
     "COSMIC DENIAL! Your zodiac sign is questioning your commitment to astrological accuracy!",
     "SPIRITUAL REBUFF! The celestial gatekeepers have temporarily blocked your access!",
-    "ENLIGHTENMENT DELAYED! Your answer has been banished to the void between dimensions!"
+    "ENLIGHTENMENT DELAYED! Your answer has been banished to the void between dimensions!",
   ];
   // Use seconds since the epoch (modulo message count) as our "random" index
   // This changes every second but is still deterministic for a given second
@@ -379,7 +425,10 @@ function getRandomFailureMessage(): string {
 }
 
 // Handle the actual horoscope generation after a successful CAPTCHA
-export async function handleGetHoroscopeRequest(request: Request, env: Env): Promise<Response> {
+export async function handleGetHoroscopeRequest(
+  request: Request,
+  env: Env
+): Promise<Response> {
   try {
     // Clean up expired tokens
     cleanExpiredTokens();
@@ -396,7 +445,11 @@ export async function handleGetHoroscopeRequest(request: Request, env: Env): Pro
     const { sign } = body;
 
     // Validate the sign
-    if (!sign || typeof sign !== "string" || !validZodiacSigns.includes(sign.toLowerCase())) {
+    if (
+      !sign ||
+      typeof sign !== "string" ||
+      !validZodiacSigns.includes(sign.toLowerCase())
+    ) {
       return new Response(JSON.stringify({ error: "Invalid zodiac sign" }), {
         status: 400,
         headers: { "Content-Type": "application/json" },
@@ -405,7 +458,7 @@ export async function handleGetHoroscopeRequest(request: Request, env: Env): Pro
 
     // Generate a detailed, absurdly pessimistic horoscope
     const horoscopeResponse = await env.AI.run(
-      "@cf/meta/llama-3.1-8b-instruct",
+      "@cf/meta/llama-3.1-8b-instruct-fp8-fast",
       {
         prompt: `Generate an EXTREMELY PESSIMISTIC daily horoscope for ${sign}. Make it hilariously dark, pessimistic, and filled with comically specific yet universally relatable misfortunes.
 
@@ -436,9 +489,13 @@ Respond ONLY with the horoscope text - no acknowledgments or explanations.`,
       JSON.stringify({
         sign,
         horoscope: fullHoroscope,
-        date: new Date().toISOString().split('T')[0], // Today's date
+        date: new Date().toISOString().split("T")[0], // Today's date
         // Add cosmic power level - a random number that changes each day but is consistent for each sign
-        cosmicPower: ((new Date().getDate() + validZodiacSigns.indexOf(sign.toLowerCase())) % 10) + 1,
+        cosmicPower:
+          ((new Date().getDate() +
+            validZodiacSigns.indexOf(sign.toLowerCase())) %
+            10) +
+          1,
         // Add random "lucky" elements
         luckyColor: getLuckyColor(sign),
         luckyNumber: getLuckyNumber(sign),
@@ -469,16 +526,24 @@ Respond ONLY with the horoscope text - no acknowledgments or explanations.`,
 // Helper function to get a "lucky color" based on sign and day
 function getLuckyColor(sign: string): string {
   const colors = [
-    "Radioactive Green", "Existential Blue", "Questionable Purple", 
-    "Suspicious Orange", "Regrettable Pink", "Unfortunate Yellow", 
-    "Anxious Beige", "Mildly Disappointing Gray", "Cosmic Depression Magenta",
-    "Awkward Teal", "Irresponsible Red", "Unethical Brown"
+    "Radioactive Green",
+    "Existential Blue",
+    "Questionable Purple",
+    "Suspicious Orange",
+    "Regrettable Pink",
+    "Unfortunate Yellow",
+    "Anxious Beige",
+    "Mildly Disappointing Gray",
+    "Cosmic Depression Magenta",
+    "Awkward Teal",
+    "Irresponsible Red",
+    "Unethical Brown",
   ];
-  
+
   const dayOfMonth = new Date().getDate();
   const signIndex = validZodiacSigns.indexOf(sign.toLowerCase());
   const colorIndex = (dayOfMonth + signIndex) % colors.length;
-  
+
   return colors[colorIndex];
 }
 
@@ -487,23 +552,29 @@ function getLuckyNumber(sign: string): string {
   const dayOfMonth = new Date().getDate();
   const month = new Date().getMonth() + 1;
   const signIndex = validZodiacSigns.indexOf(sign.toLowerCase());
-  
+
   // Use a deterministic formula instead of Math.random
   // If the sum of day and month is divisible by 3, return a normal number (similar to 30% chance)
   if ((dayOfMonth + month) % 3 === 0) {
     return String((dayOfMonth + signIndex) % 100);
   }
-  
+
   // Otherwise return a weird "number" (similar to 70% chance)
   const weirdNumbers = [
-    "π - 0.002", "√-1", "404", "your ex's birthday", 
-    "the number of unread emails in your inbox", "∞ - 7", 
-    "the square root of your regrets", "yesterday's lottery numbers",
-    "the number of times you'll say 'um' today", "the approximate number of dust mites in your pillow",
-    "your age in dog years divided by your shoe size", 
-    "the number of times you've walked into a room and forgotten why"
+    "π - 0.002",
+    "√-1",
+    "404",
+    "your ex's birthday",
+    "the number of unread emails in your inbox",
+    "∞ - 7",
+    "the square root of your regrets",
+    "yesterday's lottery numbers",
+    "the number of times you'll say 'um' today",
+    "the approximate number of dust mites in your pillow",
+    "your age in dog years divided by your shoe size",
+    "the number of times you've walked into a room and forgotten why",
   ];
-  
+
   const weirdIndex = (dayOfMonth + signIndex + month) % weirdNumbers.length;
   return weirdNumbers[weirdIndex];
 }
@@ -511,14 +582,30 @@ function getLuckyNumber(sign: string): string {
 // Helper function to get a "lucky emoji" based on sign and day
 function getLuckyEmoji(sign: string): string {
   const emojis = [
-    "🌵", "🦑", "👁️", "🧠", "🧶", "🧪", "🪑", "🧻", "🪚", 
-    "🧯", "⛓️", "🪤", "🧫", "🧸", "🪦", "🧿", "🪰", "🪱"
+    "🌵",
+    "🦑",
+    "👁️",
+    "🧠",
+    "🧶",
+    "🧪",
+    "🪑",
+    "🧻",
+    "🪚",
+    "🧯",
+    "⛓️",
+    "🪤",
+    "🧫",
+    "🧸",
+    "🪦",
+    "🧿",
+    "🪰",
+    "🪱",
   ];
-  
+
   const dayOfMonth = new Date().getDate();
   const signIndex = validZodiacSigns.indexOf(sign.toLowerCase());
   const emojiIndex = (dayOfMonth + signIndex) % emojis.length;
-  
+
   return emojis[emojiIndex];
 }
 
@@ -536,13 +623,13 @@ function getUnluckyScenario(sign: string): string {
     "Sending a screenshot of a conversation to the person you were talking about",
     "Accidentally using face wash as toothpaste",
     "Your phone battery dying at exactly 1% into an important call",
-    "Realizing you've been mispronouncing your coworker's name for 3 years"
+    "Realizing you've been mispronouncing your coworker's name for 3 years",
   ];
-  
+
   const dayOfMonth = new Date().getDate();
   const signIndex = validZodiacSigns.indexOf(sign.toLowerCase());
   const scenarioIndex = (dayOfMonth + signIndex) % scenarios.length;
-  
+
   return scenarios[scenarioIndex];
 }
 
@@ -550,7 +637,7 @@ function getUnluckyScenario(sign: string): string {
 function getCompatibleSigns(sign: string): string[] {
   const signIndex = validZodiacSigns.indexOf(sign.toLowerCase());
   const dayOfMonth = new Date().getDate();
-  
+
   // Get 2 "compatible" signs that change each day
   const result = [];
   for (let i = 0; i < 2; i++) {
@@ -560,10 +647,12 @@ function getCompatibleSigns(sign: string): string[] {
       result.push(validZodiacSigns[compatIndex]);
     } else {
       // If we landed on the same sign, take the next one
-      result.push(validZodiacSigns[(compatIndex + 1) % validZodiacSigns.length]);
+      result.push(
+        validZodiacSigns[(compatIndex + 1) % validZodiacSigns.length]
+      );
     }
   }
-  
+
   return result;
 }
 
@@ -571,19 +660,22 @@ function getCompatibleSigns(sign: string): string[] {
 function getIncompatibleSigns(sign: string): string[] {
   const signIndex = validZodiacSigns.indexOf(sign.toLowerCase());
   const dayOfMonth = new Date().getDate();
-  
+
   // Get 2 "incompatible" signs that change each day
   const result = [];
   for (let i = 0; i < 2; i++) {
-    const incompatIndex = (signIndex + dayOfMonth + i + 6) % validZodiacSigns.length; // Offset by 6 to be different from compatibles
+    const incompatIndex =
+      (signIndex + dayOfMonth + i + 6) % validZodiacSigns.length; // Offset by 6 to be different from compatibles
     // Skip the sign itself
     if (incompatIndex !== signIndex) {
       result.push(validZodiacSigns[incompatIndex]);
     } else {
       // If we landed on the same sign, take the next one
-      result.push(validZodiacSigns[(incompatIndex + 1) % validZodiacSigns.length]);
+      result.push(
+        validZodiacSigns[(incompatIndex + 1) % validZodiacSigns.length]
+      );
     }
   }
-  
+
   return result;
 }

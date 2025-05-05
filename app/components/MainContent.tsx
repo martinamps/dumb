@@ -20,6 +20,7 @@ interface CaptchaData {
   horoscope: string;
   sign: string;
   token: string;
+  answer?: string; // Optional field that contains the answer (intentionally insecure for dumb CAPTCHA)
 }
 
 interface ValidateResponse {
@@ -365,6 +366,37 @@ export function MainContent() {
       }
 
       const data: ValidateResponse = await response.json();
+      
+      // If we get the "token expired" error message and we have the answer client-side,
+      // do a client-side validation as fallback (intentionally insecure but ensures users don't get stuck)
+      if (!data.success && 
+          data.message.includes("CAPTCHA expired") && 
+          captchaData.answer) {
+        
+        console.log("Using client-side CAPTCHA validation as fallback");
+        
+        // Simple client-side validation with same cleaning logic as the server
+        const cleanAnswer = (text) => {
+          return text.toString()
+            .toLowerCase()
+            .trim()
+            .replace(/[.,!?;:'"()]/g, '') 
+            .replace(/\s+/g, ' '); 
+        };
+        
+        const cleanUserAnswer = cleanAnswer(captchaAnswer);
+        const cleanStoredAnswer = cleanAnswer(captchaData.answer);
+        
+        // If the answer matches, override the server response
+        if (cleanUserAnswer === cleanStoredAnswer) {
+          setCaptchaSuccess(true);
+          setCaptchaMessage("COSMIC FALLBACK ACTIVATED! Your answer was correct, but the stars lost track of time!");
+          fetchHoroscope(determinedSign);
+          return;
+        }
+      }
+      
+      // Otherwise proceed with normal server response
       setCaptchaSuccess(data.success);
       setCaptchaMessage(data.message);
 
@@ -374,10 +406,35 @@ export function MainContent() {
       } else {
         // For failed validation, we'll just show the error message
         // We won't fetch a new CAPTCHA immediately - let user try again with the same one
-        // The token will eventually expire after 3 attempts (as configured in the API)
       }
     } catch (error) {
       console.error("Captcha validation error:", error);
+      
+      // If server validation fails completely but we have the answer client-side,
+      // still try client-side validation as a last resort
+      if (captchaData?.answer) {
+        console.log("Server validation failed, trying client-side fallback");
+        
+        const cleanAnswer = (text) => {
+          return text.toString()
+            .toLowerCase()
+            .trim()
+            .replace(/[.,!?;:'"()]/g, '') 
+            .replace(/\s+/g, ' '); 
+        };
+        
+        const cleanUserAnswer = cleanAnswer(captchaAnswer);
+        const cleanStoredAnswer = cleanAnswer(captchaData.answer);
+        
+        if (cleanUserAnswer === cleanStoredAnswer) {
+          setCaptchaSuccess(true);
+          setCaptchaMessage("COSMIC EMERGENCY BACKUP ENGAGED! Server validation failed, but the stars aligned anyway!");
+          fetchHoroscope(determinedSign);
+          setCaptchaLoading(false);
+          return;
+        }
+      }
+      
       setCaptchaError(
         "The cosmic forces rejected your answer. Please try again."
       );
@@ -624,9 +681,20 @@ export function MainContent() {
         </form>
 
         {captchaMessage && !captchaSuccess && (
-          <p className="mt-2 text-red-500 text-sm text-center">
-            {captchaMessage}
-          </p>
+          <div className="mt-2 text-center">
+            <p className="text-red-500 text-sm">
+              {captchaMessage}
+            </p>
+            {captchaMessage.includes("CAPTCHA expired") && (
+              <button
+                type="button"
+                onClick={() => determinedSign && fetchCaptcha(determinedSign)}
+                className="mt-2 text-xs bg-purple-600 text-white px-3 py-1 rounded-md hover:bg-purple-700"
+              >
+                Get New Astrological Challenge
+              </button>
+            )}
+          </div>
         )}
         {captchaError && (
           <p className="mt-2 text-red-500 text-sm text-center">

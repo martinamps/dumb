@@ -1,4 +1,6 @@
 import { createRequestHandler } from "react-router";
+// import * as fs from "node:fs";
+// import * as path from "node:path";
 import {
   handleHaikuRequest,
   handleWeatherRequest,
@@ -7,6 +9,7 @@ import {
   handleValidateCaptchaRequest,
   handleGetHoroscopeRequest,
 } from "./api";
+import { handleDumbLandingRequest } from "./dumbLanding";
 
 declare module "react-router" {
   export interface AppLoadContext {
@@ -31,14 +34,38 @@ export default {
       url.hostname === "worldsdumbestdomain.com" ||
       url.hostname === "www.worldsdumbestdomain.com"
     ) {
-      // Instead of fetching the file from the same origin (which causes 522 errors),
-      // directly return the dumb_domain.html content if it's specifically requested
+      // Use the imported handler for the dumb landing page
       if (url.pathname === "/dumb_domain.html" || url.pathname === "/") {
-        // If there's a binding for static assets, use that
-        if (env.ASSETS) {
-          return env.ASSETS.fetch(request);
-        } else {
-          // Return a simple placeholder if the asset isn't available
+        // If there's an ASSETS binding, prioritize that for other assets potentially hosted
+        // on the same domain, but serve the hardcoded HTML for the root/specific path.
+        // Note: This logic might need adjustment if other static assets are expected
+        // to be served from the root path besides the HTML.
+        // For now, assume root path "/" and "/dumb_domain.html" are specifically for the landing page.
+        // if (env.ASSETS) {
+        //   return env.ASSETS.fetch(request);
+        // }
+
+        return handleDumbLandingRequest();
+
+        // Remove the old filesystem reading logic
+        /*
+        try {
+          const filePath = path.join(
+            process.cwd(),
+            "public",
+            "dumb_domain.html"
+          );
+          const htmlContent = fs.readFileSync(filePath, "utf8");
+
+          return new Response(htmlContent, {
+            headers: {
+              "Content-Type": "text/html;charset=UTF-8",
+            },
+          });
+        } catch (error) {
+          console.error("Error reading dumb_domain.html:", error);
+
+          // Fallback to a simple placeholder if file reading fails
           return new Response(
             `<!DOCTYPE html>
             <html lang="en">
@@ -64,10 +91,16 @@ export default {
             }
           );
         }
+        */
       }
-      
-      // For all other paths under this domain, redirect to the main site
-      return Response.redirect("https://dumb.dev", 302);
+      // If it's the correct hostname but not the root path or dumb_domain.html,
+      // let ASSETS handle it if the binding exists.
+      if (env.ASSETS) {
+        return env.ASSETS.fetch(request);
+      }
+      // Otherwise (no ASSETS binding), requests to this hostname for non-root paths
+      // will fall through to the API/React Router handlers below, or could return 404.
+      // For now, allow fall-through.
     }
 
     // Route API requests to their respective handlers
