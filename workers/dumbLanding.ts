@@ -270,6 +270,32 @@ const htmlContent = `<!DOCTYPE html>
     </div>
 
     <div id="result">??</div>
+    
+    <!-- Footer with poop emoji -->
+    <div style="margin: 40px auto 80px auto; text-align: center;">
+        <a 
+            href="https://x.com/martinamps" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            style="
+                display: inline-flex;
+                align-items: center;
+                color: rgba(255, 255, 255, 0.8);
+                text-decoration: none;
+                transition: color 0.2s;
+                font-size: min(1rem, 5vw);
+                background-color: rgba(0, 0, 0, 0.3);
+                padding: 8px 16px;
+                border-radius: 20px;
+                font-weight: bold;
+                text-shadow: 1px 1px 2px black;
+            "
+            onmouseover="this.style.color='rgba(255, 255, 255, 1)'"
+            onmouseout="this.style.color='rgba(255, 255, 255, 0.8)'"
+        >
+            Built with <span style="margin: 0 5px; font-size: 1.2em;">💩</span> by @martinamps
+        </a>
+    </div>
 
     <div class="marquee marquee-bottom">
         <div class="marquee-content">
@@ -334,15 +360,7 @@ const htmlContent = `<!DOCTYPE html>
         let clickCount = 0;
 
         button.addEventListener('click', () => {
-            // Audio effects
-            try {
-                const audio = new Audio('data:audio/wav;base64,//uQRAAAAWMSLwUIYAAsYkXgoQwAEaYLWfkWgAI0wWs/ItAAAGDgYtAgAyN+QWaAAihwMWm4G8QQRDiMcCBcH3Cc+CDv/7xA4Tvh9Rz/y8QADBwMWgQAZG/ILNAARQ4GLTcDeIIIhxGOBAuD7hOfBB3/94gcJ3w+o5/5eIAIAAAVwWgQAVQ2ORaIQwEMAJiDg95G4nQL7mQVWI6GwRcfsZAcsKkJvxgxEjzFUgfHoSQ9Qq7KNwqHwuB13MA4a1q/DmBrHgPcmjiGoh//EwC5nGPEmS4RcfkVKOhJf+WOgoxJclFz3kgn//dBA+ya1GhurNn8zb//9NNutNuhz31f////9vt///z+IdAEAAAK4LQIAKobHItEIYCGAExBwe8jcToF9zIKrEdDYIuP2MgOWFSE34wYiR5iqQPj0JIeoVdlG4VD4XA67mAcNa1fhzA1jwHuTRxDUQ//iYBczjHiTJcIuPyKlHQkv/LHQUYkuSi57yQT//uggfZNajQ3Vm//Wk//3Nksoq/////r7////n+////+cw1+hG+X1G///hxtZOXQ+HlA+/j//5jQSGFZkJB5sOqBFYF+aDCbNBk5hVCBuB/wBpAQlGCX7rBj9n7VcDsANxVR2KtDmYTmU6YAMl61/0nZL+D7z6QoRg7i4TGE4R//+pgOHDkmbx2JD1gRPtPkj+oiNaQUc3vABQ06iL81TjYx2LFGc8c9CfVD77hSCQvn7JXhUXGcQTqYEBZPh3RWYK8xFBHGGw80j9tSS1mIrPBP8MwfvSX/uHoRoRoUMaO80pJ8L9D1pYVhLGqANWE6E4RBjg1NeInCWD95nIQxiB0+BapRg+sZkXC//uSRAAAAVlSurbAEkGLGWpIbAYwBIJAD/BoIAESZR1N94DgD5vCfoFnL9P/3YmkA87k6AT5fj2ROJ2F3zrM8kNB9sKwm4xiqcvUwRJGsWSIjsGyD9+J9uzYNSGYYr9nMnUPXFbdW');
-                audio.play();
-            } catch (e) {
-                // Ignore audio errors on mobile
-                console.warn("Audio couldn't play, probably mobile:", e);
-            }
-
+            // Remove problematic audio
             // Flash screen
             document.body.style.backgroundColor = 'white';
             setTimeout(() => {
@@ -361,16 +379,10 @@ const htmlContent = `<!DOCTYPE html>
                 // Second click - trigger countdown and redirect
                 redirectOverlay.style.display = 'flex';
 
-                // Add click handler for the redirect link
-                const redirectLink = document.getElementById('redirect-link');
-                redirectLink.addEventListener('click', () => {
-                    window.location.href = "https://worldsdumbestapp.com/";
-                });
-
                 // Start 10 second countdown
                 let timeLeft = 10;
-                countdown.textContent = timeLeft;
                 countdown.style.visibility = 'visible';
+                countdown.textContent = timeLeft;
 
                 const countdownInterval = setInterval(() => {
                     timeLeft--;
@@ -381,7 +393,7 @@ const htmlContent = `<!DOCTYPE html>
 
                     if (timeLeft <= 0) {
                         clearInterval(countdownInterval);
-                        window.location.href = "https://worldsdumbestapp.com/";
+                        window.location.href = "https://www.worldsdumbestapp.com/";
                     }
                 }, 1000);
             }
@@ -402,31 +414,22 @@ const htmlContent = `<!DOCTYPE html>
                 button.style.position = 'fixed';
                 button.style.left = \`\${safeX}px\`;
                 button.style.top = \`\${safeY}px\`;
-
-                // Reset position after a delay to ensure it doesn't get stuck
+                
+                // Reset after a short delay
                 setTimeout(() => {
-                    if (clickCount < 2) { // Only reset if we haven't started redirect countdown
+                    if (clickCount < 2) {
                         button.style.position = 'relative';
                         button.style.left = 'auto';
                         button.style.top = 'auto';
                     }
-                }, 3000);
-
-                // Add bounce sound with error handling for mobile
-                try {
-                    const audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU');
-                    audio.play();
-                } catch (e) {
-                    // Ignore audio errors on mobile
-                }
+                }, 2500);
             }
         });
         
         // Also add touch event for mobile users
         button.addEventListener('touchstart', (e) => {
-            // 30% chance of button running away on touch (lower than mouseover to be less frustrating)
+            // 30% chance of button running away on touch
             if (Math.random() > 0.7) {
-                // Similar logic as mouseover but with slightly different positioning
                 const viewportHeight = window.innerHeight;
                 const viewportWidth = window.innerWidth;
                 
