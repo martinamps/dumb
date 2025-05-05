@@ -221,7 +221,7 @@ const htmlContent = `<!DOCTYPE html>
 
     <div id="redirect-overlay">
         <div id="redirect-text">... DOING SOMETHING DUMB !!!</div>
-        <div id="redirect-link">Redirecting to https://www.worldsdumbestapp.com/</div>
+        <div id="redirect-link">Redirecting to https://worldsdumbestapp.com/</div>
         <div id="countdown">10</div>
     </div>
 
@@ -307,7 +307,7 @@ const htmlContent = `<!DOCTYPE html>
                 // Add click handler for the redirect link
                 const redirectLink = document.getElementById('redirect-link');
                 redirectLink.addEventListener('click', () => {
-                    window.location.href = "https://www.worldsdumbestapp.com/";
+                    window.location.href = "https://worldsdumbestapp.com/";
                 });
 
                 // Start 10 second countdown
@@ -324,7 +324,7 @@ const htmlContent = `<!DOCTYPE html>
 
                     if (timeLeft <= 0) {
                         clearInterval(countdownInterval);
-                        window.location.href = "https://www.worldsdumbestapp.com/";
+                        window.location.href = "https://worldsdumbestapp.com/";
                     }
                 }, 1000);
             }
