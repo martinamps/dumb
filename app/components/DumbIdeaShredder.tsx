@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 const FlipDigit = ({ digit, flipping, isChangingDigit = false, initialLoad = false, startDigit = '0' }) => {
-  const [displayedDigit, setDisplayedDigit] = useState(initialLoad ? startDigit : digit);
+  // Initialize with the actual digit right away, not blank
+  const [displayedDigit, setDisplayedDigit] = useState(digit || startDigit);
   
   // Update the displayed digit when the actual digit changes
   useEffect(() => {
@@ -13,10 +14,14 @@ const FlipDigit = ({ digit, flipping, isChangingDigit = false, initialLoad = fal
   // For initial load, we want to animate from 0 to the final digit
   useEffect(() => {
     if (initialLoad) {
-      const timer = setTimeout(() => {
-        setDisplayedDigit(digit);
-      }, 5000); // Show final digit after animation completes
-      return () => clearTimeout(timer);
+      // Start with the current digit already showing
+      setDisplayedDigit(digit);
+      
+      // If we need animation later, uncomment this:
+      // const timer = setTimeout(() => {
+      //   setDisplayedDigit(digit);
+      // }, 5000); 
+      // return () => clearTimeout(timer);
     }
   }, [initialLoad, digit]);
   
@@ -120,12 +125,13 @@ const DumbIdeaShredder = () => {
   const [initialLoad, setInitialLoad] = useState(true);
   const shredderRef = useRef(null);
   
-  // Initial load animation
+  // Set initialLoad to false immediately to show digits right away
   useEffect(() => {
+    // We don't want the slow animation, so make it quick
     if (initialLoad) {
       setTimeout(() => {
         setInitialLoad(false);
-      }, 5000); // Set to 5 seconds to match the animation duration
+      }, 500); // Much quicker animation
     }
   }, []);
   

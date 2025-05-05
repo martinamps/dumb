@@ -184,8 +184,8 @@ export function WeatherWidget() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [countdown, setCountdown] = useState<number>(30);
-  const [refreshInterval, setRefreshInterval] = useState<number>(30);
+  const [countdown, setCountdown] = useState<number>(10);
+  const [refreshInterval, setRefreshInterval] = useState<number>(10);
   const [weirdTemp, setWeirdTemp] = useState<WeirdTempData | null>(null);
   const [pinEmoji, setPinEmoji] = useState<string>("📍");
 
@@ -211,8 +211,8 @@ export function WeatherWidget() {
       }
       setPinEmoji(getRandomWeirdPin());
 
-      // Set a new random refresh interval between 20-40 seconds
-      const newInterval = Math.floor(Math.random() * 20) + 20;
+      // Set a new random refresh interval between 10-20 seconds
+      const newInterval = Math.floor(Math.random() * 10) + 10;
       setRefreshInterval(newInterval);
       setCountdown(newInterval);
       setError(null);
@@ -324,7 +324,10 @@ export function WeatherWidget() {
                   {weirdTemp.unit} [{weirdTemp.suffix}]
                 </span>
                 {/* Tooltip on hover */}
-                <span className="invisible group-hover:visible absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded whitespace-nowrap z-30 font-normal" style={{textShadow: 'none', color: 'white'}}>
+                <span
+                  className="invisible group-hover:visible absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded whitespace-nowrap z-30 font-normal"
+                  style={{ textShadow: "none", color: "white" }}
+                >
                   {weirdTemp.explanation}
                 </span>
               </span>

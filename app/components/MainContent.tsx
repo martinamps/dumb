@@ -676,7 +676,11 @@ export function MainContent() {
             onChange={(e) => setCaptchaAnswer(e.target.value)}
             placeholder="YOUR COSMIC ANSWER..."
             className="flex-1 p-4 border-4 border-dotted border-yellow-300 rounded-lg bg-white text-xl font-bold"
-            style={{fontFamily: "'Comic Sans MS', cursive, sans-serif"}}
+            style={{
+              fontFamily: "'Comic Sans MS', cursive, sans-serif",
+              color: '#000000',
+              backgroundColor: '#ffffff'
+            }}
             aria-label="CAPTCHA Answer"
             disabled={captchaLoading}
           />
